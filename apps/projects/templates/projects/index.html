@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block title %}Projects &mdash; Nova{% endblock %}
+
+{% block content %}
+<section style="padding: 4rem 0;">
+    <div class="container">
+        <h1 class="section-title">Projects</h1>
+        <p class="section-subtitle">Things I have built</p>
+
+        <div class="row">
+            {% for slug, project in projects %}
+            <div class="col-lg-6 mb-4">
+                {% include "projects/" ~ slug ~ "/card.html" %}
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}

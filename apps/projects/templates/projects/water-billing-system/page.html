@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+
+{% block title %}{{ project.title }} &mdash; Nova{% endblock %}
+
+{% block content %}
+<section style="padding: 4rem 0;">
+    <div class="container">
+        <a href="{{ url_for('projects_blueprint.index') }}" style="color: var(--text-secondary); font-size: 0.88rem; text-decoration: none; display: inline-flex; align-items: center; gap: 0.4rem; margin-bottom: 2rem;">
+            <i class="fas fa-arrow-left"></i> Back to Projects
+        </a>
+
+        <div class="row">
+            <div class="col-lg-8">
+                <h1 style="font-size: 2.2rem; font-weight: 800; margin-bottom: 0.25rem;">{{ project.title }}</h1>
+                <p style="color: var(--accent); font-size: 0.95rem; font-weight: 500; margin-bottom: 1.5rem;">{{ project.subtitle }}</p>
+
+                <p style="color: var(--text-secondary); font-size: 1rem; line-height: 1.7; margin-bottom: 2rem;">
+                    {{ project.description }}
+                </p>
+
+                <h5 style="font-weight: 700; margin-bottom: 1rem;">Key Features</h5>
+                <ul style="list-style: none; padding: 0; margin-bottom: 2rem;">
+                    {% for feature in project.features %}
+                    <li style="padding: 0.5rem 0; display: flex; align-items: flex-start; gap: 0.75rem; color: var(--text-secondary); font-size: 0.92rem;">
+                        <i class="fas fa-check-circle" style="color: var(--accent); margin-top: 0.2rem; flex-shrink: 0;"></i>
+                        {{ feature }}
+                    </li>
+                    {% endfor %}
+                </ul>
+
+                {% if project.url %}
+                <a href="{{ project.url }}" target="_blank" class="btn btn-accent" style="display: inline-flex; align-items: center; gap: 0.5rem;">
+                    <i class="fas fa-external-link-alt"></i> Live Site
+                </a>
+                {% endif %}
+                {% if project.github %}
+                <a href="{{ project.github }}" target="_blank" class="btn btn-outline-accent ml-2" style="display: inline-flex; align-items: center; gap: 0.5rem;">
+                    <i class="fab fa-github"></i> Source Code
+                </a>
+                {% endif %}
+            </div>
+            <div class="col-lg-4">
+                <div style="background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem;">
+                    <h6 style="font-weight: 700; font-size: 0.85rem; margin-bottom: 0.75rem; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.5px;">
+                        <i class="fas fa-globe mr-1"></i> Web App
+                    </h6>
+                    <div style="margin-bottom: 1.25rem;">
+                        {% for tech in project.tech.web %}
+                        <span class="tag">{{ tech }}</span>
+                        {% endfor %}
+                    </div>
+
+                    <h6 style="font-weight: 700; font-size: 0.85rem; margin-bottom: 0.75rem; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.5px;">
+                        <i class="fas fa-mobile-alt mr-1"></i> Mobile App
+                    </h6>
+                    <div style="margin-bottom: 0;">
+                        {% for tech in project.tech.mobile %}
+                        <span class="tag">{{ tech }}</span>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
