@@ -28,7 +28,8 @@ PROJECTS: dict[str, dict] = {
             "Change detection sync for mobile data",
         ],
         "url": "https://raspberrypi.ghoul-aldebaran.ts.net/projects/water-billing-system/",
-        "github": None,
+        "github": "https://github.com/NovaProtocol/WaterBillingSystem",
+        "image": "assets/images/water-billing-system/water-billing-system-preview.png",
     },
 }
 
@@ -47,4 +48,4 @@ def detail(slug: str):
     project = PROJECTS.get(slug)
     if not project:
         abort(404)
-    return render_template(f"projects/{slug}/page.html", project=project, slug=slug)
+    return render_template("projects/detail.html", project=project, slug=slug)

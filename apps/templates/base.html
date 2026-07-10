@@ -107,6 +107,12 @@
             margin-right: 0.4rem;
             margin-bottom: 0.4rem;
             font-family: 'JetBrains Mono', monospace;
+            cursor: default;
+            transition: all 0.15s;
+        }
+        .tag:hover {
+            background: rgba(100, 255, 218, 0.2);
+            transform: translateY(-1px);
         }
         code {
             font-family: 'JetBrains Mono', monospace;
@@ -155,5 +161,29 @@
 
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    var indicators = document.querySelectorAll('.status-indicator');
+    indicators.forEach(function(el) {
+        var url = el.getAttribute('data-url');
+        var dot = el.querySelector('.status-dot');
+        var text = el.querySelector('.status-text');
+        if (!url || !dot || !text) return;
+
+        var controller = new AbortController();
+        setTimeout(function() { controller.abort(); }, 5000);
+
+        fetch(url, { method: 'HEAD', mode: 'no-cors', signal: controller.signal })
+            .then(function() {
+                dot.style.background = '#4ade80';
+                text.textContent = 'Online';
+            })
+            .catch(function() {
+                dot.style.background = '#f87171';
+                text.textContent = 'Offline';
+            });
+    });
+});
+</script>
 </body>
 </html>
