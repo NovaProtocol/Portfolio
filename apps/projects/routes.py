@@ -27,9 +27,12 @@ PROJECTS: dict[str, dict] = {
             "Offline-capable mobile app (Expo/React Native)",
             "Change detection sync for mobile data",
         ],
-        "url": "https://raspberrypi.ghoul-aldebaran.ts.net/projects/water-billing-system/",
+        "url": "/projects/water-billing-system/",
         "github": "https://github.com/NovaProtocol/WaterBillingSystem",
         "image": "assets/images/water-billing-system/water-billing-system-preview.png",
+        "buttons": [
+            {"name": "Reset Live Demo", "path": "staff/debug/restore-newest"},
+        ],
     },
 }
 
