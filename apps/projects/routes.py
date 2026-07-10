@@ -42,7 +42,7 @@ def index():
     return render_template("projects/index.html", projects=sorted_projects())
 
 
-@blueprint.route("/<slug>/")
+@blueprint.route("/info/<slug>/")
 def detail(slug: str):
     project = PROJECTS.get(slug)
     if not project:
