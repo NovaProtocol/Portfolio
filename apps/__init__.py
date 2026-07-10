@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from importlib import import_module
+from pathlib import Path
 
 from flask import Flask
 
@@ -15,7 +16,8 @@ def register_blueprints(app: Flask) -> None:
 
 
 def create_app(config: object) -> Flask:
-    app = Flask(__name__)
+    static_dir = Path(__file__).resolve().parent.parent / "static"
+    app = Flask(__name__, static_folder=str(static_dir), static_url_path="/static")
     app.config.from_object(config)
     register_blueprints(app)
     return app
