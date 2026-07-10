@@ -1,9 +1,9 @@
 services:
-  web:
+  portfolio_main:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: portfolio
+    container_name: portfolio_main
     restart: unless-stopped
     ports:
       - "7010:5005"
