@@ -1,0 +1,28 @@
+<a href="{{ url_for('projects_blueprint.detail', slug=slug) }}" class="card-link" style="text-decoration: none; color: inherit; display: block;">
+    <div class="card h-100" style="background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; transition: all 0.25s; cursor: pointer;">
+        <div style="padding: 1.75rem;">
+            <div class="d-flex justify-content-between align-items-start mb-3">
+                <div>
+                    <h5 style="font-weight: 700; font-size: 1.1rem; margin-bottom: 0.25rem;">
+                        {{ project.title }}
+                    </h5>
+                    <p style="color: var(--text-secondary); font-size: 0.82rem; margin-bottom: 0;">
+                        {{ project.subtitle }}
+                    </p>
+                </div>
+                <i class="fas fa-tint" style="color: var(--accent); font-size: 1.3rem; opacity: 0.7;"></i>
+            </div>
+            <p style="color: var(--text-secondary); font-size: 0.88rem; line-height: 1.6; margin-bottom: 1.25rem;">
+                {{ project.description }}
+            </p>
+            <div style="margin-bottom: 0;">
+                {% for tech in project.tech.web %}
+                <span class="tag">{{ tech }}</span>
+                {% endfor %}
+                {% for tech in project.tech.mobile %}
+                <span class="tag">{{ tech }}</span>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</a>

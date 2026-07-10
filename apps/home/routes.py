@@ -1,8 +1,10 @@
 from __future__ import annotations
 
+from flask import render_template
+
 from apps.home import blueprint
 
 
 @blueprint.route("/")
-def hello():
-    return "<h1>Hello World</h1>"
+def index():
+    return render_template("home/index.html")
