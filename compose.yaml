@@ -6,11 +6,20 @@ services:
     container_name: portfolio
     restart: unless-stopped
     ports:
-      - "5000:5000"
+      - "7010:5005"
     environment:
       PYTHON_GIL: ${PYTHON_GIL:-0}
       DEPLOYMENT_TYPE: ${DEPLOYMENT_TYPE:?DEPLOYMENT_TYPE is required}
       SECRET_KEY: ${SECRET_KEY:?SECRET_KEY is required}
+    networks:
+      - default
+      - proxy
     env_file:
       - path: .env
         required: false
+
+networks:
+  default:
+  proxy:
+    external: true
+    name: reverse-proxy_proxy
