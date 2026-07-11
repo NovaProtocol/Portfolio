@@ -31,7 +31,7 @@ PROJECTS: dict[str, dict] = {
         "github": "https://github.com/NovaProtocol/WaterBillingSystem",
         "image": "assets/images/water-billing-system/water-billing-system-preview.png",
         "buttons": [
-            {"name": "Reset Live Demo", "path": "staff/debug/restore-newest"},
+            {"name": "Reset Live Demo", "path": "staff/debug/restore-newest", "description": "Takes ~30s — may feel a bit dramatic"},
         ],
     },
 }
