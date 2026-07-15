@@ -27,11 +27,16 @@ PROJECTS: dict[str, dict] = {
             "Offline-capable mobile app (Expo/React Native)",
             "Change detection sync for mobile data",
         ],
-        "url": "/projects/water-billing-system/",
+        "url": "/waterbillingsystem/public/",
         "github": "https://github.com/NovaProtocol/WaterBillingSystem",
         "image": "assets/images/water-billing-system/water-billing-system-preview.png",
+        "links": [
+            {"name": "Staff Site", "url": "/waterbillingsystem/private/staff", "icon": "fas fa-user-tie"},
+            {"name": "Dev Site", "url": "/waterbillingsystem/private/developer", "icon": "fas fa-code-branch"},
+            {"name": "Documentation", "url": "/waterbillingsystem/private/documentation", "icon": "fas fa-book"},
+        ],
         "buttons": [
-            {"name": "Reset Live Demo", "path": "staff/debug/restore-newest", "description": "Takes ~30s — may feel a bit dramatic"},
+            {"name": "Reset Live Demo", "path": "/waterbillingsystem/private/developer/restore-newest", "description": "Takes ~30s — may feel a bit dramatic"},
         ],
     },
 }
