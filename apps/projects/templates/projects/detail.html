@@ -30,11 +30,18 @@
                 </div>
                 <p style="color: var(--accent); font-size: 0.95rem; font-weight: 500; margin-bottom: 1rem;">{{ project.subtitle }}</p>
 
-                <div class="d-flex" style="gap: 0.75rem; margin-bottom: 2rem;">
+                <div class="d-flex flex-wrap" style="gap: 0.75rem; margin-bottom: 2rem;">
                     {% if project.url %}
                     <a href="{{ project.url }}" target="_blank" class="btn btn-accent" style="display: inline-flex; align-items: center; gap: 0.5rem;">
                         <i class="fas fa-external-link-alt"></i> Live Site
                     </a>
+                    {% endif %}
+                    {% if project.links %}
+                    {% for link in project.links %}
+                    <a href="{{ link.url }}" target="_blank" class="btn btn-outline-accent" style="display: inline-flex; align-items: center; gap: 0.5rem;">
+                        <i class="{{ link.icon }}"></i> {{ link.name }}
+                    </a>
+                    {% endfor %}
                     {% endif %}
                     {% if project.github %}
                     <a href="{{ project.github }}" target="_blank" class="btn btn-outline-accent" style="display: inline-flex; align-items: center; gap: 0.5rem;">
@@ -94,8 +101,9 @@
                     </h6>
                     <div style="display: flex; flex-direction: column; gap: 0.5rem;">
                         {% for btn in project.buttons %}
+                        {% set action_url = btn.path if btn.path.startswith('/') else project.url ~ btn.path %}
                         <button class="btn btn-outline-accent action-btn"
-                                data-url="{{ project.url ~ btn.path }}"
+                                data-url="{{ action_url }}"
                                 style="width: 100%; text-align: center;">
                             {{ btn.name }}
                         </button>
