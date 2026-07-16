@@ -6,20 +6,20 @@ services:
     container_name: portfolio_main
     restart: unless-stopped
     ports:
-      - "7010:5005"
+      - "8000:8000"
     environment:
       PYTHON_GIL: ${PYTHON_GIL:-0}
       DEPLOYMENT_TYPE: ${DEPLOYMENT_TYPE:?DEPLOYMENT_TYPE is required}
       SECRET_KEY: ${SECRET_KEY:?SECRET_KEY is required}
     networks:
       - default
-      - proxy
+      - tailscale-proxy
     env_file:
       - path: .env
         required: false
 
 networks:
   default:
-  proxy:
+  tailscale-proxy:
     external: true
-    name: reverse-proxy_proxy
+    name: tailscale-network_proxy_network
