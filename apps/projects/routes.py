@@ -27,17 +27,15 @@ PROJECTS: dict[str, dict] = {
             "Offline-capable mobile app (Expo/React Native)",
             "Change detection sync for mobile data",
         ],
-        "url": "/waterbillingsystem/public/",
+        "url": "https://water-billing-system.ghoul-aldebaran.ts.net/",
         "github": "https://github.com/NovaProtocol/WaterBillingSystem",
         "image": "assets/images/water-billing-system/water-billing-system-preview.png",
         "links": [
-            {"name": "Staff Site", "url": "/waterbillingsystem/private/staff", "icon": "fas fa-user-tie"},
-            {"name": "Dev Site", "url": "/waterbillingsystem/private/developer", "icon": "fas fa-code-branch"},
-            {"name": "Documentation", "url": "/waterbillingsystem/private/documentation", "icon": "fas fa-book"},
+            {"name": "Staff Site", "url": "https://water-billing-system.ghoul-aldebaran.ts.net/staff/", "icon": "fas fa-user-tie"},
+            {"name": "Dev Site", "url": "https://water-billing-system.ghoul-aldebaran.ts.net/developer/", "icon": "fas fa-code-branch"},
+            {"name": "Documentation", "url": "https://water-billing-system.ghoul-aldebaran.ts.net/documentation", "icon": "fas fa-book"},
         ],
-        "buttons": [
-            {"name": "Reset Live Demo", "path": "/waterbillingsystem/private/developer/restore-newest", "description": "Takes ~30s — may feel a bit dramatic"},
-        ],
+        "buttons": [],
     },
 }
 
