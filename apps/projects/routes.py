@@ -47,6 +47,7 @@ PROJECTS: dict[str, dict] = {
             "GateKeeper integration for access control",
             "ProxyFix middleware for correct HTTPS behind tunnel",
         ],
+        "url": "https://portfolio.projectnova.download/",
         "github": "https://github.com/NovaProtocol/Portfolio",
         "links": [],
         "buttons": [],
