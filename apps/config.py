@@ -4,7 +4,7 @@ import os
 
 
 class BaseConfig:
-    SECRET_KEY = os.getenv("SECRET_KEY", "dev-secret-key")
+    SECRET_KEY = os.environ["SECRET_KEY"]
 
 
 class DebugConfig(BaseConfig):
