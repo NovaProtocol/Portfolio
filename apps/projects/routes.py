@@ -5,6 +5,55 @@ from flask import abort, render_template
 from apps.projects import blueprint
 
 PROJECTS: dict[str, dict] = {
+    "gatekeeper": {
+        "title": "GateKeeper",
+        "subtitle": "Access code auth gate for web apps",
+        "description": (
+            "A lightweight Flask-based authentication gateway that protects web apps "
+            "behind access codes. Users log in with a code on the GateKeeper, receive "
+            "a cross-subdomain cookie, and get redirected back. Protected apps verify "
+            "sessions via an internal API endpoint. Uses signed cookies and short-lived "
+            "tickets for stateless verification."
+        ),
+        "tech": {
+            "web": ["Flask", "SQLite", "Docker", "itsdangerous", "Cloudflare Tunnel"],
+        },
+        "features": [
+            "Access code authentication with signed cookies",
+            "Short-lived ticket-based session verification (5-min TTL)",
+            "Cross-subdomain cookie for shared auth across apps",
+            "Admin panel to create and revoke access codes",
+            "Backup code fallback for emergency access",
+            "REST API for integration with protected apps",
+        ],
+        "url": "https://gatekeeper.projectnova.download/",
+        "github": "https://github.com/NovaProtocol/GateKeeper",
+        "links": [],
+        "buttons": [],
+    },
+    "portfolio": {
+        "title": "Portfolio",
+        "subtitle": "Personal portfolio site",
+        "description": (
+            "This site. A Flask-based portfolio that showcases projects and skills. "
+            "Protected by GateKeeper — unauthenticated visitors are redirected to log in, "
+            "then sent back with a verified session. Uses ProxyFix middleware to correctly "
+            "handle HTTPS behind Cloudflare Tunnel."
+        ),
+        "tech": {
+            "web": ["Flask", "Gunicorn", "Docker", "Cloudflare Tunnel"],
+        },
+        "features": [
+            "Project showcase with detail pages and tech tags",
+            "Live status indicators for project URLs",
+            "GateKeeper integration for access control",
+            "ProxyFix middleware for correct HTTPS behind tunnel",
+        ],
+        "url": "https://portfolio.projectnova.download/",
+        "github": "https://github.com/NovaProtocol/Portfolio",
+        "links": [],
+        "buttons": [],
+    },
     "water-billing-system": {
         "title": "Water Billing System",
         "subtitle": "Cotta Realty & Development Corporation",
