@@ -6,20 +6,20 @@ services:
     container_name: portfolio_main
     restart: unless-stopped
     ports:
-      - "8000:8000"
+      - "7010:7010"
     environment:
       PYTHON_GIL: ${PYTHON_GIL:-0}
       DEPLOYMENT_TYPE: ${DEPLOYMENT_TYPE:?DEPLOYMENT_TYPE is required}
       SECRET_KEY: ${SECRET_KEY:?SECRET_KEY is required}
+      GATEKEEPER_INTERNAL: ${GATEKEEPER_INTERNAL:?GATEKEEPER_INTERNAL is required}
     networks:
       - default
-      - cloudflared-tunnel
+      - gatekeeper_default
     env_file:
       - path: .env
         required: false
 
 networks:
   default:
-  cloudflared-tunnel:
+  gatekeeper_default:
     external: true
-    name: cloudflared-tunnel_default

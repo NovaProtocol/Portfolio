@@ -42,7 +42,7 @@ app = create_app(app_config)
 
 if __name__ == "__main__":
     if DEBUG:
-        app.run(host="0.0.0.0", port=5005, debug=True)
+        app.run(host="0.0.0.0", port=7010, debug=True)
     else:
         try:
             from gunicorn.app.base import BaseApplication
@@ -64,7 +64,7 @@ if __name__ == "__main__":
                 return self.application
 
         gunicorn_opts = {
-            "bind": "0.0.0.0:5005",
+            "bind": "0.0.0.0:7010",
             "worker_class": "gthread",
             "workers": 2,
             "threads": 4,
