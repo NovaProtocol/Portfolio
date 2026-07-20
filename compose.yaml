@@ -14,12 +14,17 @@ services:
       GATEKEEPER_INTERNAL: ${GATEKEEPER_INTERNAL:?GATEKEEPER_INTERNAL is required}
     networks:
       - default
-      - gatekeeper_default
+      - gatekeeper
+      - cloudflared-tunnel
     env_file:
       - path: .env
         required: false
 
 networks:
   default:
-  gatekeeper_default:
+  gatekeeper:
     external: true
+    name: gatekeeper_default
+  cloudflared-tunnel:
+    external: true
+    name: cloudflared-tunnel_default
