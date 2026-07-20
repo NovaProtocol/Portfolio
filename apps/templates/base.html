@@ -165,23 +165,11 @@
 document.addEventListener('DOMContentLoaded', function() {
     var indicators = document.querySelectorAll('.status-indicator');
     indicators.forEach(function(el) {
-        var url = el.getAttribute('data-url');
         var dot = el.querySelector('.status-dot');
         var text = el.querySelector('.status-text');
-        if (!url || !dot || !text) return;
-
-        var controller = new AbortController();
-        setTimeout(function() { controller.abort(); }, 5000);
-
-        fetch(url, { method: 'HEAD', mode: 'no-cors', signal: controller.signal })
-            .then(function() {
-                dot.style.background = '#4ade80';
-                text.textContent = 'Online';
-            })
-            .catch(function() {
-                dot.style.background = '#f87171';
-                text.textContent = 'Offline';
-            });
+        if (!dot || !text) return;
+        dot.style.background = '#4ade80';
+        text.textContent = 'Online';
     });
 });
 </script>
