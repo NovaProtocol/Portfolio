@@ -10,9 +10,24 @@
         </a>
 
         {% if project.url %}
-        <div style="margin-bottom: 2rem; border: 1px solid var(--border); border-radius: 12px; overflow: hidden; height: 500px;">
-            <iframe src="{{ project.url }}" style="width: 100%; height: 100%; border: none;" loading="lazy"></iframe>
+        <div class="iframe-wrap" style="margin-bottom: 2rem; border: 1px solid var(--border); border-radius: 12px; overflow: hidden; width: 100%; aspect-ratio: 16/9; position: relative;">
+            <div class="iframe-scaler" style="position: absolute; top: 0; left: 0; transform-origin: 0 0; width: 1440px; height: 810px;">
+                <iframe src="{{ project.url }}" style="width: 1440px; height: 810px; border: none;" loading="lazy"></iframe>
+            </div>
         </div>
+        <script>
+        (function() {
+            var wrap = document.querySelector('.iframe-wrap');
+            var scaler = document.querySelector('.iframe-scaler');
+            if (!wrap || !scaler) return;
+            function fit() {
+                var scale = wrap.clientWidth / 1440;
+                scaler.style.transform = 'scale(' + scale + ')';
+            }
+            fit();
+            window.addEventListener('resize', fit);
+        })();
+        </script>
         {% elif project.image %}
         <div style="margin-bottom: 2rem; border: 1px solid var(--border); border-radius: 12px; overflow: hidden;">
             <img src="{{ url_for('static', filename=project.image) }}"
