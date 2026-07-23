@@ -106,6 +106,19 @@ def fetch_leetcode_data() -> dict | None:
         return None
 
 
+def save_data(data: dict) -> int:
+    save_snapshot("stats", json.dumps({
+        "username": data["username"],
+        "profile": data["profile"],
+        "solved": data["solved"],
+        "totalSubmissions": data["totalSubmissions"],
+        "badges": data["badges"],
+        "submissionCalendar": data["submissionCalendar"],
+        "fetchedAt": data["fetchedAt"],
+    }))
+    return upsert_submissions(data["recentSubmissions"])
+
+
 def poll_loop() -> None:
     init_db()
     logger.info("LeetCode poller started (interval=%ss)", POLL_INTERVAL)
@@ -113,16 +126,7 @@ def poll_loop() -> None:
     while True:
         data = fetch_leetcode_data()
         if data:
-            save_snapshot("stats", json.dumps({
-                "username": data["username"],
-                "profile": data["profile"],
-                "solved": data["solved"],
-                "totalSubmissions": data["totalSubmissions"],
-                "badges": data["badges"],
-                "submissionCalendar": data["submissionCalendar"],
-                "fetchedAt": data["fetchedAt"],
-            }))
-            new = upsert_submissions(data["recentSubmissions"])
+            new = save_data(data)
             if new > 0:
                 logger.info("LeetCode: %d new submission(s) stored", new)
             logger.debug("LeetCode poll complete: %d solved", data["solved"].get("all", 0))
