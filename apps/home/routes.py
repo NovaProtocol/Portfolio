@@ -6,6 +6,7 @@ from flask import jsonify, render_template
 
 from apps.home import blueprint
 from apps.leetcode_db import get_all_submissions, get_snapshot
+from apps.leetcode_poller import fetch_leetcode_data, save_data
 
 
 @blueprint.route("/")
@@ -29,6 +30,20 @@ def leetcode_api():
 
     stats["allSubmissions"] = submissions
     return jsonify(stats)
+
+
+@blueprint.route("/api/leetcode/refresh", methods=["POST"])
+def leetcode_refresh():
+    data = fetch_leetcode_data()
+    if not data:
+        return jsonify({"error": "LeetCode API unavailable"}), 502
+
+    new_count = save_data(data)
+    submissions = get_all_submissions()
+
+    data["allSubmissions"] = submissions
+    data["newSubmissions"] = new_count
+    return jsonify(data)
 
 
 @blueprint.route("/leetcode")
