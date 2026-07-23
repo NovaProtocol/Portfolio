@@ -49,7 +49,9 @@ function renderLeetCode(data) {
     var r = data.profile ? '#' + data.profile.ranking.toLocaleString() : 'N/A';
     var subs = data.allSubmissions || [];
 
-    var html = '<div style="display:flex;gap:1rem;justify-content:center;margin-bottom:2rem;">';
+    var html = '<p id="last-checked" style="text-align:center;color:var(--text-secondary);font-size:0.82rem;font-family:\'JetBrains Mono\',monospace;margin-bottom:1.5rem;"></p>';
+
+    html += '<div style="display:flex;gap:1rem;justify-content:center;margin-bottom:2rem;">';
     html += '<div style="background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:1.5rem;text-align:center;flex:1;"><p style="font-size:2.5rem;font-weight:800;color:var(--accent);margin-bottom:0.25rem;">' + t + '</p><p style="color:var(--text-secondary);font-size:0.85rem;">Solved</p></div>';
     html += '<div style="background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:1.5rem;text-align:center;flex:1;"><p style="font-size:2.5rem;font-weight:800;color:var(--text-secondary);margin-bottom:0.25rem;">' + r + '</p><p style="color:var(--text-secondary);font-size:0.85rem;">Global Rank</p></div>';
     html += '<div style="background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:1.5rem;text-align:center;flex:1;"><p style="font-size:2.5rem;font-weight:800;color:var(--text-secondary);margin-bottom:0.25rem;">' + subs.length + '</p><p style="color:var(--text-secondary);font-size:0.85rem;">Recorded</p></div>';
@@ -72,6 +74,27 @@ function renderLeetCode(data) {
     }
 
     el.innerHTML = html;
+    updateLastChecked(data.fetchedAt || Math.floor(Date.now() / 1000));
+}
+
+var lastCheckedTimer = null;
+
+function timeAgo(ts) {
+    var s = Math.floor(Date.now() / 1000) - ts;
+    if (s < 60) return 'just now';
+    if (s < 3600) return Math.floor(s / 60) + 'm ago';
+    if (s < 86400) return Math.floor(s / 3600) + 'h ago';
+    return Math.floor(s / 86400) + 'd ago';
+}
+
+function updateLastChecked(ts) {
+    var el = document.getElementById('last-checked');
+    if (el) el.textContent = 'Last checked: ' + timeAgo(ts);
+    if (lastCheckedTimer) clearInterval(lastCheckedTimer);
+    lastCheckedTimer = setInterval(function() {
+        var el = document.getElementById('last-checked');
+        if (el) el.textContent = 'Last checked: ' + timeAgo(ts);
+    }, 30000);
 }
 
 function refreshLeetCode() {
