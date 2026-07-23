@@ -56,23 +56,26 @@ PROJECTS: dict[str, dict] = {
         "title": "Water Billing System",
         "subtitle": "Cotta Realty & Development Corporation",
         "description": (
-            "A full-stack water utility billing management platform serving a Philippine "
-            "real estate developer. Manages customer enrollment, NFC/QR meter readings, "
-            "tiered billing computation, payment processing (GCash, Maya, cards), "
-            "and a staff portal."
+            "A full-stack water utility billing management platform with "
+            "NFC-enabled meter reading, 4 authentication systems, and "
+            "automated payment reconciliation via Xendit. Built for a "
+            "Philippine real estate developer serving residential tenants.\n"
+            "Project Note: This project is hosted on a low-end server and does not "
+            "represent the full capabilities of the system. It is a demo "
+            "version for showcase purposes only."
         ),
         "tech": {
-            "web": ["Flask", "MySQL", "Docker", "Gunicorn", "Xendit API"],
-            "mobile": ["React Native", "Expo", "NFC", "SQLite"],
+            "web": ["Flask", "SQLAlchemy", "MySQL 8.4", "Caddy", "Gunicorn", "Xendit API", "Docker"],
+            "mobile": ["React Native", "Expo", "TypeScript", "NFC (NTAG215)", "SQLite"],
         },
         "features": [
-            "Customer enrollment with GPS mapping via Leaflet",
-            "NFC tag & QR code meter reading with offline sync",
-            "Tiered billing (5 tiers) with late penalties",
-            "Online payments via Xendit gateway",
-            "Staff portal with 7 role-based permissions",
-            "Offline-capable mobile app (Expo/React Native)",
-            "Change detection sync for mobile data",
+            "11 Docker containers with 6 internal networks (public/private/API isolation)",
+            "Caddy reverse proxy separating public (:7020) and private (:7021) traffic",
+            "4 authentication systems: API keys, Flask-Login, signed cookies, GateKeeper SSO",
+            "NFC tag reading (NTAG215 PWD_AUTH) with offline-capable React Native app",
+            "DB-backed background task queue with Xendit payment reconciliation",
+            "MkDocs documentation site with full API reference and architecture docs",
+            "phpMyAdmin admin interface proxied through Caddy on private port",
         ],
         "url": "https://water-billing-system.projectnova.download/",
         "github": "https://github.com/NovaProtocol/WaterBillingSystem",
@@ -82,6 +85,17 @@ PROJECTS: dict[str, dict] = {
             {"name": "Dev Site", "url": "https://water-billing-system-private.projectnova.download/developer/", "icon": "fas fa-code-branch"},
             {"name": "Documentation", "url": "https://water-billing-system-private.projectnova.download/documentation/", "icon": "fas fa-book"},
         ],
+        "testing": {
+            "staff": {
+                "username": "superuser",
+                "password": "superuser",
+            },
+            "customer": {
+                "account_number": "1 to 10000",
+                "registered_name": "Not needed (DEBUG mode)",
+                "last_receipt_number": "Not needed (DEBUG mode)",
+            },
+        },
         "buttons": [],
     },
 }
