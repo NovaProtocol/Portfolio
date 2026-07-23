@@ -34,6 +34,8 @@
     </div>
 </section>
 
+<div id="leet-tooltip" style="display:none;position:fixed;background:var(--bg-card);border:1px solid var(--border);border-radius:8px;padding:0.5rem 0.75rem;font-size:0.78rem;z-index:9999;box-shadow:0 8px 24px rgba(0,0,0,0.5);max-width:300px;font-family:'JetBrains Mono',monospace;line-height:1.6;"></div>
+
 <script>
 function renderLeetCode(data) {
     var el = document.getElementById('leetcode-page');
@@ -66,7 +68,15 @@ function renderLeetCode(data) {
     if (subs.length > 0) {
         html += '<div style="background:var(--bg-card);border:1px solid var(--border);border-radius:12px;overflow:hidden;"><div style="padding:1.25rem 1.25rem 0;"><h6 style="font-weight:700;font-size:0.85rem;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.5px;"><i class="fas fa-list mr-1"></i> All Submissions <span style="font-weight:400;color:var(--text-secondary);">(' + subs.length + ')</span></h6></div><div style="padding:0.5rem 0;">';
         subs.forEach(function(s) {
-            html += '<div style="display:flex;justify-content:space-between;align-items:center;padding:0.55rem 1.25rem;border-bottom:1px solid var(--border);font-size:0.88rem;"><a href="https://leetcode.com/problems/'+s.title_slug+'/" target="_blank" style="color:var(--text-primary);text-decoration:none;">'+s.title+'</a><span style="color:var(--text-secondary);font-size:0.8rem;">'+s.date+'</span></div>';
+            html += '<div style="display:flex;justify-content:space-between;align-items:center;padding:0.55rem 1.25rem;border-bottom:1px solid var(--border);font-size:0.88rem;position:relative;">';
+            html += '  <div style="display:flex;align-items:center;gap:0.5rem;">';
+            html += '    <a href="https://leetcode.com/problems/'+s.title_slug+'/" target="_blank" style="color:var(--text-primary);text-decoration:none;">'+s.title+'</a>';
+            if (s.count > 1) {
+                html += '    <span style="background:var(--accent-dim);color:var(--accent);font-size:0.7rem;padding:0.1rem 0.4rem;border-radius:4px;font-family:\'JetBrains Mono\',monospace;cursor:help;" onmouseover="showTooltip(this,event,\'' + s.title_slug + '\')" onmouseout="hideTooltip(\'' + s.title_slug + '\')">&times;' + s.count + '</span>';
+            }
+            html += '  </div>';
+            html += '  <span style="color:var(--text-secondary);font-size:0.8rem;">' + s.date + '</span>';
+            html += '</div>';
         });
         html += '</div></div>';
     } else {
@@ -74,10 +84,15 @@ function renderLeetCode(data) {
     }
 
     el.innerHTML = html;
+    tooltipData = {};
+    subs.forEach(function(s) {
+        if (s.count > 1) tooltipData[s.title_slug] = s.submissions;
+    });
     updateLastChecked(data.fetchedAt || Math.floor(Date.now() / 1000));
 }
 
 var lastCheckedTimer = null;
+var tooltipData = {};
 
 function timeAgo(ts) {
     var s = Math.floor(Date.now() / 1000) - ts;
@@ -85,6 +100,25 @@ function timeAgo(ts) {
     if (s < 3600) return Math.floor(s / 60) + 'm ago';
     if (s < 86400) return Math.floor(s / 3600) + 'h ago';
     return Math.floor(s / 86400) + 'd ago';
+}
+
+function showTooltip(el, ev, slug) {
+    var entries = tooltipData[slug];
+    if (!entries || entries.length < 2) return;
+    var html = '';
+    entries.forEach(function(e) {
+        html += '<div>' + e.date + '</div>';
+    });
+    var tip = document.getElementById('leet-tooltip');
+    tip.innerHTML = html;
+    tip.style.display = 'block';
+    var rect = el.getBoundingClientRect();
+    tip.style.left = (rect.left + window.scrollX) + 'px';
+    tip.style.top = (rect.bottom + window.scrollY + 6) + 'px';
+}
+
+function hideTooltip(slug) {
+    document.getElementById('leet-tooltip').style.display = 'none';
 }
 
 function updateLastChecked(ts) {

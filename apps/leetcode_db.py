@@ -74,7 +74,36 @@ def get_all_submissions() -> list[dict]:
     rows = conn.execute(
         "SELECT id, title, title_slug, timestamp, date FROM leetcode_submissions ORDER BY timestamp DESC"
     ).fetchall()
-    return [dict(r) for r in rows]
+
+    groups: dict[str, dict] = {}
+    for r in rows:
+        slug = r["title_slug"]
+        if slug not in groups:
+            groups[slug] = {
+                "title": r["title"],
+                "title_slug": slug,
+                "count": 0,
+                "latest_timestamp": 0,
+                "date": "",
+                "submissions": [],
+            }
+        g = groups[slug]
+        g["count"] += 1
+        if r["timestamp"] > g["latest_timestamp"]:
+            g["latest_timestamp"] = r["timestamp"]
+            g["date"] = r["date"]
+        g["submissions"].append({
+            "id": r["id"],
+            "timestamp": r["timestamp"],
+            "date": r["date"],
+        })
+
+    result = []
+    for g in groups.values():
+        g["submissions"].sort(key=lambda x: x["timestamp"], reverse=True)
+        result.append(g)
+    result.sort(key=lambda x: x["latest_timestamp"], reverse=True)
+    return result
 
 
 def get_submission_count() -> int:
