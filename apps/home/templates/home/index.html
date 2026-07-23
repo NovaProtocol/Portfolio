@@ -280,6 +280,9 @@ document.addEventListener('DOMContentLoaded', function() {
             data.allSubmissions.slice(0, 20).forEach(function(s){ html+='<div style="display:flex;justify-content:space-between;align-items:center;padding:0.4rem 0;border-bottom:1px solid var(--border);font-size:0.85rem;"><a href="https://leetcode.com/problems/'+s.title_slug+'/" target="_blank" style="color:var(--text-primary);text-decoration:none;">'+s.title+'</a><span style="color:var(--text-secondary);font-size:0.78rem;">'+s.date+'</span></div>'; });
             html += '</div>';
         }
+        if (data.allSubmissions && data.allSubmissions.length > 0) {
+            html += '<div style="text-align:center;margin-top:1rem;"><a href="{{ url_for('home_blueprint.leetcode_page') }}" class="btn btn-outline-accent btn-sm" style="font-size:0.82rem;"><i class="fas fa-list mr-1"></i> View all ' + data.allSubmissions.length + ' submissions</a></div>';
+        }
         el.innerHTML = html;
     }).catch(function(){ var el=document.getElementById('leetcode-content'); el.innerHTML='<p style="text-align:center;color:var(--text-secondary);">Failed to load.</p>'; });
 });
