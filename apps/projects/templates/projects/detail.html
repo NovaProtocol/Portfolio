@@ -69,9 +69,17 @@
                     {% endif %}
                 </div>
 
-                <p style="color: var(--text-secondary); font-size: 1rem; line-height: 1.7; white-space: pre-wrap; margin-bottom: 2rem;">
+                {% if project.description is string %}
+                <p style="color: var(--text-secondary); font-size: 1rem; line-height: 1.7; margin-bottom: 2rem;">
                     {{ project.description }}
                 </p>
+                {% else %}
+                {% for paragraph in project.description %}
+                <p style="color: var(--text-secondary); font-size: 1rem; line-height: 1.7; margin-bottom: 1rem;">
+                    {{ paragraph }}
+                </p>
+                {% endfor %}
+                {% endif %}
 
                 {% if project.features %}
                 <h5 style="font-weight: 700; margin-bottom: 1rem;">Key Features</h5>
