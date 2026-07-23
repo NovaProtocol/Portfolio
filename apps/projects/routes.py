@@ -60,7 +60,7 @@ PROJECTS: dict[str, dict] = {
             "Project Note: This project is hosted on a low-end server and thus, does not represent the full expected performance of the system. It is only a demo version meant to showcase the features and functionality.",
         ],
         "tech": {
-            "web": ["Flask", "SQLAlchemy", "MySQL 8.4", "Caddy", "Gunicorn", "Xendit API", "Docker"],
+            "web": ["Flask", "SQLAlchemy", "MySQL 8.4", "Caddy", "Gunicorn", "Xendit API", "Cloudflare Tunnel", "Docker"],
             "mobile": ["React Native", "Expo", "TypeScript", "NFC (NTAG215)", "SQLite"],
         },
         "features": [
