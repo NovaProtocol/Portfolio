@@ -12,6 +12,9 @@ services:
       DEPLOYMENT_TYPE: ${DEPLOYMENT_TYPE:?DEPLOYMENT_TYPE is required}
       SECRET_KEY: ${SECRET_KEY:?SECRET_KEY is required}
       GATEKEEPER_INTERNAL: ${GATEKEEPER_INTERNAL:?GATEKEEPER_INTERNAL is required}
+      LEETCODE_DB_DIR: /data
+    volumes:
+      - leetcode_data:/data
     networks:
       - default
       - gatekeeper
@@ -28,3 +31,6 @@ networks:
   cloudflared-tunnel:
     external: true
     name: cloudflared-tunnel_default
+
+volumes:
+  leetcode_data:
