@@ -17,39 +17,17 @@
                     I build software.
                 </h2>
                 <p style="color: var(--text-secondary); font-size: 1.05rem; max-width: 540px; line-height: 1.7; margin-bottom: 2rem;">
-                    Full-stack developer with a passion for building scalable web applications,
-                    clean APIs, and meaningful tools. I work across the stack &mdash; from Flask backends
-                    to React Native mobile apps.
+                    Full-stack developer building web apps, mobile apps, and infrastructure
+                    from scratch. I work across the stack &mdash; from Flask backends
+                    to React Native mobile apps, Docker networking, and Cloudflare Tunnel.
                 </p>
                 <div class="d-flex flex-wrap gap-2" style="gap: 0.75rem;">
                     <a href="{{ url_for('projects_blueprint.index') }}" class="btn btn-accent">
                         <i class="fas fa-folder-open mr-2"></i>See Projects
                     </a>
-                    <a href="https://github.com/NovaProtocol" target="_blank" class="btn btn-outline-accent">
-                        <i class="fab fa-github mr-2"></i>GitHub
+                    <a href="#contact" class="btn btn-outline-accent">
+                        <i class="far fa-envelope mr-2"></i>Contact
                     </a>
-                </div>
-                <div style="margin-top: 2.5rem; padding-top: 2rem; border-top: 1px solid var(--border);">
-                    <p style="color: var(--text-secondary); font-size: 0.82rem; margin-bottom: 0.75rem; font-family: 'JetBrains Mono', monospace;">
-                        // technologies i work with
-                    </p>
-                    <div>
-                        <span class="tag">Python</span>
-                        <span class="tag">Flask</span>
-                        <span class="tag">SQLAlchemy</span>
-                        <span class="tag">PyTorch</span>
-                        <span class="tag">React Native</span>
-                        <span class="tag">Expo</span>
-                        <span class="tag">TypeScript</span>
-                        <span class="tag">MySQL</span>
-                        <span class="tag">SQLite</span>
-                        <span class="tag">Docker</span>
-                        <span class="tag">Caddy</span>
-                        <span class="tag">Gunicorn</span>
-                        <span class="tag">Cloudflare Tunnel</span>
-                        <span class="tag">REST APIs</span>
-                        <span class="tag">Git</span>
-                    </div>
                 </div>
             </div>
             <div class="col-lg-5 text-center d-none d-lg-block">
@@ -66,6 +44,109 @@ app = Flask(__name__)
                     </pre>
                 </div>
             </div>
+        </div>
+    </div>
+</section>
+
+<section id="bio" style="padding: 5rem 0; border-top: 1px solid var(--border);">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <h2 class="section-title" style="text-align: center;">About Me</h2>
+                <p class="section-subtitle" style="text-align: center;">A bit about who I am</p>
+                <p style="color: var(--text-secondary); font-size: 1.05rem; line-height: 1.8; text-align: center;">
+                    I'm a software engineer who builds full-stack applications from the ground up &mdash;
+                    designing the architecture, writing the backend, shipping the mobile app, and deploying
+                    it with Docker and Cloudflare Tunnel. I enjoy working across the entire stack and
+                    learning the tools that get things done.
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="skills" style="padding: 5rem 0; border-top: 1px solid var(--border); background: var(--bg-secondary);">
+    <div class="container">
+        <h2 class="section-title" style="text-align: center;">Skills</h2>
+        <p class="section-subtitle" style="text-align: center;">Technologies I work with</p>
+        <div style="max-width: 700px; margin: 0 auto;">
+            <div style="margin-bottom: 2rem;">
+                <h6 style="font-weight: 700; font-size: 0.85rem; margin-bottom: 0.75rem; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.5px;">
+                    <i class="fas fa-server mr-1"></i> Backend
+                </h6>
+                <div>
+                    <span class="tag">Python</span>
+                    <span class="tag">Flask</span>
+                    <span class="tag">SQLAlchemy</span>
+                    <span class="tag">REST APIs</span>
+                    <span class="tag">PyTorch</span>
+                </div>
+            </div>
+            <div style="margin-bottom: 2rem;">
+                <h6 style="font-weight: 700; font-size: 0.85rem; margin-bottom: 0.75rem; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.5px;">
+                    <i class="fas fa-mobile-alt mr-1"></i> Mobile
+                </h6>
+                <div>
+                    <span class="tag">React Native</span>
+                    <span class="tag">Expo</span>
+                    <span class="tag">TypeScript</span>
+                    <span class="tag">NFC</span>
+                </div>
+            </div>
+            <div style="margin-bottom: 2rem;">
+                <h6 style="font-weight: 700; font-size: 0.85rem; margin-bottom: 0.75rem; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.5px;">
+                    <i class="fas fa-database mr-1"></i> Database
+                </h6>
+                <div>
+                    <span class="tag">MySQL</span>
+                    <span class="tag">SQLite</span>
+                </div>
+            </div>
+            <div>
+                <h6 style="font-weight: 700; font-size: 0.85rem; margin-bottom: 0.75rem; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.5px;">
+                    <i class="fas fa-cloud mr-1"></i> Infrastructure
+                </h6>
+                <div>
+                    <span class="tag">Docker</span>
+                    <span class="tag">Caddy</span>
+                    <span class="tag">Gunicorn</span>
+                    <span class="tag">Cloudflare Tunnel</span>
+                    <span class="tag">Git</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="education" style="padding: 5rem 0; border-top: 1px solid var(--border);">
+    <div class="container">
+        <h2 class="section-title" style="text-align: center;">Education</h2>
+        <p class="section-subtitle" style="text-align: center;">My academic background</p>
+
+        <div style="max-width: 600px; margin: 0 auto;">
+            <div style="position: relative; padding-left: 2rem; border-left: 2px solid var(--accent);">
+                <div style="position: relative; padding-bottom: 2rem;">
+                    <div style="position: absolute; left: -2.4rem; top: 0; width: 12px; height: 12px; border-radius: 50%; background: var(--accent); border: 2px solid var(--bg-primary);"></div>
+                    <p style="font-size: 0.82rem; color: var(--accent); font-family: 'JetBrains Mono', monospace; margin-bottom: 0.25rem;">2020 &mdash; 2024</p>
+                    <h5 style="font-weight: 700; font-size: 1.1rem; margin-bottom: 0.25rem;">Bachelor of Science in Computer Science</h5>
+                    <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 0;">University Name</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="contact" style="padding: 5rem 0; border-top: 1px solid var(--border); background: var(--bg-secondary);">
+    <div class="container">
+        <h2 class="section-title" style="text-align: center;">Contact</h2>
+        <p class="section-subtitle" style="text-align: center;">Get in touch</p>
+        <div style="display: flex; justify-content: center; gap: 1.5rem; flex-wrap: wrap;">
+            <a href="mailto:hello@nova.dev" class="btn btn-accent" style="display: inline-flex; align-items: center; gap: 0.5rem;">
+                <i class="far fa-envelope"></i> Email
+            </a>
+            <a href="https://github.com/NovaProtocol" target="_blank" class="btn btn-outline-accent" style="display: inline-flex; align-items: center; gap: 0.5rem;">
+                <i class="fab fa-github"></i> GitHub
+            </a>
         </div>
     </div>
 </section>
