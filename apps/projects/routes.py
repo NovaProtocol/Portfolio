@@ -56,13 +56,8 @@ PROJECTS: dict[str, dict] = {
         "title": "Water Billing System",
         "subtitle": "Cotta Realty & Development Corporation",
         "description": [
-            "A full-stack water utility billing management platform with "
-            "NFC-enabled meter reading, 4 authentication systems, and "
-            "automated payment reconciliation via Xendit. Built for a "
-            "Philippine real estate developer serving residential tenants.",
-            "Project Note: This project is hosted on a low-end server and does not "
-            "represent the full capabilities of the system. It is a demo "
-            "version for showcase purposes only.",
+            "A full-stack water utility billing management platform with NFC-enabled meter reading, 4 authentication systems, and automated payment reconciliation via Xendit. Built for a Philippine real estate developer serving residential tenants.",
+            "Project Note: This project is hosted on a low-end server and thus, does not represent the full expected performance of the system. It is only a demo version meant to showcase the features and functionality.",
         ],
         "tech": {
             "web": ["Flask", "SQLAlchemy", "MySQL 8.4", "Caddy", "Gunicorn", "Xendit API", "Docker"],
