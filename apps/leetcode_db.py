@@ -1,11 +1,14 @@
 from __future__ import annotations
 
 import json
+import os
 import sqlite3
 import threading
 from pathlib import Path
 
-DB_PATH = Path(__file__).resolve().parent.parent / "leetcode_data.db"
+DB_DIR = Path(os.environ.get("LEETCODE_DB_DIR", str(Path(__file__).resolve().parent.parent / "data")))
+DB_DIR.mkdir(parents=True, exist_ok=True)
+DB_PATH = DB_DIR / "leetcode_data.db"
 _local = threading.local()
 
 
