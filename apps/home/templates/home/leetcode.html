@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% block title %}LeetCode &mdash; Nova{% endblock %}
+
+{% block content %}
+<section style="padding: 4rem 0;">
+    <div class="container">
+        <a href="{{ url_for('home_blueprint.index') }}" style="color: var(--text-secondary); font-size: 0.88rem; text-decoration: none; display: inline-flex; align-items: center; gap: 0.4rem; margin-bottom: 2rem;">
+            <i class="fas fa-arrow-left"></i> Back to Home
+        </a>
+
+        <h1 class="section-title">LeetCode</h1>
+        <p class="section-subtitle">Problem solving history</p>
+
+        <div id="leetcode-page" style="max-width: 700px; margin: 0 auto;">
+            <div style="text-align: center; color: var(--text-secondary); padding: 3rem 0;">
+                <i class="fas fa-spinner fa-spin" style="font-size: 1.5rem;"></i>
+                <p style="margin-top: 0.75rem;">Loading stats...</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    fetch('/api/leetcode').then(function(r) { return r.json(); }).then(function(data) {
+        var el = document.getElementById('leetcode-page');
+        if (data.error) {
+            el.innerHTML = '<p style="text-align:center;color:var(--text-secondary);padding:3rem 0;">No data yet.</p>';
+            return;
+        }
+
+        var t = data.solved.all||0, e = data.solved.easy||0, m = data.solved.medium||0, h = data.solved.hard||0;
+        var r = data.profile ? '#' + data.profile.ranking.toLocaleString() : 'N/A';
+        var subs = data.allSubmissions || [];
+
+        var html = '<div style="display:flex;gap:1rem;justify-content:center;margin-bottom:2rem;">';
+        html += '<div style="background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:1.5rem;text-align:center;flex:1;"><p style="font-size:2.5rem;font-weight:800;color:var(--accent);margin-bottom:0.25rem;">' + t + '</p><p style="color:var(--text-secondary);font-size:0.85rem;">Solved</p></div>';
+        html += '<div style="background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:1.5rem;text-align:center;flex:1;"><p style="font-size:2.5rem;font-weight:800;color:var(--text-secondary);margin-bottom:0.25rem;">' + r + '</p><p style="color:var(--text-secondary);font-size:0.85rem;">Ranking</p></div>';
+        html += '<div style="background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:1.5rem;text-align:center;flex:1;"><p style="font-size:2.5rem;font-weight:800;color:var(--text-secondary);margin-bottom:0.25rem;">' + subs.length + '</p><p style="color:var(--text-secondary);font-size:0.85rem;">Recorded</p></div>';
+        html += '</div>';
+
+        html += '<div style="background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:1.5rem;margin-bottom:2rem;">';
+        var ds = [{l:'Easy',c:e,g:'#4ade80'},{l:'Medium',c:m,g:'#facc15'},{l:'Hard',c:h,g:'#f87171'}];
+        var maxC = Math.max(e, m, h, 1);
+        ds.forEach(function(d){ var p=d.c>0?Math.round(d.c/maxC*100):0; html+='<div style="margin-bottom:0.75rem;"><div style="display:flex;justify-content:space-between;font-size:0.88rem;margin-bottom:0.3rem;"><span style="color:'+d.g+';">'+d.l+'</span><span style="color:var(--text-secondary);">'+d.c+'</span></div><div style="background:var(--border);border-radius:4px;overflow:hidden;height:8px;"><div style="width:'+p+'%;background:'+d.g+';height:100%;border-radius:4px;"></div></div></div>'; });
+        html += '</div>';
+
+        if (subs.length > 0) {
+            html += '<div style="background:var(--bg-card);border:1px solid var(--border);border-radius:12px;overflow:hidden;"><div style="padding:1.25rem 1.25rem 0;"><h6 style="font-weight:700;font-size:0.85rem;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.5px;"><i class="fas fa-list mr-1"></i> All Submissions</h6></div><div style="padding:0.5rem 0;">';
+            subs.forEach(function(s) {
+                html += '<div style="display:flex;justify-content:space-between;align-items:center;padding:0.55rem 1.25rem;border-bottom:1px solid var(--border);font-size:0.88rem;"><a href="https://leetcode.com/problems/'+s.title_slug+'/" target="_blank" style="color:var(--text-primary);text-decoration:none;">'+s.title+'</a><span style="color:var(--text-secondary);font-size:0.8rem;">'+s.date+'</span></div>';
+            });
+            html += '</div></div>';
+        }
+
+        el.innerHTML = html;
+    }).catch(function() {
+        var el = document.getElementById('leetcode-page');
+        el.innerHTML = '<p style="text-align:center;color:var(--text-secondary);padding:3rem 0;">Failed to load.</p>';
+    });
+});
+</script>
+{% endblock %}

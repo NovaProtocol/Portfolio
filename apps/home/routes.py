@@ -19,7 +19,7 @@ def health():
 
 
 @blueprint.route("/api/leetcode")
-def leetcode():
+def leetcode_api():
     stats_raw = get_snapshot("stats")
     if not stats_raw:
         return jsonify({"error": "No data yet — poller hasn't run"}), 503
@@ -29,3 +29,8 @@ def leetcode():
 
     stats["allSubmissions"] = submissions
     return jsonify(stats)
+
+
+@blueprint.route("/leetcode")
+def leetcode_page():
+    return render_template("home/leetcode.html")
