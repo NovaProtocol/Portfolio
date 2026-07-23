@@ -55,15 +55,15 @@ PROJECTS: dict[str, dict] = {
     "water-billing-system": {
         "title": "Water Billing System",
         "subtitle": "Cotta Realty & Development Corporation",
-        "description": (
+        "description": [
             "A full-stack water utility billing management platform with "
             "NFC-enabled meter reading, 4 authentication systems, and "
             "automated payment reconciliation via Xendit. Built for a "
-            "Philippine real estate developer serving residential tenants.\n"
+            "Philippine real estate developer serving residential tenants.",
             "Project Note: This project is hosted on a low-end server and does not "
             "represent the full capabilities of the system. It is a demo "
-            "version for showcase purposes only."
-        ),
+            "version for showcase purposes only.",
+        ],
         "tech": {
             "web": ["Flask", "SQLAlchemy", "MySQL 8.4", "Caddy", "Gunicorn", "Xendit API", "Docker"],
             "mobile": ["React Native", "Expo", "TypeScript", "NFC (NTAG215)", "SQLite"],

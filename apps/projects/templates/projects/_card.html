@@ -21,7 +21,7 @@
                 </div>
             </div>
             <p style="color: var(--text-secondary); font-size: 0.88rem; line-height: 1.6; margin-bottom: 1.25rem;">
-                {{ project.description }}
+                {{ project.description if project.description is string else project.description | join(" ") }}
             </p>
             <div style="margin-bottom: 0;">
                 {% for tech in project.tech.web %}
