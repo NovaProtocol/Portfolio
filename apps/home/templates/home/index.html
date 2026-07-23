@@ -275,9 +275,9 @@ document.addEventListener('DOMContentLoaded', function() {
         var ds = [{l:'Easy',c:e,g:'#4ade80',mt:Math.max(e,1)},{l:'Medium',c:m,g:'#facc15',mt:Math.max(m,1)},{l:'Hard',c:h,g:'#f87171',mt:Math.max(h,1)}];
         ds.forEach(function(d){ var p=d.c>0?Math.round(d.c/d.mt*100):0; html+='<div style="margin-bottom:0.75rem;"><div style="display:flex;justify-content:space-between;font-size:0.85rem;margin-bottom:0.3rem;"><span style="color:'+d.g+';">'+d.l+'</span><span style="color:var(--text-secondary);">'+d.c+'</span></div><div style="background:var(--border);border-radius:4px;overflow:hidden;height:6px;"><div style="width:'+p+'%;background:'+d.g+';height:100%;border-radius:4px;"></div></div></div>'; });
         html += '</div>';
-        if (data.recentSubmissions && data.recentSubmissions.length > 0) {
-            html += '<div style="background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:1.25rem;"><h6 style="font-weight:700;font-size:0.85rem;margin-bottom:0.75rem;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.5px;"><i class="fas fa-history mr-1"></i> Recent</h6>';
-            data.recentSubmissions.forEach(function(s){ html+='<div style="display:flex;justify-content:space-between;align-items:center;padding:0.4rem 0;border-bottom:1px solid var(--border);font-size:0.85rem;"><a href="https://leetcode.com/problems/'+s.slug+'/" target="_blank" style="color:var(--text-primary);text-decoration:none;">'+s.title+'</a><span style="color:var(--text-secondary);font-size:0.78rem;">'+s.date+'</span></div>'; });
+        if (data.allSubmissions && data.allSubmissions.length > 0) {
+            html += '<div style="background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:1.25rem;"><h6 style="font-weight:700;font-size:0.85rem;margin-bottom:0.75rem;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.5px;"><i class="fas fa-history mr-1"></i> Submissions (' + data.allSubmissions.length + ' total)</h6>';
+            data.allSubmissions.slice(0, 20).forEach(function(s){ html+='<div style="display:flex;justify-content:space-between;align-items:center;padding:0.4rem 0;border-bottom:1px solid var(--border);font-size:0.85rem;"><a href="https://leetcode.com/problems/'+s.title_slug+'/" target="_blank" style="color:var(--text-primary);text-decoration:none;">'+s.title+'</a><span style="color:var(--text-secondary);font-size:0.78rem;">'+s.date+'</span></div>'; });
             html += '</div>';
         }
         el.innerHTML = html;
