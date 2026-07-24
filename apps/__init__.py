@@ -26,8 +26,4 @@ def create_app(config: object) -> Flask:
     from apps.gatekeeper import gatekeeper_check
     app.before_request(gatekeeper_check)
 
-    with app.app_context():
-        from apps.leetcode_poller import start_poller
-        start_poller()
-
     return app

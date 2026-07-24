@@ -27,8 +27,7 @@ def _gatekeeper_url():
 
 
 def gatekeeper_check():
-    if (request.path.startswith("/static/") or request.path == "/health"
-        or request.path.startswith("/api/leetcode") or request.path == "/leetcode"):
+    if (request.path.startswith("/static/") or request.path == "/health"):
         return
 
     token = request.cookies.get("gatekeeper_token")
