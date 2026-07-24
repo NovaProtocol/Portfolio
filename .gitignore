@@ -4,3 +4,5 @@ __pycache__/
 .env
 Portfolio.code-workspace
 AGENTS.md
+.agents/
+docs/
