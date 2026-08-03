@@ -23,6 +23,15 @@ PROJECTS: dict[str, dict] = {
             "Backup code fallback for emergency access",
             "REST API for integration with protected apps",
         ],
+        "status": "operational",
+        "reason": (
+            "The moment a domain goes live, bots start crawling it — scraping "
+            "whatever they can and probing for unsecured endpoints. GateKeeper is the "
+            "boundary: anyone with a proper link gets in, anyone browsing directly "
+            "gets a login page. One access code, one signed cookie, one redirect — "
+            "security through a simple, verifiable boundary instead of a sprawling "
+            "auth system."
+        ),
         "github": "https://github.com/NovaProtocol/GateKeeper",
         "links": [],
         "buttons": [],
@@ -42,6 +51,14 @@ PROJECTS: dict[str, dict] = {
             "GateKeeper integration for access control",
             "ProxyFix middleware for correct HTTPS behind tunnel",
         ],
+        "status": "operational",
+        "reason": (
+            "This site is the front door to everything else — and the proof that "
+            "everything behind it actually works: real domains routed through "
+            "Cloudflare Tunnel without needing a public IP, containers wired securely "
+            "inside Docker networks, and a GateKeeper-protected stack running in "
+            "production."
+        ),
         "url": "https://portfolio.projectnova.download/",
         "github": "https://github.com/NovaProtocol/Portfolio",
         "links": [],
@@ -70,6 +87,14 @@ PROJECTS: dict[str, dict] = {
             "MkDocs documentation site with full API reference and architecture docs",
             "phpMyAdmin admin interface proxied through Caddy on private port",
         ],
+        "status": "operational",
+        "reason": (
+            "Utility billing handles some of the most sensitive data there is — "
+            "customer identities, meter records, payments. This project proves I can "
+            "build that properly: customer data sealed in internal networks, granular "
+            "staff permissions, signed sessions, a full audit trail, and payment "
+            "reconciliation that can be traced end to end."
+        ),
         "url": "https://water-billing-system.projectnova.download/",
         "github": "https://github.com/NovaProtocol/WaterBillingSystem",
         "image": "assets/images/water-billing-system/water-billing-system-preview.png",
@@ -98,7 +123,16 @@ PROJECTS: dict[str, dict] = {
             "A self-hosted platform for practicing Python programming problems. A Flask frontend, protected by GateKeeper auth, offers a browsable problem library with images, tags, and per-problem progress tracking, plus a code submission interface. Problems and submissions are stored in MySQL, and a separate executor container picks up submissions from a queue and runs them in a hardened bubblewrap sandbox — the web app and the code runner never share a process.",
             "Every submission executes in its own sandbox. Bubblewrap gives it a private set of namespaces (user, network, IPC, PID, UTS, cgroup, time), so it has no network access and cannot see other processes. The system is read-only: only /usr, /usr/local, /lib, and /lib64 are bound in, /tmp is a RAM-backed tmpfs that vanishes when the process dies, and /dev is freshly populated. The environment is completely empty — no variables, no secrets, nothing inherited from the host. Hard resource limits are enforced on the entire process tree before the code starts: 1GB of address space, 64 processes, 25 CPU seconds, and core dumps disabled — and user code cannot raise any of them.",
             "There is no fallback path: if the sandbox fails to start, the submission is marked failed rather than ever running unsandboxed. Every case is judged against hidden expected outputs with per-case pass/fail results, timing, and peak memory tracked. The executor container itself is capped at 1GB of RAM, 2 CPUs, and 128 processes, keeping it fully isolated from the database and web app.",
+            "I made SolveSpace as an attempt to learn about sandboxing and process isolation — namespaces, resource limits, and what it takes to run untrusted code safely. It served that purpose well, but it's not actively used anymore.",
         ],
+        "status": "halted",
+        "status_reason": "Lack of Productive Use — it's cool, but there are over 100 LeetCode clones that function way better.",
+        "reason": (
+            "Built to learn what it actually takes to run untrusted code safely — "
+            "namespaces, resource limits, and process isolation. The sandboxing "
+            "worked exactly as intended; the use case just didn't outlive the "
+            "learning."
+        ),
         "tech": {
             "web": ["Flask", "Gunicorn", "MySQL 8.4", "Docker", "Bubblewrap", "Cloudflare Tunnel"],
         },
