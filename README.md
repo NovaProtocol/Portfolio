@@ -1,6 +1,6 @@
 # Portfolio
 
-Personal portfolio site built with Flask 3.1 + Gunicorn.
+Personal portfolio site built with Flask 3.1 + Gunicorn, served behind a Caddy reverse proxy that gates access through [GateKeeper](https://github.com/NovaProtocol/GateKeeper).
 
 ## Adding a Project
 
@@ -48,24 +48,29 @@ Place preview images in `static/assets/images/<slug>/`.
 ## Running
 
 ```bash
-# Development (port 7010)
+# Development (port 7010, no auth)
 python run.py --deployment_type DEBUG
 
-# Production via gunicorn
-python run.py --deployment_type PRODUCTION
-
-# Docker
+# Docker (app :7010 internal, Caddy :7011 exposed)
 docker compose up --build
 ```
+
+The Cloudflare tunnel ingress must point at the Caddy container
+(`portfolio_caddy:7011`), not the app.
 
 ## Environment
 
 | Variable | Required | Description |
 |----------|----------|-------------|
 | `DEPLOYMENT_TYPE` | yes | `DEBUG` or `PRODUCTION` |
-| `SECRET_KEY` | yes | Must match GateKeeper's key |
-| `GATEKEEPER_INTERNAL` | yes | Internal URL for API calls (`http://gatekeeper:7000` in Docker) |
 
 ## Auth
 
-Portfolio is protected by [GateKeeper](https://github.com/NovaProtocol/GateKeeper). Unauthenticated requests are redirected to the GateKeeper login page. The redirect URL is derived by swapping the subdomain to `gatekeeper` (e.g. `portfolio.example.com` → `gatekeeper.example.com`).
+Every request through Caddy is checked against GateKeeper's forward-auth
+endpoint (`/api/authz/forward-auth`). A valid `gatekeeper_token` cookie passes
+(200). Without one, a valid `?access_code=` in the URL logs in on the spot and
+is stripped from the URL. Otherwise the request is redirected to the GateKeeper
+login page. Only `/health` bypasses the gate.
+
+See `caddy/Caddyfile` — GateKeeper is reached as `gatekeeper:7000` over the
+external `gatekeeper_default` Docker network.

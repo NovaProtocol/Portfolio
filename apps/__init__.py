@@ -23,7 +23,4 @@ def create_app(config: object) -> Flask:
     app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1)
     register_blueprints(app)
 
-    from apps.gatekeeper import gatekeeper_check
-    app.before_request(gatekeeper_check)
-
     return app
