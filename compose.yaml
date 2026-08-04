@@ -5,21 +5,27 @@ services:
       dockerfile: Dockerfile
     container_name: portfolio_main
     restart: unless-stopped
-    ports:
-      - "7010:7010"
     environment:
       PYTHON_GIL: ${PYTHON_GIL:-0}
       DEPLOYMENT_TYPE: ${DEPLOYMENT_TYPE:?DEPLOYMENT_TYPE is required}
-      SECRET_KEY: ${SECRET_KEY:?SECRET_KEY is required}
-      GATEKEEPER_INTERNAL: ${GATEKEEPER_INTERNAL:?GATEKEEPER_INTERNAL is required}
+    networks:
+      - default
+    env_file:
+      - path: .env
+        required: false
 
+  caddy:
+    build:
+      context: ./caddy
+      dockerfile: Dockerfile
+    container_name: portfolio_caddy
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:7011:7011"
     networks:
       - default
       - gatekeeper
       - cloudflared-tunnel
-    env_file:
-      - path: .env
-        required: false
 
 networks:
   default:
@@ -29,5 +35,3 @@ networks:
   cloudflared-tunnel:
     external: true
     name: cloudflared-tunnel_default
-
-
