@@ -30,10 +30,10 @@
             </p>
             <div style="margin-bottom: 0;">
                 {% for tech in project.tech.web %}
-                <span class="tag">{{ tech }}</span>
+                {{ tech_tag(tech) }}
                 {% endfor %}
                 {% for tech in project.tech.mobile %}
-                <span class="tag">{{ tech }}</span>
+                {{ tech_tag(tech) }}
                 {% endfor %}
             </div>
         </div>
