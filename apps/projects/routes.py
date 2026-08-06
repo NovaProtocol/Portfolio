@@ -71,18 +71,22 @@ PROJECTS: dict[str, dict] = {
             "A full-stack water utility billing management platform with NFC-enabled meter reading, 4 authentication systems, and automated payment reconciliation via Xendit. Built for Cotta Realty & Development Corporation, serving residential tenants across multiple subdivisions in Quezon, Philippines.",
             "A React Native field app gives meter readers an offline-first workflow: customer lists, reading history, and NFC tag data are downloaded during sync, and readings are queued in local SQLite until connectivity returns. Meter tags are NTAG215 NFC chips whose passwords are derived on-device from the tag's unclonable factory UID using SHA-256 — the secret never touches the server or the network — with tamper detection, on-device enrollment with read-back verification of every write, and duplicate-month protection enforced both locally and server-side.",
             "Readings auto-generate bills against a 5-tier progressive water tariff with late penalties. Payments use a waterfall model: money settles the oldest unpaid bill first, excess rolls over as credit, and a single receipt can span multiple bills with receipt-group undo. 22 payment methods (GCash, Maya, cards, bank debits, over-the-counter, QRPh) each carry their own fee structure, and online payments flow through Xendit payment sessions.",
-            "Online payments are reconciled through two paths: an instant webhook auto-pays the moment Xendit confirms, and a self-rescheduling background worker re-checks stuck transactions every 5 minutes and can reverse payments Xendit later reverses. The platform runs as 11 Docker containers behind a Caddy reverse proxy with 6 networks — the API is unreachable from the edge, portals reach it only over an internal network, and phpMyAdmin and documentation sit on a private port behind GateKeeper SSO.",
+            "Online payments are reconciled through two paths: an instant webhook auto-pays the moment Xendit confirms, and a self-rescheduling background worker re-checks stuck transactions every 5 minutes and can reverse payments Xendit later reverses. The API and all portals are async FastAPI services on Granian (the worker remains a lightweight Flask process), and the platform runs as 11 Docker containers behind a Caddy reverse proxy with 6 networks — the API is unreachable from the edge, portals reach it only over an internal network, and phpMyAdmin and documentation sit on a private port behind GateKeeper SSO.",
+            "The container repairs itself: on every boot the API runs a database preflight that inspects the live schema against the models — missing tables and indexes are created automatically, column drift is widened safely, and redundant indexes are dropped — while anything it cannot fix without risking data (missing columns, incompatible types) crashes the container with the exact ALTER commands to run after a backup. Environment variables are held to the same standard: every required value missing means the container refuses to start instead of silently running with a placeholder.",
             "Project Note: This project is hosted on a low-end server and thus, does not represent the full expected performance of the system. It is only a demo version meant to showcase the features and functionality.",
         ],
         "tech": {
-            "web": ["Flask", "SQLAlchemy", "MySQL 8.4", "Caddy", "Gunicorn", "Xendit API", "Cloudflare Tunnel", "Docker"],
+            "web": ["FastAPI", "Flask", "SQLAlchemy", "MySQL 8.4", "Caddy", "Granian", "Xendit API", "Cloudflare Tunnel", "Docker"],
             "mobile": ["React Native", "Expo", "TypeScript", "NFC (NTAG215)", "SQLite"],
         },
         "features": [
             "11 Docker containers with 6 internal networks (public/private/API isolation)",
             "Caddy reverse proxy separating public (:7020) and private (:7021) traffic",
-            "4 authentication systems: API keys, Flask-Login, signed cookies, GateKeeper SSO",
+            "4 authentication layers: API keys, signed cookies, internal service keys, GateKeeper SSO",
             "NFC tag reading (NTAG215 PWD_AUTH) with offline-capable React Native app",
+            "Async FastAPI API + portals on Granian with a Flask-based background worker",
+            "Startup DB preflight & self-heal: missing tables/indexes auto-created, drift auto-fixed, risky discrepancies crash-loop the container with the exact fix",
+            "Strict environment validation — every required variable missing means the container refuses to boot",
             "DB-backed background task queue with Xendit payment reconciliation",
             "MkDocs documentation site with full API reference and architecture docs",
             "phpMyAdmin admin interface proxied through Caddy on private port",
@@ -102,6 +106,7 @@ PROJECTS: dict[str, dict] = {
             {"name": "Staff Site", "url": "https://water-billing-system-private.projectnova.download/staff/", "icon": "fas fa-user-tie"},
             {"name": "Dev Site", "url": "https://water-billing-system-private.projectnova.download/developer/", "icon": "fas fa-code-branch"},
             {"name": "Documentation", "url": "https://water-billing-system-private.projectnova.download/documentation/", "icon": "fas fa-book"},
+            {"name": "phpMyAdmin", "url": "https://water-billing-system-private.projectnova.download/phpmyadmin/", "icon": "fas fa-database"},
         ],
         "testing": {
             "staff": {
