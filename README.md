@@ -37,6 +37,8 @@ Add an entry to the `PROJECTS` dict in `apps/projects/routes.py`:
 | `description` | yes | 2-3 sentence summary |
 | `tech` | yes | `web` and `mobile` lists of tech tags |
 | `features` | no | Bullet list of key features |
+| `status` | no | Operational status tag (`operational` / `halted`) |
+| `note` | no | Short note shown under the status tag (e.g. job update) |
 | `url` | no | Live site URL (shows online/offline status) |
 | `github` | no | Source repo link |
 | `image` | no | Path relative to `static/` (shown on detail page) |
