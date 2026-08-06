@@ -75,7 +75,7 @@ PROJECTS: dict[str, dict] = {
             "Project Note: this is a live demo of the full system, hosted on a low-end server to stay affordable. The live site shows the features, not the real performance headroom. You can log in with the given demo credentials and explore.",
         ],
         "tech": {
-            "web": ["FastAPI", "Flask", "SQLAlchemy", "MySQL 8.4", "Caddy", "Granian", "Xendit API", "Cloudflare Tunnel", "Docker"],
+            "web": ["FastAPI", "SQLAlchemy", "MySQL 8.4", "Caddy", "Granian", "Xendit API", "Cloudflare Tunnel", "Docker"],
             "mobile": ["React Native", "Expo", "TypeScript", "NFC (NTAG215)", "SQLite"],
         },
         "features": [
