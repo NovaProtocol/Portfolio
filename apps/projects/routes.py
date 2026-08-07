@@ -171,12 +171,14 @@ PROJECTS: dict[str, dict] = {
         ],
         "status": "operational",
         "reason": (
-            "A real local business that deserved a proper web presence. This project "
-            "meant taking a client's physical menu, contact details, and branch "
-            "information and turning it into something maintainable: content-driven "
-            "pages, a single source of truth for pricing, and a clean FastAPI site "
-            "deployed with the same hardened Docker and GateKeeper setup as the rest "
-            "of the stack."
+            "Above all, this was a learning playground. I used Buddy's, a real local "
+            "business, as the subject to teach myself modern frontend techniques: "
+            "animated CSS, scroll-triggered reveals, hover micro-interactions, glass "
+            "morphism, and the Pahiyas festival-inspired theming that gives the site "
+            "its character. Along the way I also turned a physical menu into a "
+            "maintainable system with content-driven pages and a single source of "
+            "truth for pricing, all served through a FastAPI site behind the same "
+            "hardened Docker and GateKeeper setup as the rest of my stack."
         ),
         "url": "https://buddys.projectnova.download/",
         "github": "https://github.com/NovaProtocol/BuddysFreelanceProject",
