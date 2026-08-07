@@ -1,10 +1,13 @@
 {
   "name": "Khyles Gibrian Ramos",
+  "headline": "Software Engineer · Web Developer",
   "photo": "assets/images/resume_image.JPG",
   "contact": {
     "address": "Brgy. Mateuna, Tayabas, Quezon",
     "phone": "(+63) 927 403 2529",
-    "email": "khyles.gibrian.ramos19@gmail.com"
+    "email": "khyles.gibrian.ramos19@gmail.com",
+    "linkedin": "https://www.linkedin.com/in/khyles-gibrian-ramos/",
+    "github": "https://github.com/NovaProtocol"
   },
   "summary": "DOST Scholar and engineering student with a foundation in software programming, system automation, and network configuration. Experience in scripting, web infrastructure, and software-hardware integration through academic and personal projects. Adaptable and eager to learn, with a desire to build practical, real-world skills in system architecture and backend operations.",
   "objectives": "Motivated individual seeking an entry-level technical role to apply hands-on experience in coding, circuit prototyping, and system simulations. Eager to contribute to a collaborative team while actively learning from experienced professionals and continuously expanding my multidisciplinary skill set.",
@@ -12,17 +15,17 @@
     {
       "school": "Southern Luzon State University",
       "degree": "Bachelor of Science in Mechanical Engineering",
-      "years": "S.Y. 2021-2026"
+      "years": "2021-2026"
     },
     {
       "school": "Sacred Heart College Lucena",
       "degree": "Science Technology Engineering & Mathematics (STEM) Strand",
-      "years": "S.Y. 2019-2021"
+      "years": "2019-2021"
     },
     {
       "school": "Luis Palad Integrated High School",
       "degree": "Junior High School",
-      "years": "S.Y. 2015-2019"
+      "years": "2015-2019"
     }
   ],
   "certifications": [
@@ -43,6 +46,33 @@
         "Inspected campus emergency lights and fire extinguishers to ensure proper working order and safety compliance.",
         "Utilized AutoCAD to design and update detailed facility layouts and emergency fire exit plans.",
         "Handled daily office operations, including documentation, message routing, and cross-department communications."
+      ]
+    }
+  ],
+  "projects": [
+    {
+      "name": "Water Billing System",
+      "description": "Utility CIS for Cotta Realty & Development Corp. FastAPI, SQLAlchemy, MySQL, Docker, Xendit payment integration.",
+      "highlights": [
+        "11-container Docker deployment across 6 isolated networks with role-scoped API access",
+        "Offline-first React Native meter reading app with tamper-proof NFC meter tags",
+        "Automatic billing from a 5-tier progressive tariff with payment reconciliation"
+      ]
+    },
+    {
+      "name": "GateKeeper",
+      "description": "Single sign-on access code auth gate protecting a family of web apps. Flask, SQLite, Docker, Cloudflare Tunnel.",
+      "highlights": [
+        "Signed, tamper-evident cookies with short-lived ticket-based session verification",
+        "Admin panel to create and revoke access codes with backup code fallback"
+      ]
+    },
+    {
+      "name": "SolveSpace",
+      "description": "Self-hosted Python practice sandbox. Flask, MySQL, Docker, Bubblewrap.",
+      "highlights": [
+        "Sandboxed solution judging via bubblewrap with hard memory, CPU, and process limits",
+        "No network access and read-only filesystem for every submission"
       ]
     }
   ],
