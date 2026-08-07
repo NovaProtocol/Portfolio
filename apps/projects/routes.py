@@ -6,6 +6,7 @@ from apps.projects import blueprint
 
 PROJECTS: dict[str, dict] = {
     "gatekeeper": {
+        "active": True,
         "title": "GateKeeper",
         "subtitle": "Access code auth gate for web apps",
         "description": [
@@ -37,6 +38,7 @@ PROJECTS: dict[str, dict] = {
         "buttons": [],
     },
     "portfolio": {
+        "active": True,
         "title": "Portfolio",
         "subtitle": "Personal portfolio site",
         "description": [
@@ -65,6 +67,7 @@ PROJECTS: dict[str, dict] = {
         "buttons": [],
     },
     "water-billing-system": {
+        "active": True,
         "title": "Water Billing System",
         "subtitle": "Cotta Realty & Development Corporation",
         "description": [
@@ -122,6 +125,7 @@ PROJECTS: dict[str, dict] = {
         "buttons": [],
     },
     "solvespace": {
+        "active": True,
         "title": "SolveSpace",
         "subtitle": "Self-hosted Python practice sandbox",
         "description": [
@@ -153,6 +157,7 @@ PROJECTS: dict[str, dict] = {
         "buttons": [],
     },
     "buddys-freelance-project": {
+        "active": False,
         "title": "Buddy's Website",
         "subtitle": "Freelance — Buddy's Restaurant",
         "description": [
@@ -189,7 +194,7 @@ PROJECTS: dict[str, dict] = {
 
 
 def ordered_projects() -> list[tuple[str, dict]]:
-    return list(PROJECTS.items())
+    return [(slug, project) for slug, project in PROJECTS.items() if project.get("active")]
 
 
 @blueprint.route("/")
