@@ -1,0 +1,100 @@
+{
+  "name": "Khyles Gibrian Ramos",
+  "photo": "assets/images/resume_image.JPG",
+  "contact": {
+    "address": "Brgy. Mateuna, Tayabas, Quezon",
+    "phone": "(+63) 927 403 2529",
+    "email": "khyles.gibrian.ramos19@gmail.com"
+  },
+  "summary": "DOST Scholar and engineering student with a foundation in software programming, system automation, and network configuration. Experience in scripting, web infrastructure, and software-hardware integration through academic and personal projects. Adaptable and eager to learn, with a desire to build practical, real-world skills in system architecture and backend operations.",
+  "objectives": "Motivated individual seeking an entry-level technical role to apply hands-on experience in coding, circuit prototyping, and system simulations. Eager to contribute to a collaborative team while actively learning from experienced professionals and continuously expanding my multidisciplinary skill set.",
+  "education": [
+    {
+      "school": "Southern Luzon State University",
+      "degree": "Bachelor of Science in Mechanical Engineering",
+      "years": "S.Y. 2021-2026"
+    },
+    {
+      "school": "Sacred Heart College Lucena",
+      "degree": "Science Technology Engineering & Mathematics (STEM) Strand",
+      "years": "S.Y. 2019-2021"
+    },
+    {
+      "school": "Luis Palad Integrated High School",
+      "degree": "Junior High School",
+      "years": "S.Y. 2015-2019"
+    }
+  ],
+  "certifications": [
+    {
+      "title": "DOLE Accredited Safety Officer 2 (SO2)",
+      "issuer": "Basic Occupational Safety and Health (BOSH SO2) Training",
+      "year": "2024",
+      "detail": "Completed 40-Hour OSH Course"
+    }
+  ],
+  "experience": [
+    {
+      "role": "Physical Plant Facilities Department - PTP Program",
+      "organization": "Southern Luzon State University",
+      "period": "Mar 2026 - Apr 2026",
+      "responsibilities": [
+        "Conducted routine inventory audits and applied asset tags to university property to improve tracking accuracy.",
+        "Inspected campus emergency lights and fire extinguishers to ensure proper working order and safety compliance.",
+        "Utilized AutoCAD to design and update detailed facility layouts and emergency fire exit plans.",
+        "Handled daily office operations, including documentation, message routing, and cross-department communications."
+      ]
+    }
+  ],
+  "awards": [
+    {
+      "title": "Academic Excellence Awardee",
+      "detail": "With Honours",
+      "years": "2016 - 2021"
+    },
+    {
+      "title": "Dean's Lister",
+      "detail": "Dean's Lister",
+      "years": "2021 - 2025"
+    },
+    {
+      "title": "DOST Scholar",
+      "detail": "S&T Scholarship",
+      "years": "2021 - 2025"
+    }
+  ],
+  "skills": [
+    {
+      "category": "Programming",
+      "value": "Python, C++, JavaScript, Rust, TypeScript, SQL"
+    },
+    {
+      "category": "Frameworks & Libraries",
+      "value": "Flask, FastAPI, Django, SQLAlchemy, Jinja2, Bootstrap, REST APIs"
+    },
+    {
+      "category": "Databases",
+      "value": "MySQL, SQLite"
+    },
+    {
+      "category": "Servers & Deployment",
+      "value": "Node.js, Docker, Caddy, Nginx, Gunicorn, Granian, Debian, Bubblewrap"
+    },
+    {
+      "category": "Networking",
+      "value": "Cloudflare Tunnel, Tailscale Funnel, Domain Management, Network Configuration"
+    },
+    {
+      "category": "Mobile Development",
+      "value": "React Native, Expo"
+    },
+    {
+      "category": "Electronics & Hardware",
+      "value": "Arduino, ESP32, WT32, RP2040, Raspberry Pi, STM32, ESP8266, NTAG215, NTAG213, Mifare Classic 1K"
+    },
+    {
+      "category": "Mechanical",
+      "value": "AutoCAD, OnShape, Fusion 360, UltiMaker Cura"
+    }
+  ]
+}
