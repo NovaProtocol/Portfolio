@@ -47,7 +47,7 @@ Demos.register(function() {
         { text: '[INFO] Booting worker with pid: 1235', color: 'var(--text-secondary)', delay: 150 },
         { text: '[INFO] Booting worker with pid: 1236', color: 'var(--text-secondary)', delay: 100 },
         { text: '', delay: 60 },
-        { text: '✓ gunicorn ready — 3 workers · 4 threads each', color: '#f1fa8c', delay: 300 },
+        { text: '✓ gunicorn ready: 3 workers · 4 threads each', color: '#f1fa8c', delay: 300 },
     ]); });
 
     return p;

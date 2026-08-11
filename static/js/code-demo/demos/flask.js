@@ -42,7 +42,7 @@ Demos.register(function() {
         { text: ' * Serving Flask app "app"', color: 'var(--text-secondary)', delay: 200 },
         { text: ' * Running on http://0.0.0.0:5000', color: '#50fa7b', delay: 300 },
         { text: '', delay: 60 },
-        { text: '✓ API ready — 3 routes registered', color: '#f1fa8c', delay: 400 },
+        { text: '✓ API ready: 3 routes registered', color: '#f1fa8c', delay: 400 },
     ]); });
 
     return p;

@@ -47,6 +47,19 @@
         "Utilized AutoCAD to design and update detailed facility layouts and emergency fire exit plans.",
         "Handled daily office operations, including documentation, message routing, and cross-department communications."
       ]
+    },
+    {
+      "role": "Freelance Software Developer",
+      "organization": "N/A - Work from Home",
+      "period": "Aug 2025 - Nov 2025",
+      "responsibilities": [
+        "Developed a full-stack signature verification application using PyTorch, ResNet-18, and Flask to support academic thesis research.",
+        "Built a signature verification system that utilizes Triplet Loss to compare known reference signatures against unknown samples for authentication.",
+        "Developed a web-based user interface using Flask to allow users to upload signature samples and view real-time verification results.",
+        "Integrated PyTorch models into the backend to handle real-time image processing and model inference upon user request.",
+        "Created data preprocessing scripts to prepare, normalize, and format signature image datasets for model training.",
+        "Delivered functional code and technical documentation within project deadlines."
+      ]
     }
   ],
   "projects": [
