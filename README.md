@@ -74,5 +74,5 @@ endpoint (`/api/authz/forward-auth`). A valid `gatekeeper_token` cookie passes
 is stripped from the URL. Otherwise the request is redirected to the GateKeeper
 login page. Only `/health` bypasses the gate.
 
-See `caddy/Caddyfile` — GateKeeper is reached as `gatekeeper:7000` over the
+See `caddy/Caddyfile`: GateKeeper is reached as `gatekeeper:7000` over the
 external `gatekeeper_default` Docker network.

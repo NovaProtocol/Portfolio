@@ -26,10 +26,10 @@ PROJECTS: dict[str, dict] = {
         ],
         "status": "operational",
         "reason": (
-            "The moment a domain goes live, bots start crawling it — scraping "
+            "The moment a domain goes live, bots start crawling it, scraping "
             "whatever they can and probing for unsecured endpoints. GateKeeper is the "
             "boundary: anyone with a proper link gets in, anyone browsing directly "
-            "gets a login page. One access code, one signed cookie, one redirect — "
+            "gets a login page. One access code, one signed cookie, one redirect: "
             "security through a simple, verifiable boundary instead of a sprawling "
             "auth system."
         ),
@@ -55,7 +55,7 @@ PROJECTS: dict[str, dict] = {
         ],
         "status": "operational",
         "reason": (
-            "This site is the front door to everything else — and the proof that "
+            "This site is the front door to everything else, and the proof that "
             "everything behind it actually works: real domains routed through "
             "Cloudflare Tunnel without needing a public IP, containers wired securely "
             "inside Docker networks, and a GateKeeper-protected stack running in "
@@ -96,7 +96,7 @@ PROJECTS: dict[str, dict] = {
         "status": "operational",
         "note": "Update: Did not get hired",
         "reason": (
-            "Utility billing handles some of the most sensitive data there is — "
+            "Utility billing handles some of the most sensitive data there is: "
             "customer identities, meter records, payments. This project proves I can "
             "build that properly: customer data sealed in internal networks, granular "
             "staff permissions, signed sessions, a full audit trail, and payment "
@@ -134,9 +134,9 @@ PROJECTS: dict[str, dict] = {
             "I built it to learn process isolation and sandboxing. It served that purpose well, and it's not actively used anymore.",
         ],
         "status": "halted",
-        "status_reason": "Lack of Productive Use — it's cool, but there are over 100 LeetCode clones that function way better.",
+        "status_reason": "Lack of Productive Use: it's cool, but there are over 100 LeetCode clones that function way better.",
         "reason": (
-            "Built to learn what it actually takes to run untrusted code safely — "
+            "Built to learn what it actually takes to run untrusted code safely: "
             "namespaces, resource limits, and process isolation. The sandboxing "
             "worked exactly as intended; the use case just didn't outlive the "
             "learning."
@@ -159,7 +159,7 @@ PROJECTS: dict[str, dict] = {
     "buddys-freelance-project": {
         "active": False,
         "title": "Buddy's Website",
-        "subtitle": "Freelance — Buddy's Restaurant",
+        "subtitle": "Freelance: Buddy's Restaurant",
         "description": [
             "A marketing site for Buddy's, a Pahiyas festival-inspired Filipino restaurant chain founded in Lucban, Quezon, in 1985. The site brings a local food institution online: a full menu with real pricing, a directory of branches across Quezon, Metro Manila, Laguna, and Batangas, private event details, and a product page for every dish.",
             "Prices live in a single pricing dataset, and a curated alias layer bridges naming differences between the menu and the pricing data so every dish shows the right amount. Branch pages carry addresses, operating hours, phone numbers, map links, and photo galleries. Product pages pull descriptive copy, related items, and size options automatically from the pricing data.",
