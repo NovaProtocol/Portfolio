@@ -51,7 +51,7 @@ Place preview images in `static/assets/images/<slug>/`.
 
 ```bash
 # Development (port 7010, no auth)
-python run.py --deployment_type DEBUG
+DEPLOYMENT_TYPE=DEBUG python run.py
 
 # Docker (app :7010 internal, Caddy :7011 exposed)
 docker compose up --build
