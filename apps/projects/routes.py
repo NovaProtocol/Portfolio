@@ -193,6 +193,7 @@ PROJECTS: dict[str, dict] = {
     "novaprotocol": {
         "active": True,
         "title": "NovaProtocol",
+        "title_prefix": "https://github.com/",
         "subtitle": "Dynamic GitHub profile asset server",
         "description": [
             "A public asset server that produces the dynamic SVG badges and animations embedded in my GitHub profile README. Visit my profile and every graphic you see -- the name badge, skills list, and the animated console session -- is a live SVG served by this app, rendered fresh on every page load.",
