@@ -190,6 +190,44 @@ PROJECTS: dict[str, dict] = {
         "links": [],
         "buttons": [],
     },
+    "novaprotocol": {
+        "active": True,
+        "title": "NovaProtocol",
+        "subtitle": "Dynamic GitHub profile asset server",
+        "description": [
+            "A public asset server that produces the dynamic SVG badges and animations embedded in my GitHub profile README. Visit my profile and every graphic you see -- the name badge, skills list, and the animated console session -- is a live SVG served by this app, rendered fresh on every page load.",
+            "Each endpoint generates hand-crafted SVG output from custom Python utilities. The console session simulates a boot-up sequence with typing effects, per-line scroll, and color-coded output. Skills badges render multi-color blocks at proportional widths. The name badge combines typography and layout into a single formatted SVG header.",
+            "It is intentionally public with no authentication layer: GitHub loads these images as embedded content, and embedders have no cookie jar, so a GateKeeper forward-auth gate would break the very thing the project was built for. The stack stays deliberately small -- one FastAPI app, one Caddy proxy, one container.",
+        ],
+        "tech": {
+            "web": ["FastAPI", "Granian", "Caddy", "Docker", "Cloudflare Tunnel"],
+            "lib": ["svgwrite"],
+        },
+        "features": [
+            "Hand-crafted SVG generation with no templates -- every badge is pure Python output",
+            "Animated console session with typing effects, scrolling, and color-coded terminal output",
+            "Multi-color skills badges with padded blocks and percentage-based progress bars",
+            "Intentionally public (no auth gate) since GitHub embedders have no session",
+            "Test suite covering route cache headers, SVG structure, and edge cases",
+        ],
+        "status": "operational",
+        "reason": (
+            "GitHub profile pages are static by default. NovaProtocol turns mine "
+            "into a live window: the SVG endpoints regenerate on every request, so I "
+            "can update my skills, add new badges, or change the console animation "
+            "without touching the README. It is the only intentionally public service "
+            "in my stack, and the one visitors see first -- before they even know the "
+            "rest of the ecosystem exists."
+        ),
+        "url": "https://github.projectnova.download/",
+        "github": "https://github.com/NovaProtocol/NovaProtocol",
+        "links": [
+            {"name": "Name Badge", "url": "https://github.projectnova.download/name.svg", "icon": "fas fa-tag"},
+            {"name": "Skills Badge", "url": "https://github.projectnova.download/skills.svg", "icon": "fas fa-code"},
+            {"name": "Console", "url": "https://github.projectnova.download/console.svg", "icon": "fas fa-terminal"},
+        ],
+        "buttons": [],
+    },
 }
 
 
