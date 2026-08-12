@@ -1,7 +1,6 @@
 from __future__ import annotations
 
-import os
+from apps import create_app
+from apps.config import ProductionConfig
 
-os.environ["DEPLOYMENT_TYPE"] = "PRODUCTION"
-
-from run import app  # noqa: E402
+app = create_app(ProductionConfig)
