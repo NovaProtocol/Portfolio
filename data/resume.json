@@ -76,7 +76,7 @@
       "name": "GateKeeper",
       "description": "Single sign-on access code auth gate protecting a family of web apps. Flask, SQLite, Docker, Cloudflare Tunnel.",
       "highlights": [
-        "Signed, tamper-evident cookies with short-lived ticket-based session verification",
+        "Signed, tamper-evident cookies with forward-auth session verification",
         "Admin panel to create and revoke access codes with backup code fallback"
       ]
     },

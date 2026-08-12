@@ -18,7 +18,7 @@ PROJECTS: dict[str, dict] = {
         },
         "features": [
             "Access code authentication with signed cookies",
-            "Short-lived ticket-based session verification (5-min TTL)",
+            "Forward-auth session verification via Caddy",
             "Cross-subdomain cookie for shared auth across apps",
             "Admin panel to create and revoke access codes",
             "Backup code fallback for emergency access",
