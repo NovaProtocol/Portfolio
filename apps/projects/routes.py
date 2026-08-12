@@ -221,11 +221,7 @@ PROJECTS: dict[str, dict] = {
         ),
         "url": "https://github.com/NovaProtocol",
         "github": "https://github.com/NovaProtocol/NovaProtocol",
-        "links": [
-            {"name": "Name Badge", "url": "https://github.projectnova.download/name.svg", "icon": "fas fa-tag"},
-            {"name": "Skills Badge", "url": "https://github.projectnova.download/skills.svg", "icon": "fas fa-code"},
-            {"name": "Console", "url": "https://github.projectnova.download/console.svg", "icon": "fas fa-terminal"},
-        ],
+        "links": [],
         "buttons": [],
     },
 }
