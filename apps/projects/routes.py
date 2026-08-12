@@ -219,7 +219,7 @@ PROJECTS: dict[str, dict] = {
             "in my stack, and the one visitors see first -- before they even know the "
             "rest of the ecosystem exists."
         ),
-        "url": "https://github.com/NovaProtocol",
+        "url": "https://github.projectnova.download/test",
         "github": "https://github.com/NovaProtocol/NovaProtocol",
         "links": [],
         "buttons": [],
