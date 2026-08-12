@@ -1,44 +1,23 @@
 from __future__ import annotations
 
-import argparse
 import os
 import sys
-from pathlib import Path
 
-from dotenv import load_dotenv
+from apps import create_app
+from apps.config import config_dict
 
-dotenv_path = Path(__file__).resolve().parent / ".env"
-load_dotenv(dotenv_path)
+deployment_type = os.environ.get("DEPLOYMENT_TYPE")
 
-from apps import create_app  # noqa: E402
-from apps.config import config_dict  # noqa: E402
-
-parser = argparse.ArgumentParser(description="Portfolio")
-parser.add_argument(
-    "--deployment_type",
-    choices=["DEBUG", "PRODUCTION"],
-    default=os.environ.get("DEPLOYMENT_TYPE"),
-    help="Run mode ($DEPLOYMENT_TYPE env var, required)",
-)
-args, _ = parser.parse_known_args()
-
-if not args.deployment_type:
+if deployment_type not in ("DEBUG", "PRODUCTION"):
     print(
-        "FATAL: DEPLOYMENT_TYPE is not set. Must be DEBUG or PRODUCTION.\n"
-        "Set it in your .env file or as an environment variable.",
+        "FATAL: DEPLOYMENT_TYPE must be DEBUG or PRODUCTION "
+        "(set the environment variable before running).",
         file=sys.stderr,
     )
     sys.exit(1)
 
-DEBUG = args.deployment_type == "DEBUG"
-get_config_mode = "Debug" if DEBUG else "Production"
-
-try:
-    app_config = config_dict[get_config_mode.capitalize()]
-except KeyError:
-    exit('Error: Invalid <config_mode>. Expected values [Debug, Production]')
-
-app = create_app(app_config)
+app = create_app(config_dict[deployment_type.capitalize()])
+DEBUG = deployment_type == "DEBUG"
 
 if __name__ == "__main__":
     if DEBUG:
