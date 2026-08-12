@@ -6,3 +6,11 @@ Portfolio.code-workspace
 AGENTS.md
 .agents/
 docs/
+
+# AI scratch — never commit
+.agents/
+.superpowers/
+.opencode/
+.claude/
+.continue/
+AGENTS.md
