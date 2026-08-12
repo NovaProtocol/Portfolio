@@ -66,6 +66,15 @@ The Cloudflare tunnel ingress must point at the Caddy container
 |----------|----------|-------------|
 | `DEPLOYMENT_TYPE` | yes | `DEBUG` or `PRODUCTION` |
 
+## Ports
+
+| Port | Service |
+|------|---------|
+| 7010 | App (gunicorn, internal) |
+| 7011 | Caddy (loopback-bound — tunnel only) |
+
+Ports are allotted in groups of 10 per project (Portfolio owns the 7010 block).
+
 ## Auth
 
 Every request through Caddy is checked against GateKeeper's forward-auth
