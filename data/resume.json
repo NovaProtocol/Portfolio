@@ -40,7 +40,7 @@
     {
       "role": "Physical Plant Facilities Department - PTP Program",
       "organization": "Southern Luzon State University",
-      "period": "Mar 2026 - Apr 2026",
+      "period": "Mar 2024 - Apr 2024",
       "responsibilities": [
         "Conducted routine inventory audits and applied asset tags to university property to improve tracking accuracy.",
         "Inspected campus emergency lights and fire extinguishers to ensure proper working order and safety compliance.",
@@ -65,59 +65,34 @@
   "projects": [
     {
       "name": "MELE Review",
-      "description": "Board exam reviewer for the Mechanical Engineering Licensure Exam. FastAPI, SQLAlchemy, MySQL, Docker.",
+      "tech": "FastAPI, SQLAlchemy, MySQL, Docker",
       "highlights": [
-        "Searchable question bank from uploaded exam PDFs with filter, flag-for-review, and answer feedback",
-        "Notebook-style solution editor with a unit-aware solver, MathQuill formula blocks, and metric/English conventions"
+        "Self-hosted board exam reviewer with a self-maintained question bank from various sources, with answer feedback and flag-for-review",
+        "Notebook-style solution editor with a unit-aware solver that handles multi-step engineering equations in both metric and English conventions"
       ]
     },
     {
       "name": "Water Billing System",
-      "description": "Utility CIS for Cotta Realty & Development Corp. FastAPI, SQLAlchemy, MySQL, Docker, Xendit payment integration.",
+      "tech": "FastAPI, SQLAlchemy, MySQL, Docker, React Native, NFC",
       "highlights": [
-        "11-container Docker deployment across 6 isolated networks with role-scoped API access",
-        "Offline-first React Native meter reading app with tamper-proof NFC meter tags",
-        "Automatic billing from a 5-tier progressive tariff with payment reconciliation"
+        "Designed a utility billing platform that keeps confidential customer and payment data isolated on internal Docker networks, with role-scoped API access so each user reaches only what they need",
+        "Built an offline-first meter reading app with tamper-proof NFC tags whose security keys derive on-device, so tag data never crosses the network",
+        "Automated billing from a 5-tier progressive tariff and reconciled 22 payment channels end-to-end"
       ]
     },
     {
       "name": "GateKeeper",
-      "description": "Single sign-on access code auth gate protecting a family of web apps. Flask, SQLite, Docker, Cloudflare Tunnel.",
+      "tech": "Flask, SQLite, Docker, Cloudflare Tunnel",
       "highlights": [
-        "Signed, tamper-evident cookies with forward-auth session verification",
-        "Admin panel to create and revoke access codes with backup code fallback"
-      ]
-    },
-    {
-      "name": "NovaProtocol",
-      "description": "Dynamic GitHub profile asset server. FastAPI, Granian, Caddy, Docker.",
-      "highlights": [
-        "Live SVG badges and animated console session rendered fresh on every request",
-        "Hand-crafted SVG generation with no templates"
+        "Single sign-on auth gate protecting a family of web apps with signed, tamper-evident cookies and forward-auth session verification",
+        "Admin panel to issue and revoke access codes, with a backup code so the owner is never locked out"
       ]
     },
     {
       "name": "SolveSpace",
-      "description": "Self-hosted Python practice sandbox. Flask, MySQL, Docker, Bubblewrap.",
+      "tech": "Flask, Docker, Bubblewrap",
       "highlights": [
-        "Sandboxed solution judging via bubblewrap with hard memory, CPU, and process limits",
-        "No network access and read-only filesystem for every submission"
-      ]
-    },
-    {
-      "name": "Portfolio",
-      "description": "Personal portfolio site documenting the whole stack. Flask, Gunicorn, Docker, Cloudflare Tunnel.",
-      "highlights": [
-        "Project showcase with detail pages, tech tags, and live-site embeds",
-        "GateKeeper-protected frontend served behind a Cloudflare tunnel"
-      ]
-    },
-    {
-      "name": "Buddy's Website",
-      "description": "Marketing site for Buddy's restaurant chain. FastAPI, Granian, Jinja2, Docker.",
-      "highlights": [
-        "Menu, product, and branch pages generated from unified pricing data",
-        "Pahiyas-inspired theming with animated CSS and scroll-triggered reveals"
+        "Practice sandbox that runs untrusted user code in isolated containers with hard memory, CPU, and process limits and no network access"
       ]
     }
   ],
