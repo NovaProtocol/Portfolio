@@ -91,9 +91,6 @@
     .resume-projects-qr { flex-shrink: 0; text-align: center; }
     .resume-projects-qr img { width: 100px; height: 100px; border: 1px solid #ddd; }
     .resume-projects-qr p { font-size: 0.72em; color: #555; margin: 0.25rem 0 0; }
-    .resume-footer-url { text-align: center; font-size: 0.85em; margin-top: 1rem; color: #333; }
-    .resume-footer-url p { margin: 0; }
-    .resume-footer-url a { color: #1a1a1a; text-decoration: underline; }
     .resume-sheet .save-btn {
         display: inline-block;
         margin-bottom: 1rem;
@@ -325,12 +322,6 @@
                 </p>
                 {% endfor %}
             </section>
-
-            {% if resume.contact.portfolio %}
-            <div class="resume-footer-url">
-                <p>My project portfolio: <a href="{{ resume.contact.portfolio }}">{{ resume.contact.portfolio }}</a></p>
-            </div>
-            {% endif %}
         </div>
     </div>
 </div>
