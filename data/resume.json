@@ -116,40 +116,32 @@
   ],
   "skills": [
     {
-      "category": "Programming",
-      "value": "Python, C++, JavaScript, Rust, TypeScript, SQL"
+      "category": "Languages",
+      "value": "Python, C++, JavaScript, TypeScript, SQL"
     },
     {
-      "category": "Frameworks & Libraries",
-      "value": "Flask, FastAPI, Django, SQLAlchemy, Jinja2, Bootstrap, pytest, math.js, REST APIs"
+      "category": "Backend",
+      "value": "FastAPI, Flask, SQLAlchemy, Jinja2"
+    },
+    {
+      "category": "Infrastructure",
+      "value": "Docker, Caddy, Cloudflare Tunnel, Linux"
     },
     {
       "category": "Databases",
       "value": "MySQL, SQLite"
     },
     {
-      "category": "Servers & Deployment",
-      "value": "Node.js, Docker, Caddy, Nginx, Gunicorn, Granian, Uvicorn, Debian, Bubblewrap"
-    },
-    {
-      "category": "Networking",
-      "value": "Cloudflare Tunnel, Tailscale Funnel, Domain Management, Network Configuration"
-    },
-    {
-      "category": "Tools",
-      "value": "Git, Postman"
-    },
-    {
-      "category": "Mobile Development",
+      "category": "Mobile",
       "value": "React Native, Expo"
     },
     {
-      "category": "Electronics & Hardware",
-      "value": "Arduino, ESP32, WT32, RP2040, Raspberry Pi, STM32, ESP8266, NTAG215, NTAG213, Mifare Classic 1K"
+      "category": "Hardware",
+      "value": "Arduino, ESP32, Raspberry Pi, NFC (NTAG215)"
     },
     {
       "category": "Mechanical",
-      "value": "AutoCAD, OnShape, Fusion 360, UltiMaker Cura"
+      "value": "AutoCAD, Fusion 360"
     }
   ]
 }
