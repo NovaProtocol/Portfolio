@@ -268,7 +268,9 @@
                 {% for proj in resume.projects %}
                 <div class="entry">
                     <p class="title" style="margin-bottom:0.15rem;">{{ proj.name }}</p>
-                    <p style="margin-bottom:0.3rem;">{{ proj.description }}</p>
+                    {% if proj.tech %}
+                    <p style="margin-bottom:0.3rem; font-size:0.8em; color:#444;">Tech Stack: {{ proj.tech }}</p>
+                    {% endif %}
                     <ul>
                         {% for item in proj.highlights %}
                         <li>{{ item }}</li>
