@@ -59,6 +59,13 @@
         margin-left: 1.5rem;
         flex-shrink: 0;
     }
+    .resume-qr-top {
+        width: 110px;
+        height: 110px;
+        border: 1px solid #ddd;
+        margin-left: 0.75rem;
+        flex-shrink: 0;
+    }
     .resume-sheet section { margin-bottom: 1.25rem; }
     .resume-sheet h2 {
         font-size: 1.07em;
@@ -86,6 +93,11 @@
     .resume-sheet ul li { margin-bottom: 0.25rem; }
     .resume-sheet .skill-row { margin-bottom: 0.35rem; }
     .resume-sheet .skill-cat { font-weight: 700; }
+    .resume-projects-wrap { display: flex; gap: 1rem; align-items: flex-start; }
+    .resume-projects-list { flex: 1; min-width: 0; }
+    .resume-projects-qr { flex-shrink: 0; text-align: center; }
+    .resume-projects-qr img { width: 100px; height: 100px; border: 1px solid #ddd; }
+    .resume-projects-qr p { font-size: 0.72em; color: #555; margin: 0.25rem 0 0; }
     .resume-sheet .save-btn {
         display: inline-block;
         margin-bottom: 1rem;
@@ -201,9 +213,17 @@
                         <a href="{{ resume.contact.github }}">GitHub: {{ resume.contact.github }}</a>
                     </p>
                     {% endif %}
+                    {% if resume.contact.portfolio %}
+                    <p class="contact-line">
+                        <a href="{{ resume.contact.portfolio }}">Portfolio: portfolio.projectnova.download</a>
+                    </p>
+                    {% endif %}
                 </div>
                 {% if resume.photo %}
                 <img class="resume-photo" src="{{ url_for('static', filename=resume.photo) }}" alt="Profile photo">
+                {% endif %}
+                {% if resume.contact.portfolio %}
+                <img class="resume-qr-top" src="{{ url_for('static', filename='assets/images/portfolio-qr.png') }}" alt="Portfolio QR code">
                 {% endif %}
             </div>
 
@@ -265,19 +285,29 @@
             {% if resume.projects %}
             <section>
                 <h2>Projects</h2>
-                {% for proj in resume.projects %}
-                <div class="entry">
-                    <p class="title" style="margin-bottom:0.15rem;">{{ proj.name }}</p>
-                    {% if proj.tech %}
-                    <p style="margin-bottom:0.3rem; font-size:0.8em; color:#444;">Tech Stack: {{ proj.tech }}</p>
-                    {% endif %}
-                    <ul>
-                        {% for item in proj.highlights %}
-                        <li>{{ item }}</li>
+                <div class="resume-projects-wrap">
+                    <div class="resume-projects-list">
+                        {% for proj in resume.projects %}
+                        <div class="entry">
+                            <p class="title" style="margin-bottom:0.15rem;">{{ proj.name }}</p>
+                            {% if proj.tech %}
+                            <p style="margin-bottom:0.3rem; font-size:0.8em; color:#444;">Tech Stack: {{ proj.tech }}</p>
+                            {% endif %}
+                            <ul>
+                                {% for item in proj.highlights %}
+                                <li>{{ item }}</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
                         {% endfor %}
-                    </ul>
+                    </div>
+                    {% if resume.contact.portfolio %}
+                    <div class="resume-projects-qr">
+                        <img src="{{ url_for('static', filename='assets/images/portfolio-qr.png') }}" alt="Portfolio QR code">
+                        <p>Scan for my portfolio</p>
+                    </div>
+                    {% endif %}
                 </div>
-                {% endfor %}
             </section>
             {% endif %}
 
