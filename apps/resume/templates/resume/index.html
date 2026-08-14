@@ -59,13 +59,6 @@
         margin-left: 1.5rem;
         flex-shrink: 0;
     }
-    .resume-qr-top {
-        width: 110px;
-        height: 110px;
-        border: 1px solid #ddd;
-        margin-left: 0.75rem;
-        flex-shrink: 0;
-    }
     .resume-sheet section { margin-bottom: 1.25rem; }
     .resume-sheet h2 {
         font-size: 1.07em;
@@ -222,9 +215,6 @@
                 {% if resume.photo %}
                 <img class="resume-photo" src="{{ url_for('static', filename=resume.photo) }}" alt="Profile photo">
                 {% endif %}
-                {% if resume.contact.portfolio %}
-                <img class="resume-qr-top" src="{{ url_for('static', filename='assets/images/portfolio-qr.png') }}" alt="Portfolio QR code">
-                {% endif %}
             </div>
 
             <section>
@@ -304,7 +294,7 @@
                     {% if resume.contact.portfolio %}
                     <div class="resume-projects-qr">
                         <img src="{{ url_for('static', filename='assets/images/portfolio-qr.png') }}" alt="Portfolio QR code">
-                        <p>Scan for my portfolio</p>
+                        <p>Scan for my project portfolio</p>
                     </div>
                     {% endif %}
                 </div>
