@@ -64,6 +64,14 @@
   ],
   "projects": [
     {
+      "name": "MELE Review",
+      "description": "Board exam reviewer for the Mechanical Engineering Licensure Exam. FastAPI, SQLAlchemy, MySQL, Docker.",
+      "highlights": [
+        "Searchable question bank from uploaded exam PDFs with filter, flag-for-review, and answer feedback",
+        "Notebook-style solution editor with a unit-aware solver, MathQuill formula blocks, and metric/English conventions"
+      ]
+    },
+    {
       "name": "Water Billing System",
       "description": "Utility CIS for Cotta Realty & Development Corp. FastAPI, SQLAlchemy, MySQL, Docker, Xendit payment integration.",
       "highlights": [
@@ -81,11 +89,35 @@
       ]
     },
     {
+      "name": "NovaProtocol",
+      "description": "Dynamic GitHub profile asset server. FastAPI, Granian, Caddy, Docker.",
+      "highlights": [
+        "Live SVG badges and animated console session rendered fresh on every request",
+        "Hand-crafted SVG generation with no templates"
+      ]
+    },
+    {
       "name": "SolveSpace",
       "description": "Self-hosted Python practice sandbox. Flask, MySQL, Docker, Bubblewrap.",
       "highlights": [
         "Sandboxed solution judging via bubblewrap with hard memory, CPU, and process limits",
         "No network access and read-only filesystem for every submission"
+      ]
+    },
+    {
+      "name": "Portfolio",
+      "description": "Personal portfolio site documenting the whole stack. Flask, Gunicorn, Docker, Cloudflare Tunnel.",
+      "highlights": [
+        "Project showcase with detail pages, tech tags, and live-site embeds",
+        "GateKeeper-protected frontend served behind a Cloudflare tunnel"
+      ]
+    },
+    {
+      "name": "Buddy's Website",
+      "description": "Marketing site for Buddy's restaurant chain. FastAPI, Granian, Jinja2, Docker.",
+      "highlights": [
+        "Menu, product, and branch pages generated from unified pricing data",
+        "Pahiyas-inspired theming with animated CSS and scroll-triggered reveals"
       ]
     }
   ],
@@ -113,7 +145,7 @@
     },
     {
       "category": "Frameworks & Libraries",
-      "value": "Flask, FastAPI, Django, SQLAlchemy, Jinja2, Bootstrap, REST APIs"
+      "value": "Flask, FastAPI, Django, SQLAlchemy, Jinja2, Bootstrap, pytest, math.js, REST APIs"
     },
     {
       "category": "Databases",
@@ -121,11 +153,15 @@
     },
     {
       "category": "Servers & Deployment",
-      "value": "Node.js, Docker, Caddy, Nginx, Gunicorn, Granian, Debian, Bubblewrap"
+      "value": "Node.js, Docker, Caddy, Nginx, Gunicorn, Granian, Uvicorn, Debian, Bubblewrap"
     },
     {
       "category": "Networking",
       "value": "Cloudflare Tunnel, Tailscale Funnel, Domain Management, Network Configuration"
+    },
+    {
+      "category": "Tools",
+      "value": "Git, Postman"
     },
     {
       "category": "Mobile Development",
