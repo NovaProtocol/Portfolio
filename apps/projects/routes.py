@@ -124,6 +124,39 @@ PROJECTS: dict[str, dict] = {
         },
         "buttons": [],
     },
+    "mle-review": {
+        "active": True,
+        "title": "MELE Review",
+        "subtitle": "Board exam reviewer — Mechanical Engineering Licensure Exam",
+        "description": [
+            "A self-hosted practice site for the Mechanical Engineering Licensure Exam. Upload past-board-exam PDFs as question sources, and the platform turns them into a searchable question bank: filter by answered/unanswered/flagged, search across question text and choices, reveal the correct answer with green/red feedback, and flag questions for review.",
+            "Each question carries a notebook-style solution editor. Build solutions from blocks: constants with unit autosuggestion, MathQuill formula blocks, and answer blocks. Hitting Run evaluates the formulas top-to-bottom with a unit-aware solver, auto-solves single-variable equations by binary search, and normalizes metric/English conventions. Solutions persist per question and render read-only for anyone, while a write-access password lets the owner edit and upload.",
+        ],
+        "tech": {
+            "web": ["FastAPI", "Granian", "SQLAlchemy", "MySQL 8.4", "Caddy", "Docker", "Cloudflare Tunnel", "itsdangerous"],
+            "lib": ["MathQuill", "math.js"],
+        },
+        "features": [
+            "PDF question sources with per-question banks, search, filter, and pagination",
+            "Answer reveal with green/red feedback and flag-for-review",
+            "Notebook-style solution editor: constants, formula blocks, and answer blocks",
+            "Unit-aware solver with unit autosuggestion, binary-search solving, and metric/English conventions",
+            "Read-only solution view for everyone; password-protected write mode for editing",
+            "GateKeeper-protected access behind a Cloudflare tunnel",
+        ],
+        "status": "in progress",
+        "reason": (
+            "The MELE board exam is make-or-break, and past papers deserve a "
+            "better practice tool than a stack of PDFs. This project turns those "
+            "papers into a searchable question bank and proves I can build a "
+            "browser-based math solver that handles real engineering equations "
+            "with units, not just toy examples."
+        ),
+        "url": "https://melereview.projectnova.download/",
+        "github": "https://github.com/NovaProtocol/MELEReviewSite",
+        "links": [],
+        "buttons": [],
+    },
     "solvespace": {
         "active": True,
         "title": "SolveSpace",

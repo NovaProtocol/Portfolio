@@ -32,6 +32,8 @@ TAG_LINKS: dict[str, str] = {
     "NFC (NTAG215)": "https://www.nxp.com/products/rfid-nfc/ntag-for-tags-labels",
     "React Native": "https://reactnative.dev/",
     "Expo": "https://expo.dev/",
+    "MathQuill": "https://mathquill.com/",
+    "math.js": "https://mathjs.org/",
     "Arduino": "https://www.arduino.cc/",
     "ESP32": "https://www.espressif.com/",
     "ESP8266": "https://www.espressif.com/",
