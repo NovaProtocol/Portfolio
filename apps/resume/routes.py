@@ -31,9 +31,16 @@ def index():
 
 @blueprint.route("/view")
 def view():
-    """Standalone resume page shown in the iframe.
-
-    Rendered as plain HTML, so text is always selectable and printing
-    via the browser produces the same output as the on-screen view.
-    """
+    """Combined 2-page resume document, used for printing."""
     return render_template("resume/view.html", resume=_RESUME)
+
+
+@blueprint.route("/view/page/<int:page>")
+def view_page(page: int):
+    """Single A4 resume page, rendered in its own iframe."""
+    template = {1: "resume/page1.html", 2: "resume/page2.html"}.get(page)
+    if not template:
+        from flask import abort
+
+        abort(404)
+    return render_template(template, resume=_RESUME)
