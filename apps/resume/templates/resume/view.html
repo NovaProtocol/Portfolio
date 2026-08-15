@@ -34,13 +34,14 @@
             margin-top: 2rem;
         }
         @media print {
+            @page { margin: 0; }
             body { margin: 0; padding: 0; }
             .resume { margin: 0; }
             .page {
-                width: auto;
-                height: auto;
-                overflow: visible;
-                padding: 0;
+                width: 210mm;
+                height: 297mm;
+                overflow: hidden;
+                padding: 15mm 18mm;
                 margin: 0;
                 box-shadow: none;
                 break-after: page;
@@ -224,12 +225,12 @@
     <section>
         <h2>Technical Skills</h2>
         {% for skill in resume.skills %}
-        <p class="skill-row"><span class="skill-cat">{{ skill.category }}:</span> {{ skill.value }}</p>
+        <p class="skill-row" style="margin-bottom:0.5rem;"><span class="skill-cat">{{ skill.category }}:</span> {{ skill.value }}</p>
         {% endfor %}
     </section>
 
-    <div class="declaration" style="margin-top:1rem;">
-        <p style="margin-bottom:1.5rem;">I hereby certify that the above information is true and correct to the best of my knowledge and ability.</p>
+    <div class="declaration" style="margin-top:1.25rem;">
+        <p style="margin-bottom:1.75rem;">I hereby certify that the above information is true and correct to the best of my knowledge and ability.</p>
         <p style="font-weight:700; text-decoration:underline; margin-bottom:0.2rem;">Khyles Gibrian B. Ramos</p>
         <p style="margin-bottom:0;">Applicant</p>
     </div>
