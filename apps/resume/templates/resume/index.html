@@ -100,11 +100,13 @@
         margin: 0;
     }
     @media print {
+        html, body { width: 210mm; height: 297mm; margin: 0 !important; padding: 0 !important; }
         body { background: #ffffff; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
         .navbar, .footer, .resume-page .save-btn { display: none !important; }
-        main { padding-top: 0 !important; }
-        .resume-page { background: #ffffff; padding: 0; }
-        .resume-pages { gap: 0; }
+        main { padding-top: 0 !important; margin: 0 !important; }
+        .resume-page { background: #ffffff; padding: 0 !important; margin: 0 !important; }
+        .resume-pages { gap: 0 !important; margin: 0 !important; }
+        .container { padding: 0 !important; max-width: none !important; margin: 0 !important; }
         .resume-sheet {
             box-shadow: none;
             break-after: page;
@@ -113,22 +115,20 @@
             overflow: hidden;
             page-break-after: always;
             font-size: 15.2px !important;
+            margin: 0 !important;
+            padding: 3rem 3.5rem !important;
         }
         .resume-sheet:last-child { break-after: auto; page-break-after: auto; }
         .resume-projects-wrap { page-break-inside: avoid; }
         .resume-sheet section { page-break-inside: avoid; }
-        .resume-photo { border: none; }
-        .resume-projects-qr img { border: none; }
+        .resume-photo { border: none !important; }
+        .resume-projects-qr img { border: none !important; }
     }
         .resume-sheet:last-child { break-after: auto; page-break-after: auto; }
         .resume-projects-wrap { page-break-inside: avoid; }
         .resume-sheet section { page-break-inside: avoid; }
         .resume-photo { border: none; }
         .resume-projects-qr img { border: none; }
-    }
-        .resume-sheet:last-child { break-after: auto; page-break-after: auto; }
-        .resume-projects-wrap { page-break-inside: avoid; }
-        .resume-sheet section { page-break-inside: avoid; }
     }
 </style>
 <script>
