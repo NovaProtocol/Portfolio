@@ -1,6 +1,6 @@
 {
   "name": "Khyles Gibrian Ramos",
-  "headline": "Mechanical Engineer · Software Developer · Full-stack Web Developer",
+  "headline": "Mechanical Engineer · Systems Development",
   "photo": "assets/images/resume_image.JPG",
   "contact": {
     "address": "Brgy. Mateuna, Tayabas, Quezon",
@@ -54,56 +54,54 @@
       "organization": "Southern Luzon State University",
       "period": "Mar 2024 - Apr 2024",
       "responsibilities": [
-        "Conducted routine inventory audits and applied asset tags to university property to improve tracking accuracy.",
-        "Inspected campus emergency lights and fire extinguishers to ensure proper working order and safety compliance.",
-        "Utilized AutoCAD to design and update detailed facility layouts and emergency fire exit plans.",
-        "Handled daily office operations, including documentation, message routing, and cross-department communications."
+        "Designed and updated facility layouts and emergency fire exit plans using AutoCAD to meet safety and compliance standards.",
+        "Inspected campus emergency lights and fire extinguishers for proper working order and safety compliance.",
+        "Conducted inventory audits and applied asset tags to university property to improve tracking accuracy.",
+        "Coordinated cross-department documentation and message routing for daily facility operations."
       ]
     },
     {
-      "role": "Freelance Software Developer",
+      "role": "Freelance Systems Developer",
       "organization": "Freelance - Work from Home",
       "period": "Aug 2025 - Nov 2025",
       "responsibilities": [
-        "Developed a full-stack signature verification application using PyTorch, ResNet-18, and Flask to support academic thesis research.",
-        "Built a signature verification system using Triplet Loss with a ResNet-18 backbone, achieving 86.96% validation accuracy on the reference dataset.",
-        "Developed a web-based user interface using Flask to allow users to upload signature samples and view real-time verification results.",
-        "Integrated PyTorch models into the backend to handle real-time image processing and model inference upon user request.",
-        "Created data preprocessing scripts to prepare, normalize, and format signature image datasets for model training.",
+        "Built a signature verification system using a ResNet-18 neural network with Triplet Loss, achieving 86.96% validation accuracy on the reference dataset.",
+        "Developed data preprocessing pipelines to prepare, normalize, and format image datasets for model training.",
+        "Integrated the trained model into a backend service for real-time image processing and inference upon user request.",
         "Delivered functional code and technical documentation within project deadlines."
       ]
     }
   ],
   "projects": [
     {
-      "name": "MELE Review",
-      "tech": "FastAPI, Granian, SQLAlchemy, MySQL, Docker, Caddy, Cloudflare Tunnel",
+      "name": "Water Billing System",
+      "tech": "React Native, NFC, Docker, MySQL",
       "highlights": [
-        "Built a unit-aware engineering equation solver that evaluates multi-step formulas across both metric and English conventions",
-        "Self-hosted board exam reviewer with a self-maintained question bank, answer feedback, and flag-for-review"
+        "Designed an end-to-end utility billing workflow that unifies meter reading, tariff computation, and bill distribution into a single process",
+        "Offline-first NFC meter reading with on-device cryptographic key derivation so meter data never crosses the network",
+        "Automated 5-tier progressive tariff billing with late penalties and waterfall payment application",
+        "Customer and payment data isolated in internal networks with role-scoped access"
       ]
     },
     {
-      "name": "Water Billing System",
-      "tech": "FastAPI, Granian, SQLAlchemy, MySQL, Docker, React Native, NFC, Xendit, Caddy, Cloudflare Tunnel",
+      "name": "MELE Review",
+      "tech": "Python, MySQL, Docker",
       "highlights": [
-        "Offline-first NFC meter reading architecture with on-device cryptographic key derivation so tag data never crosses the network",
-        "Automated 5-tier progressive tariff billing with late penalties and waterfall payment application",
-        "Confidential customer and payment data sealed in internal Docker networks with role-scoped API access",
-        "Unifies meter reading and bill distribution into a single end-to-end workflow with live bill access for customers"
+        "Built a unit-aware engineering equation solver that evaluates multi-step formulas across metric and English conventions",
+        "Board exam reviewer tool for the Mechanical Engineering Licensure Exam with a self-maintained question bank"
       ]
     },
     {
       "name": "GateKeeper",
-      "tech": "Flask, itsdangerous, SQLite, Docker, Cloudflare Tunnel",
+      "tech": "Python, SQLite, Docker",
       "highlights": [
-        "Single sign-on auth gate protecting a family of web apps with signed, tamper-evident cookies and forward-auth session verification",
+        "Single sign-on auth gate with signed, tamper-evident cookies and forward-auth session verification",
         "Admin panel to issue and revoke access codes, with a backup code so the owner is never locked out"
       ]
     },
     {
       "name": "SolveSpace",
-      "tech": "Flask, MySQL, Docker, Bubblewrap, Cloudflare Tunnel",
+      "tech": "Python, Docker, Bubblewrap",
       "highlights": [
         "Isolated execution sandbox for untrusted code with hard memory, CPU, and process limits and zero network access"
       ]
@@ -111,32 +109,40 @@
   ],
   "skills": [
     {
-      "category": "Languages",
+      "category": "Mechanical Design",
+      "value": "AutoCAD, Fusion 360, OnShape, Technical Drawing, Blueprint Reading"
+    },
+    {
+      "category": "Manufacturing & Fabrication",
+      "value": "Shielded Metal Arc Welding (SMAW), 3D Printing (UltiMaker Cura), Prototyping"
+    },
+    {
+      "category": "Safety & Compliance",
+      "value": "DOLE BOSH SO2, OSH Standards, Safety Inspection, Fire Safety Planning"
+    },
+    {
+      "category": "Programming Languages",
       "value": "Python, C++, JavaScript, TypeScript, SQL"
     },
     {
-      "category": "Backend",
-      "value": "FastAPI, Flask, Granian, SQLAlchemy, Jinja2"
-    },
-    {
-      "category": "Infrastructure",
-      "value": "Docker, Caddy, Cloudflare Tunnel, Linux"
+      "category": "Backend Development",
+      "value": "FastAPI, Flask, SQLAlchemy, REST APIs"
     },
     {
       "category": "Databases",
       "value": "MySQL, SQLite"
     },
     {
-      "category": "Mobile",
-      "value": "React Native, Expo"
+      "category": "Deployment & Infrastructure",
+      "value": "Docker, Linux, Cloudflare Tunnel, Caddy, Gunicorn"
     },
     {
-      "category": "Hardware",
+      "category": "Electronics & Hardware",
       "value": "Arduino, ESP32, Raspberry Pi, NFC (NTAG215)"
     },
     {
-      "category": "Mechanical",
-      "value": "AutoCAD, OnShape, Fusion 360"
+      "category": "Mobile Development",
+      "value": "React Native, Expo"
     }
   ]
 }
