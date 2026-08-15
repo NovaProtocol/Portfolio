@@ -1,152 +1,138 @@
 <style>
     /* ============================================================
-       THEME 1 — "Executive": two-column layout.
-       Left column: education + certification (+ skills on page 2).
-       Right column: summary + experience (+ projects on page 2).
+       THEME 1 — "Classic": RenderCV-inspired clean academic look.
+       Centered name, contact row, thin rules, airy spacing.
        ============================================================ */
     {% if theme == 1 %}
     :root {
-        --font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
-        --text-color: #2b2b2b;
-        --accent: #c9a227;
+        --font-family: Georgia, 'Times New Roman', Times, serif;
+        --text-color: #1a1a1a;
+        --accent: #1a1a1a;
         --accent-soft: transparent;
-        --muted: #4a4a4a;
-        --light-muted: #667085;
+        --muted: #333;
+        --light-muted: #666;
         --header-border: none;
-        --h2-border: none;
-        --name-color: #ffffff;
+        --h2-border: 1px solid #1a1a1a;
+        --name-color: #1a1a1a;
         --section-heading-bg: transparent;
     }
-    .page { padding: 0; overflow: hidden; display: grid; grid-template-columns: 38% 62%; grid-auto-rows: min-content; background: linear-gradient(to right, #f4f6fa 0, #f4f6fa 38%, #ffffff 38%); }
-    body { font-size: 10px !important; }
+    body { font-size: 10.5px !important; line-height: 1.5 !important; }
+    .page { padding: 18mm 20mm; }
+    /* Centered header */
     .resume-header {
-        grid-column: 1 / -1;
-        grid-row: 1;
-        display: flex;
-        align-items: center;
-        gap: 6mm;
-        background: #14213d;
-        color: #fff;
-        padding: 6mm 12mm;
-        border-bottom: 3px solid var(--accent);
+        text-align: center;
+        border-bottom: none;
+        padding-bottom: 1rem;
+        margin-bottom: 1.2rem;
     }
     .resume-header h1 {
-        font-size: 1.7em;
-        letter-spacing: 1.5px;
-        text-transform: uppercase;
-        color: #ffffff !important;
-        margin: 0 0 0.15rem;
+        font-size: 2.4em;
+        font-weight: 700;
+        color: #1a1a1a !important;
+        letter-spacing: -0.5px;
+        margin: 0 0 0.4rem;
     }
-    .resume-header .contact-line,
-    .resume-header .contact-line a { color: #d7dbe6 !important; font-size: 0.72em; }
-    .resume-photo {
-        width: 28mm;
-        height: 28mm;
-        border: 3px solid var(--accent);
-        border-radius: 50%;
-        margin: 0;
+    .resume-photo { display: none; }
+    .contact-line {
+        font-size: 0.85em;
+        margin: 0 0.5em !important;
+        display: inline;
     }
-    /* Main column (right) */
-    .section-summary, .section-experience, .section-projects {
-        grid-column: 2;
-        padding: 3mm 8mm;
-        margin: 0;
+    /* Turn contact into a horizontal row with dot separators */
+    .resume-header .who > *:not(:last-child)::after {
+        content: ' \00b7';
+        margin: 0 0.5em;
+        color: #888;
     }
-    .section-summary { grid-row: 2; }
-    .section-experience, .section-projects { grid-row: 3; }
-    /* Side column (left): education, certification, skills */
-    .section-education, .section-certification, .section-skills {
-        grid-column: 1;
-        padding: 3mm 5mm 3mm 8mm;
-        margin: 0;
-    }
-    .section-education { grid-row: 2; }
-    .section-certification, .section-skills { grid-row: 3; }
+    section { margin-bottom: 1.1rem; }
     section h2 {
-        color: #14213d;
-        font-size: 0.78em;
-        letter-spacing: 2px;
-        border-bottom: 2px solid var(--accent);
-        display: inline-block;
-        padding-bottom: 0.1rem;
-        margin-bottom: 0.3rem;
+        border-bottom: 1px solid #1a1a1a;
+        font-size: 1em;
+        letter-spacing: 0.5px;
+        padding-bottom: 0.15rem;
+        margin-bottom: 0.5rem;
     }
-    .entry .title { color: #14213d; }
-    .entry { margin-bottom: 0.4rem; }
-    .entry ul li { margin-bottom: 0.05rem; }
-    .declaration { grid-column: 1 / -1; grid-row: 4; margin: 2mm 12mm 0; padding-top: 0.4rem !important; border-top: 2px solid var(--accent) !important; font-size: 0.9em; }
-    .resume-projects-wrap { flex-direction: column; }
+    .entry { margin-bottom: 0.6rem; }
+    .entry:last-child { margin-bottom: 0; }
+    .entry .head {
+        justify-content: space-between;
+        align-items: baseline;
+    }
+    .entry .title { font-weight: 700; font-size: 1.02em; }
+    .entry .org {
+        font-style: italic;
+        font-weight: 400;
+        font-size: 0.95em;
+    }
+    .entry .period { font-size: 0.88em; }
+    .entry ul li { margin-bottom: 0.15rem; font-size: 0.95em; }
+    .skill-row { display: flex; gap: 0.5em; margin-bottom: 0.4rem; }
+    .declaration { border-top: 1px solid #1a1a1a !important; margin-top: 0.5rem; }
 
     /* ============================================================
-       THEME 2 — "Editorial": stacked, wide teal top band,
-       inline title/period rows, spaced sections.
+       THEME 2 — "Moderncv": left accent bar, left-side dates,
+       clean sans-serif.
        ============================================================ */
     {% elif theme == 2 %}
     :root {
-        --font-family: 'Trebuchet MS', 'Segoe UI', sans-serif;
-        --text-color: #1f2937;
-        --accent: #0d9488;
-        --accent-soft: #e6f7f5;
-        --muted: #374151;
-        --light-muted: #6b7280;
+        --font-family: 'Helvetica Neue', 'Segoe UI', Arial, sans-serif;
+        --text-color: #1a1a1a;
+        --accent: #0070c0;
+        --accent-soft: transparent;
+        --muted: #333;
+        --light-muted: #666;
         --header-border: none;
         --h2-border: none;
-        --name-color: #111827;
+        --name-color: #1a1a1a;
         --section-heading-bg: transparent;
     }
-    .page { padding: 0; overflow: hidden; }
-    body { font-size: 10px !important; }
+    body { font-size: 10px !important; line-height: 1.45 !important; }
+    .page { padding: 14mm 16mm 14mm 20mm; border-left: 4px solid var(--accent); }
+    /* Header: name left, contact inline */
     .resume-header {
-        background: linear-gradient(135deg, #0d9488, #0b6e66);
-        color: #fff;
-        padding: 6mm 18mm;
-        margin: 0;
-        border: none;
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+        border-bottom: none;
+        padding-bottom: 0.6rem;
+        margin-bottom: 1rem;
     }
     .resume-header h1 {
-        font-size: 1.9em;
-        font-weight: 600;
-        color: #fff !important;
-        margin: 0 0 0.15rem;
+        font-size: 2.4em;
+        font-weight: 700;
+        color: var(--accent) !important;
+        margin: 0;
     }
-    .resume-header .contact-line,
-    .resume-header .contact-line a { color: #e6fffb !important; font-size: 0.78em; }
-    .resume-photo {
-        width: 26mm;
-        height: 26mm;
-        border-radius: 50%;
-        border: 3px solid #fff;
-    }
-    .page > section {
-        padding: 2.5mm 18mm;
-        border-bottom: 1px solid #eef2f6;
-    }
+    .resume-photo { display: none; }
+    /* Contact as a row */
+    .resume-header .who { display: flex; flex-direction: column; gap: 0.15rem; }
+    .resume-header .contact-line { margin: 0 !important; font-size: 0.8em; }
+    section { margin-bottom: 1rem; }
     section h2 {
-        font-size: 0.8em;
-        letter-spacing: 3px;
         color: var(--accent);
-        text-transform: uppercase;
-        margin-bottom: 0.4rem;
+        border-bottom: 2px solid var(--accent);
+        font-size: 1em;
+        font-weight: 700;
+        padding-bottom: 0.15rem;
+        margin-bottom: 0.5rem;
     }
-    section h2::before {
-        content: '';
-        display: inline-block;
-        width: 8px;
-        height: 8px;
-        background: var(--accent);
-        margin-right: 0.5rem;
-    }
-    .skill-row {
-        display: flex;
+    .entry .head {
         justify-content: space-between;
-        border-bottom: 1px dashed #e5e7eb;
-        padding-bottom: 0.2rem;
+        align-items: baseline;
     }
-    .skill-cat { color: var(--accent); font-weight: 600; }
-    .declaration { margin: 3mm 18mm; border-top: 2px solid var(--accent) !important; }
+    .entry .title { font-weight: 700; font-size: 1.02em; }
+    .entry .org {
+        font-style: italic;
+        font-weight: 400;
+        font-size: 0.95em;
+    }
+    .entry .period { font-size: 0.88em; }
+    .entry ul li { margin-bottom: 0.15rem; font-size: 0.95em; }
+    .skill-row { display: flex; gap: 0.5em; margin-bottom: 0.4rem; }
+    .declaration { border-top: 2px solid var(--accent) !important; margin-top: 0.5rem; }
 
     /* ============================================================
-       THEME 3 — "Classic" (unchanged single column).
+       THEME 3 — "Executive" (original, unchanged)
        ============================================================ */
     {% else %}
     :root {
