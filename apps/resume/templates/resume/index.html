@@ -22,14 +22,39 @@
         box-shadow: 0 2px 16px rgba(0, 0, 0, 0.18);
         background: #ffffff;
     }
-    .resume-pdf-viewer canvas {
-        display: block;
-        width: 100%;
-        height: auto;
+    .resume-page-canvas {
+        position: relative;
+        line-height: 0;
         background: #ffffff;
     }
-    .resume-pdf-viewer canvas + canvas {
+    .resume-page-canvas + .resume-page-canvas {
         border-top: 1px solid #ddd;
+    }
+    .resume-page-canvas canvas {
+        width: 100%;
+        height: auto;
+        display: block;
+    }
+    .resume-page-canvas .textLayer {
+        position: absolute;
+        left: 0;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        overflow: hidden;
+        line-height: 1;
+    }
+    .resume-page-canvas .textLayer span,
+    .resume-page-canvas .textLayer br {
+        color: transparent;
+        position: absolute;
+        white-space: pre;
+        cursor: text;
+        transform-origin: 0% 0%;
+    }
+    .resume-page-canvas .textLayer ::selection {
+        background: rgba(0, 100, 0, 0.3);
+        color: transparent;
     }
     .resume-toolbar {
         position: absolute;
@@ -98,10 +123,8 @@
     const PDF_URL = "{{ url_for('static', filename='assets/images/resume.pdf') }}";
     const container = document.getElementById('pdf-viewer');
     const loadingEl = document.getElementById('pdf-loading');
-    const renderedCanvases = [];
 
     function printResume() {
-        // Print the actual PDF (vector quality) via a hidden iframe.
         const frame = document.createElement('iframe');
         frame.style.display = 'none';
         frame.src = PDF_URL;
@@ -117,7 +140,6 @@
             const pdf = await pdfjsLib.getDocument(PDF_URL).promise;
             loadingEl.remove();
 
-            // Render each page at a resolution that fits the container width.
             const targetWidth = Math.min(container.clientWidth, 794);
             for (let i = 1; i <= pdf.numPages; i++) {
                 const page = await pdf.getPage(i);
@@ -125,14 +147,32 @@
                 const scale = targetWidth / baseViewport.width;
                 const viewport = page.getViewport({ scale });
 
+                const pageDiv = document.createElement('div');
+                pageDiv.className = 'resume-page-canvas';
+                container.appendChild(pageDiv);
+
                 const canvas = document.createElement('canvas');
                 canvas.width = Math.floor(viewport.width);
                 canvas.height = Math.floor(viewport.height);
-                container.appendChild(canvas);
+                pageDiv.appendChild(canvas);
 
                 const ctx = canvas.getContext('2d');
                 await page.render({ canvasContext: ctx, viewport }).promise;
-                renderedCanvases.push(canvas);
+
+                // Text layer for selectable text over the canvas.
+                const textDiv = document.createElement('div');
+                textDiv.className = 'textLayer';
+                textDiv.style.width = viewport.width + 'px';
+                textDiv.style.height = viewport.height + 'px';
+                pageDiv.appendChild(textDiv);
+
+                const textContent = await page.getTextContent();
+                pdfjsLib.renderTextLayer({
+                    textContentSource: textContent,
+                    container: textDiv,
+                    viewport: viewport,
+                    textDivs: [],
+                });
             }
         } catch (err) {
             console.error('Failed to render resume PDF:', err);
