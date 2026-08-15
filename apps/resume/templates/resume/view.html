@@ -157,6 +157,13 @@
         {% endfor %}
     </section>
 
+    {% if resume.coursework %}
+    <section class="section-coursework">
+        <h2>Relevant Coursework</h2>
+        <p style="margin-bottom:0;">{{ resume.coursework | join(' · ') }}</p>
+    </section>
+    {% endif %}
+
     <section class="section-certification">
         <h2>Certification</h2>
         {% for cert in resume.certifications %}
@@ -193,7 +200,7 @@
     <div class="page">
     {% if resume.projects %}
     <section class="section-projects">
-        <h2>Projects</h2>
+        <h2>Selected Technical Projects</h2>
         <div class="resume-projects-wrap">
             <div class="resume-projects-list">
                 {% for proj in resume.projects %}
