@@ -2,7 +2,16 @@ FROM python3146t
 
 WORKDIR /app
 
-RUN apt-get update && apt-get install -y --no-install-recommends gcc g++ libc6-dev && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    gcc g++ libc6-dev \
+    # WeasyPrint system dependencies (GLib, Pango, Cairo, GDK-Pixbuf)
+    libglib2.0-0 \
+    libpango-1.0-0 libpangoft2-1.0-0 \
+    libharfbuzz0b \
+    libffi8 libjpeg62-turbo libopenjp2-7 \
+    libcairo2 libgdk-pixbuf-2.0-0 shared-mime-info \
+    fonts-dejavu \
+    && rm -rf /var/lib/apt/lists/*
 
 COPY requirements.txt .
 RUN pip3 install --no-cache-dir -r requirements.txt
