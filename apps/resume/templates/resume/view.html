@@ -4,13 +4,12 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Resume - Khyles Gibrian Ramos</title>
+    {% include "resume/_theme.html" %}
     <style>
         * { box-sizing: border-box; }
         body {
             margin: 0;
             background: #ffffff;
-            color: #1a1a1a;
-            font-family: Georgia, 'Times New Roman', Times, serif;
             font-size: 11px;
             line-height: 1.4;
         }
@@ -53,7 +52,7 @@
             display: flex;
             justify-content: space-between;
             align-items: flex-start;
-            border-bottom: 3px double #1a1a1a;
+            border-bottom: var(--header-border);
             padding-bottom: 0.8rem;
             margin-bottom: 0.9rem;
         }
@@ -61,10 +60,9 @@
             font-size: 1.6em;
             font-weight: 700;
             margin: 0 0 0.3rem;
-            color: #1a1a1a;
         }
-        .contact-line { font-size: 0.9em; color: #1a1a1a; margin: 0; }
-        .contact-line a { color: #1a1a1a; text-decoration: underline; }
+        .contact-line { font-size: 0.9em; margin: 0; }
+        .contact-line a { text-decoration: underline; }
         .resume-photo {
             width: 90px;
             height: 90px;
@@ -79,10 +77,10 @@
             font-weight: 700;
             letter-spacing: 1px;
             text-transform: uppercase;
-            color: #1a1a1a;
-            border-bottom: 1px solid #444;
+            padding: 0.15rem 0.4rem;
             padding-bottom: 0.2rem;
             margin-bottom: 0.4rem;
+            background: var(--section-heading-bg);
         }
         .entry { page-break-inside: avoid; margin-bottom: 0.6rem; }
         .entry:last-child { margin-bottom: 0; }
@@ -92,17 +90,17 @@
             align-items: baseline;
             margin-bottom: 0.1rem;
         }
-        .entry .title { font-weight: 700; color: #111; }
-        .entry .org { font-weight: 400; color: #333; font-size: 0.95em; }
-        .entry .period { font-style: italic; color: #555; font-size: 0.89em; white-space: nowrap; }
+        .entry .title { font-weight: 700; }
+        .entry .org { font-weight: 400; font-size: 0.95em; }
+        .entry .period { font-style: italic; font-size: 0.89em; white-space: nowrap; }
         .entry ul { margin: 0.1rem 0 0; padding-left: 1.2rem; }
-        .entry ul li { margin-bottom: 0.1rem; font-size: 0.95em; color: #333; }
-        .tech-stack { font-size: 0.85em; color: #333; margin-bottom: 0.2rem; }
+        .entry ul li { margin-bottom: 0.1rem; font-size: 0.95em; }
+        .tech-stack { font-size: 0.85em; margin-bottom: 0.2rem; }
         .resume-projects-wrap { display: flex; gap: 1rem; align-items: flex-start; }
         .resume-projects-list { flex: 1; min-width: 0; }
         .resume-projects-qr { flex-shrink: 0; text-align: center; }
         .resume-projects-qr img { width: 80px; height: 80px; border: 1px solid #ddd; }
-        .resume-projects-qr p { font-size: 0.72em; color: #555; margin: 0.2rem 0 0; }
+        .resume-projects-qr p { font-size: 0.72em; color: var(--light-muted); margin: 0.2rem 0 0; }
         .skill-row { margin: 0 0 0.3rem; }
         .skill-cat { font-weight: 700; }
     </style>

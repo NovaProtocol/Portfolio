@@ -4,7 +4,7 @@ import json
 import logging
 from pathlib import Path
 
-from flask import render_template
+from flask import abort, render_template, request
 
 from apps.resume import blueprint
 
@@ -23,6 +23,8 @@ def _load_resume() -> dict:
 
 _RESUME = _load_resume()
 
+_THEMES = {1, 2, 3}
+
 
 @blueprint.route("/")
 def index():
@@ -31,16 +33,22 @@ def index():
 
 @blueprint.route("/view")
 def view():
-    """Combined 2-page resume document, used for printing."""
-    return render_template("resume/view.html", resume=_RESUME)
+    """Single or combined resume page, themeable.
 
+    Query params:
+      page  - 1 or 2 for a single page, omitted for the combined
+              two-page document used in printing.
+      theme - 1, 2, or 3 (defaults to 3).
+    """
+    theme = request.args.get("theme", type=int, default=3)
+    if theme not in _THEMES:
+        theme = 3
 
-@blueprint.route("/view/page/<int:page>")
-def view_page(page: int):
-    """Single A4 resume page, rendered in its own iframe."""
-    template = {1: "resume/page1.html", 2: "resume/page2.html"}.get(page)
-    if not template:
-        from flask import abort
+    page = request.args.get("page", type=int)
+    if page is not None:
+        template = {1: "resume/page1.html", 2: "resume/page2.html"}.get(page)
+        if not template:
+            abort(404)
+        return render_template(template, resume=_RESUME, theme=theme)
 
-        abort(404)
-    return render_template(template, resume=_RESUME)
+    return render_template("resume/view.html", resume=_RESUME, theme=theme)
