@@ -12,23 +12,12 @@
         margin: 0 auto;
         max-width: 900px;
     }
-    .resume-frame {
-        width: 100%;
-        height: 297mm;
-        max-height: 92vh;
-        display: block;
-        border: 1px solid #ddd;
-        border-radius: 4px;
-        box-shadow: 0 2px 16px rgba(0, 0, 0, 0.18);
-        background: #ffffff;
-    }
     .resume-toolbar {
         display: flex;
         gap: 0.5rem;
         justify-content: flex-end;
         margin-bottom: 0.75rem;
     }
-    .resume-toolbar a,
     .resume-toolbar button {
         width: 2.5rem;
         height: 2.5rem;
@@ -43,11 +32,26 @@
         cursor: pointer;
         transition: background 0.2s, color 0.2s;
     }
-    .resume-toolbar a:hover,
     .resume-toolbar button:hover {
         background: var(--accent);
         color: var(--bg-primary);
         border-color: var(--accent);
+    }
+    .resume-sheet {
+        width: 100%;
+        display: block;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        box-shadow: 0 2px 16px rgba(0, 0, 0, 0.18);
+        background: #ffffff;
+        margin-bottom: 1.5rem;
+    }
+    .resume-sheet:last-child { margin-bottom: 0; }
+    .resume-sheet iframe {
+        width: 100%;
+        height: 1123px;
+        border: 0;
+        display: block;
     }
 </style>
 {% endblock %}
@@ -64,18 +68,27 @@
                     <i class="fas fa-print"></i>
                 </button>
             </div>
-            <iframe id="resume-frame" class="resume-frame" src="{{ url_for('resume_blueprint.view') }}" title="Resume"></iframe>
+
+            <div class="resume-sheet">
+                <iframe src="{{ url_for('resume_blueprint.view_page', page=1) }}" title="Resume page 1"></iframe>
+            </div>
+            <div class="resume-sheet">
+                <iframe src="{{ url_for('resume_blueprint.view_page', page=2) }}" title="Resume page 2"></iframe>
+            </div>
         </div>
     </div>
 </div>
 
+<iframe id="print-frame" style="position:absolute; width:0; height:0; border:0; visibility:hidden;" title="Print"></iframe>
+
 <script>
     function printResume() {
-        const frame = document.getElementById('resume-frame');
-        if (frame && frame.contentWindow) {
-            frame.contentWindow.focus();
-            frame.contentWindow.print();
-        }
+        const printFrame = document.getElementById('print-frame');
+        printFrame.src = "{{ url_for('resume_blueprint.view') }}";
+        printFrame.onload = function() {
+            printFrame.contentWindow.focus();
+            printFrame.contentWindow.print();
+        };
     }
 </script>
 {% endblock %}
