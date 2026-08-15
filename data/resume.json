@@ -14,16 +14,21 @@
   "objectives": "Motivated individual seeking an entry-level technical role to apply hands-on experience in coding, circuit prototyping, and system simulations. Eager to contribute to a collaborative team while actively learning from experienced professionals and continuously expanding my multidisciplinary skill set.",
   "education": [
     {
+      "level": "Tertiary",
       "school": "Southern Luzon State University",
       "degree": "Bachelor of Science in Mechanical Engineering",
-      "years": "2021-2026"
+      "years": "2021-2026",
+      "awards": ["DOST S&T Scholarship", "Dean's Lister"]
     },
     {
+      "level": "Senior High School",
       "school": "Sacred Heart College Lucena",
       "degree": "Science Technology Engineering & Mathematics (STEM) Strand",
-      "years": "2019-2021"
+      "years": "2019-2021",
+      "awards": ["Academic Excellence Awardee - With Honours"]
     },
     {
+      "level": "Junior High School",
       "school": "Luis Palad Integrated High School",
       "degree": "Junior High School",
       "years": "2015-2019"
@@ -95,23 +100,6 @@
       "highlights": [
         "Practice sandbox that runs untrusted user code in isolated containers with hard memory, CPU, and process limits and no network access"
       ]
-    }
-  ],
-  "awards": [
-    {
-      "title": "Academic Excellence Awardee",
-      "detail": "With Honours",
-      "years": "2016 - 2021"
-    },
-    {
-      "title": "Dean's Lister",
-      "detail": "Dean's Lister",
-      "years": "2021 - 2025"
-    },
-    {
-      "title": "DOST Scholar",
-      "detail": "S&T Scholarship",
-      "years": "2021 - 2025"
     }
   ],
   "skills": [
