@@ -140,6 +140,24 @@
     </section>
 
     <section>
+        <h2>Work Experience</h2>
+        {% for job in resume.experience %}
+        <div class="entry">
+            <div class="head">
+                <span class="title">{{ job.organization }}</span>
+                <span class="period">{{ job.period }}</span>
+            </div>
+            <p class="org" style="margin-bottom:0.3rem;">{{ job.role }}</p>
+            <ul>
+                {% for item in job.responsibilities %}
+                <li>{{ item }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endfor %}
+    </section>
+
+    <section>
         <h2>Education</h2>
         {% for edu in resume.education %}
         <div class="entry">
@@ -155,38 +173,6 @@
                 {% endfor %}
             </ul>
             {% endif %}
-        </div>
-        {% endfor %}
-    </section>
-
-    <section>
-        <h2>Certification</h2>
-        {% for cert in resume.certifications %}
-        <div class="entry">
-            <div class="head">
-                <span class="title">{{ cert.title }}</span>
-                <span class="period">{{ cert.year }}</span>
-            </div>
-            <p style="margin-bottom:0;">{{ cert.issuer }}</p>
-            {% if cert.detail %}<p style="margin-bottom:0; color:#333;">{{ cert.detail }}</p>{% endif %}
-        </div>
-        {% endfor %}
-    </section>
-
-    <section>
-        <h2>Work Experience</h2>
-        {% for job in resume.experience %}
-        <div class="entry">
-            <div class="head">
-                <span class="title">{{ job.organization }}</span>
-                <span class="period">{{ job.period }}</span>
-            </div>
-            <p class="org" style="margin-bottom:0.3rem;">{{ job.role }}</p>
-            <ul>
-                {% for item in job.responsibilities %}
-                <li>{{ item }}</li>
-                {% endfor %}
-            </ul>
         </div>
         {% endfor %}
     </section>
@@ -221,6 +207,20 @@
         </div>
     </section>
     {% endif %}
+
+    <section>
+        <h2>Certification</h2>
+        {% for cert in resume.certifications %}
+        <div class="entry">
+            <div class="head">
+                <span class="title">{{ cert.title }}</span>
+                <span class="period">{{ cert.year }}</span>
+            </div>
+            <p style="margin-bottom:0;">{{ cert.issuer }}</p>
+            {% if cert.detail %}<p style="margin-bottom:0; color:#333;">{{ cert.detail }}</p>{% endif %}
+        </div>
+        {% endfor %}
+    </section>
 
     <section>
         <h2>Technical Skills</h2>
