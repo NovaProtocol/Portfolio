@@ -57,14 +57,14 @@
     <div class="container">
         <div class="resume-wrap">
             <div class="resume-toolbar">
-                <a href="{{ url_for('static', filename='assets/images/resume.pdf') }}" download="resume.pdf" title="Download PDF">
+                <a href="{{ url_for('resume_blueprint.pdf') }}" download="resume.pdf" title="Download PDF">
                     <i class="fas fa-download"></i>
                 </a>
                 <button type="button" title="Print" onclick="printResume()">
                     <i class="fas fa-print"></i>
                 </button>
             </div>
-            <iframe id="resume-frame" class="resume-frame" src="{{ url_for('static', filename='assets/images/resume.pdf') }}" title="Resume"></iframe>
+            <iframe id="resume-frame" class="resume-frame" src="{{ url_for('resume_blueprint.pdf') }}" title="Resume"></iframe>
         </div>
     </div>
 </div>
@@ -72,7 +72,7 @@
 <iframe id="print-frame" style="position:absolute; width:0; height:0; border:0; visibility:hidden;" title="Print"></iframe>
 
 <script>
-    const PDF_URL = "{{ url_for('static', filename='assets/images/resume.pdf') }}";
+    const PDF_URL = "{{ url_for('resume_blueprint.pdf') }}";
 
     function printResume() {
         // Print the PDF file itself in a fresh hidden iframe, so the
