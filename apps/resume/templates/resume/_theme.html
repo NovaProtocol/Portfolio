@@ -1,6 +1,9 @@
 <style>
-    /* ============ Theme 1: Executive ============
-       Full-bleed navy header band, gold accents, clean sans-serif. */
+    /* ============================================================
+       THEME 1 — "Executive": two-column layout.
+       Left column: education + certification (+ skills on page 2).
+       Right column: summary + experience (+ projects on page 2).
+       ============================================================ */
     {% if theme == 1 %}
     :root {
         --font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
@@ -8,51 +11,72 @@
         --accent: #c9a227;
         --accent-soft: transparent;
         --muted: #4a4a4a;
-        --light-muted: #666;
+        --light-muted: #667085;
         --header-border: none;
-        --h2-border: 2px solid var(--accent);
+        --h2-border: none;
         --name-color: #ffffff;
         --section-heading-bg: transparent;
     }
+    .page { padding: 0; overflow: hidden; display: grid; grid-template-columns: 38% 62%; }
+    body { font-size: 10px !important; }
     .resume-header {
+        grid-column: 1 / -1;
+        display: flex;
+        align-items: center;
+        gap: 6mm;
         background: #14213d;
-        color: #ffffff;
-        margin: -15mm -18mm 1.1rem;
-        padding: 12mm 18mm 10mm;
+        color: #fff;
+        padding: 6mm 12mm;
+        border-bottom: 3px solid var(--accent);
     }
     .resume-header h1 {
-        font-size: 2em;
-        letter-spacing: 1px;
+        font-size: 1.7em;
+        letter-spacing: 1.5px;
         text-transform: uppercase;
         color: #ffffff !important;
+        margin: 0 0 0.15rem;
     }
     .resume-header .contact-line,
-    .resume-header .contact-line a {
-        color: #d7dbe6 !important;
-        font-size: 0.85em;
-    }
-    .resume-header .contact-line a:hover { color: #ffffff; }
+    .resume-header .contact-line a { color: #d7dbe6 !important; font-size: 0.72em; }
     .resume-photo {
+        width: 28mm;
+        height: 28mm;
         border: 3px solid var(--accent);
         border-radius: 50%;
-        margin-left: 1.5rem;
+        margin: 0;
+    }
+    /* side column = education, certification, skills */
+    .section-education, .section-certification, .section-skills {
+        grid-column: 1;
+        padding: 3mm 5mm 3mm 8mm;
+        background: #f4f6fa;
+        margin: 0;
+    }
+    /* main column = summary, experience, projects */
+    .section-summary, .section-experience, .section-projects {
+        grid-column: 2;
+        padding: 3mm 8mm;
+        margin: 0;
     }
     section h2 {
         color: #14213d;
+        font-size: 0.78em;
         letter-spacing: 2px;
-    }
-    section h2::after {
-        content: '';
-        display: block;
-        width: 100%;
         border-bottom: 2px solid var(--accent);
-        margin-top: 0.15rem;
+        display: inline-block;
+        padding-bottom: 0.1rem;
+        margin-bottom: 0.3rem;
     }
-    .entry .title { color: #14213d; letter-spacing: 0.3px; }
-    .declaration { border-top: 2px solid var(--accent) !important; }
+    .entry .title { color: #14213d; }
+    .entry { margin-bottom: 0.4rem; }
+    .entry ul li { margin-bottom: 0.05rem; }
+    .declaration { grid-column: 2; grid-row: auto; margin: 3mm 8mm 0; padding-top: 0.4rem !important; border-top: 2px solid var(--accent) !important; font-size: 0.9em; }
+    .resume-projects-wrap { flex-direction: column; }
 
-    /* ============ Theme 2: Editorial ============
-       Teal side rail, light and airy, marker bullets, no heavy rules. */
+    /* ============================================================
+       THEME 2 — "Editorial": stacked, wide teal top band,
+       inline title/period rows, spaced sections.
+       ============================================================ */
     {% elif theme == 2 %}
     :root {
         --font-family: 'Trebuchet MS', 'Segoe UI', sans-serif;
@@ -61,53 +85,65 @@
         --accent-soft: #e6f7f5;
         --muted: #374151;
         --light-muted: #6b7280;
-        --header-border: 1px solid #e5e7eb;
+        --header-border: none;
         --h2-border: none;
         --name-color: #111827;
         --section-heading-bg: transparent;
     }
-    .page { position: relative; }
-    .page::before {
-        content: '';
-        position: absolute;
-        left: 0;
-        top: 0;
-        bottom: 0;
-        width: 6mm;
-        background: linear-gradient(var(--accent), #0b6e66);
+    .page { padding: 0; overflow: hidden; }
+    body { font-size: 10px !important; }
+    .resume-header {
+        background: linear-gradient(135deg, #0d9488, #0b6e66);
+        color: #fff;
+        padding: 6mm 18mm;
+        margin: 0;
+        border: none;
     }
     .resume-header h1 {
-        font-size: 2.1em;
+        font-size: 1.9em;
         font-weight: 600;
-        letter-spacing: -0.5px;
-        color: var(--name-color);
+        color: #fff !important;
+        margin: 0 0 0.15rem;
     }
-    .resume-header { border-bottom: 1px solid #e5e7eb; }
+    .resume-header .contact-line,
+    .resume-header .contact-line a { color: #e6fffb !important; font-size: 0.78em; }
     .resume-photo {
-        border-radius: 4px;
-        border: 1px solid #d1d5db;
+        width: 26mm;
+        height: 26mm;
+        border-radius: 50%;
+        border: 3px solid #fff;
+    }
+    .page > section {
+        padding: 2.5mm 18mm;
+        border-bottom: 1px solid #eef2f6;
     }
     section h2 {
-        color: var(--accent);
-        font-size: 0.9em;
+        font-size: 0.8em;
         letter-spacing: 3px;
-        font-weight: 600;
-        padding-left: 0;
+        color: var(--accent);
+        text-transform: uppercase;
+        margin-bottom: 0.4rem;
     }
     section h2::before {
         content: '';
         display: inline-block;
-        width: 0.55em;
-        height: 0.55em;
+        width: 8px;
+        height: 8px;
         background: var(--accent);
-        margin-right: 0.45em;
-        transform: rotate(45deg);
+        margin-right: 0.5rem;
     }
-    .entry .title { color: #111827; }
-    .skill-cat { color: var(--accent); }
-    .declaration { border-top: 1px solid var(--accent) !important; }
+    .skill-row {
+        display: flex;
+        justify-content: space-between;
+        border-bottom: 1px dashed #e5e7eb;
+        padding-bottom: 0.2rem;
+    }
+    .skill-cat { color: var(--accent); font-weight: 600; }
+    .declaration { margin: 3mm 18mm; border-top: 2px solid var(--accent) !important; }
 
-    /* ============ Theme 3: Classic (unchanged) ============ */
+    /* ============================================================
+       THEME 3 — "Classic" (unchanged single column).
+       ============================================================ */
     {% else %}
     :root {
         --font-family: Georgia, 'Times New Roman', Times, serif;

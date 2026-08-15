@@ -56,7 +56,7 @@
 <body>
 <div class="page">
     {% if resume.projects %}
-    <section>
+    <section class="section-projects">
         <h2>Projects</h2>
         <div class="resume-projects-wrap">
             <div class="resume-projects-list">
@@ -84,7 +84,7 @@
     </section>
     {% endif %}
 
-    <section>
+    <section class="section-skills">
         <h2>Technical Skills</h2>
         {% for skill in resume.skills %}
         <p class="skill-row" style="margin-bottom:0.5rem;"><span class="skill-cat">{{ skill.category }}:</span> {{ skill.value }}</p>
