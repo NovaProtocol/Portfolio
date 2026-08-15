@@ -10,7 +10,7 @@
     "github": "https://github.com/NovaProtocol",
     "portfolio": "https://portfolio.projectnova.download/?access_code=bb829542bf71ca5e"
   },
-  "summary": "Mechanical Engineering graduate with experience in AutoCAD facility layouts, safety inspections, technical documentation, and engineering-focused software projects. Skilled in CAD, technical drawing, blueprint reading, fabrication, and safety practices, with additional experience in Python, embedded systems, and automation.",
+  "summary": "Mechanical Engineering graduate with experience in AutoCAD facility layouts, safety inspections, technical documentation, and technical systems development. Skilled in CAD, technical drawing, blueprint reading, fabrication, and occupational safety, complemented by hands-on experience in software development, embedded systems, and automation.",
   "education": [
     {
       "level": "Tertiary",
@@ -20,16 +20,26 @@
       "awards": ["DOST S&T Scholarship", "Dean's Lister"]
     }
   ],
+  "coursework": [
+    "Machine Design",
+    "Thermodynamics",
+    "Fluid Mechanics",
+    "Heat Transfer",
+    "Manufacturing Processes",
+    "Engineering Mechanics",
+    "Materials Engineering",
+    "Mechatronics"
+  ],
   "certifications": [
     {
-      "title": "DOLE Accredited Safety Officer 2 (SO2)",
-      "issuer": "Basic Occupational Safety and Health (BOSH SO2) Training",
+      "title": "BOSH Safety Officer 2 (SO2) — 40-Hour OSH Training",
+      "issuer": "",
       "year": "2024",
-      "detail": "40-Hour OSH Course"
+      "detail": ""
     },
     {
-      "title": "Shielded Metal Arc Welding Certification (SMAW NC1)",
-      "issuer": "TESDA",
+      "title": "TESDA SMAW NC I",
+      "issuer": "",
       "year": "2023",
       "detail": ""
     }
@@ -48,7 +58,7 @@
     },
     {
       "role": "Freelance Technical Developer",
-      "organization": "Freelance - Work from Home",
+      "organization": "Freelance",
       "period": "Aug 2025 - Nov 2025",
       "responsibilities": [
         "Built a signature verification system using a ResNet-18 neural network with Triplet Loss, achieving 86.96% validation accuracy on the reference dataset.",
@@ -59,7 +69,7 @@
   ],
   "projects": [
     {
-      "name": "MELE Review",
+      "name": "MELE Review — Personal Project",
       "tech": "Python, MySQL, Docker",
       "highlights": [
         "Built a unit-aware engineering equation solver that evaluates multi-step formulas across metric and English conventions",
@@ -67,13 +77,28 @@
       ]
     },
     {
-      "name": "Water Billing System",
+      "name": "Water Billing System — Personal Project, In Development",
       "tech": "React Native, NFC, Docker, MySQL",
       "highlights": [
         "Designed an end-to-end utility billing workflow that unifies meter reading, tariff computation, and bill distribution into a single process",
         "Offline-first NFC meter reading with on-device cryptographic key derivation so meter data never crosses the network",
         "Automated 5-tier progressive tariff billing with late penalties and waterfall payment application",
         "Customer and payment data isolated in internal networks with role-scoped access"
+      ]
+    },
+    {
+      "name": "SolveSpace — Personal Project",
+      "tech": "Python, Docker, Bubblewrap",
+      "highlights": [
+        "Isolated execution sandbox for untrusted code with hard memory, CPU, and process limits and zero network access"
+      ]
+    },
+    {
+      "name": "GateKeeper — Personal Project",
+      "tech": "Python, SQLite, Docker",
+      "highlights": [
+        "Single sign-on auth gate with signed, tamper-evident cookies and forward-auth session verification",
+        "Admin panel to issue and revoke access codes, with a backup code so the owner is never locked out"
       ]
     }
   ],
