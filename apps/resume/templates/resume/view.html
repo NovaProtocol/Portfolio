@@ -132,12 +132,12 @@
         {% endif %}
     </div>
 
-    <section>
+    <section class="section-summary">
         <h2>Professional Summary</h2>
         <p>{{ resume.summary }}</p>
     </section>
 
-    <section>
+    <section class="section-education">
         <h2>Education</h2>
         {% for edu in resume.education %}
         <div class="entry">
@@ -157,7 +157,7 @@
         {% endfor %}
     </section>
 
-    <section>
+    <section class="section-certification">
         <h2>Certification</h2>
         {% for cert in resume.certifications %}
         <div class="entry">
@@ -171,7 +171,7 @@
         {% endfor %}
     </section>
 
-    <section>
+    <section class="section-experience">
         <h2>Work Experience</h2>
         {% for job in resume.experience %}
         <div class="entry">
@@ -192,7 +192,7 @@
 
     <div class="page">
     {% if resume.projects %}
-    <section>
+    <section class="section-projects">
         <h2>Projects</h2>
         <div class="resume-projects-wrap">
             <div class="resume-projects-list">
@@ -220,7 +220,7 @@
     </section>
     {% endif %}
 
-    <section>
+    <section class="section-skills">
         <h2>Technical Skills</h2>
         {% for skill in resume.skills %}
         <p class="skill-row" style="margin-bottom:0.5rem;"><span class="skill-cat">{{ skill.category }}:</span> {{ skill.value }}</p>
