@@ -22,39 +22,14 @@
         box-shadow: 0 2px 16px rgba(0, 0, 0, 0.18);
         background: #ffffff;
     }
-    .resume-page-canvas {
-        position: relative;
-        line-height: 0;
-        background: #ffffff;
-    }
-    .resume-page-canvas + .resume-page-canvas {
-        border-top: 1px solid #ddd;
-    }
-    .resume-page-canvas canvas {
+    .resume-pdf-viewer canvas {
+        display: block;
         width: 100%;
         height: auto;
-        display: block;
+        background: #ffffff;
     }
-    .resume-page-canvas .textLayer {
-        position: absolute;
-        left: 0;
-        top: 0;
-        right: 0;
-        bottom: 0;
-        overflow: hidden;
-        line-height: 1;
-    }
-    .resume-page-canvas .textLayer span,
-    .resume-page-canvas .textLayer br {
-        color: transparent;
-        position: absolute;
-        white-space: pre;
-        cursor: text;
-        transform-origin: 0% 0%;
-    }
-    .resume-page-canvas .textLayer ::selection {
-        background: rgba(0, 100, 0, 0.3);
-        color: transparent;
+    .resume-pdf-viewer canvas + canvas {
+        border-top: 1px solid #ddd;
     }
     .resume-toolbar {
         position: absolute;
@@ -147,32 +122,13 @@
                 const scale = targetWidth / baseViewport.width;
                 const viewport = page.getViewport({ scale });
 
-                const pageDiv = document.createElement('div');
-                pageDiv.className = 'resume-page-canvas';
-                container.appendChild(pageDiv);
-
                 const canvas = document.createElement('canvas');
                 canvas.width = Math.floor(viewport.width);
                 canvas.height = Math.floor(viewport.height);
-                pageDiv.appendChild(canvas);
+                container.appendChild(canvas);
 
                 const ctx = canvas.getContext('2d');
                 await page.render({ canvasContext: ctx, viewport }).promise;
-
-                // Text layer for selectable text over the canvas.
-                const textDiv = document.createElement('div');
-                textDiv.className = 'textLayer';
-                textDiv.style.width = viewport.width + 'px';
-                textDiv.style.height = viewport.height + 'px';
-                pageDiv.appendChild(textDiv);
-
-                const textContent = await page.getTextContent();
-                pdfjsLib.renderTextLayer({
-                    textContentSource: textContent,
-                    container: textDiv,
-                    viewport: viewport,
-                    textDivs: [],
-                });
             }
         } catch (err) {
             console.error('Failed to render resume PDF:', err);
