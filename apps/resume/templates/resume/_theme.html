@@ -1,31 +1,113 @@
 <style>
-    /* Theme definitions */
+    /* ============ Theme 1: Executive ============
+       Full-bleed navy header band, gold accents, clean sans-serif. */
     {% if theme == 1 %}
     :root {
-        --font-family: 'Helvetica Neue', Arial, sans-serif;
-        --text-color: #1a1a1a;
-        --accent: #0f4c81;
-        --accent-soft: #dbe7f3;
+        --font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+        --text-color: #2b2b2b;
+        --accent: #c9a227;
+        --accent-soft: transparent;
         --muted: #4a4a4a;
         --light-muted: #666;
-        --header-border: 2px solid var(--accent);
+        --header-border: none;
         --h2-border: 2px solid var(--accent);
-        --name-color: var(--accent);
-        --section-heading-bg: var(--accent-soft);
+        --name-color: #ffffff;
+        --section-heading-bg: transparent;
     }
+    .resume-header {
+        background: #14213d;
+        color: #ffffff;
+        margin: -15mm -18mm 1.1rem;
+        padding: 12mm 18mm 10mm;
+    }
+    .resume-header h1 {
+        font-size: 2em;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        color: #ffffff !important;
+    }
+    .resume-header .contact-line,
+    .resume-header .contact-line a {
+        color: #d7dbe6 !important;
+        font-size: 0.85em;
+    }
+    .resume-header .contact-line a:hover { color: #ffffff; }
+    .resume-photo {
+        border: 3px solid var(--accent);
+        border-radius: 50%;
+        margin-left: 1.5rem;
+    }
+    section h2 {
+        color: #14213d;
+        letter-spacing: 2px;
+    }
+    section h2::after {
+        content: '';
+        display: block;
+        width: 100%;
+        border-bottom: 2px solid var(--accent);
+        margin-top: 0.15rem;
+    }
+    .entry .title { color: #14213d; letter-spacing: 0.3px; }
+    .declaration { border-top: 2px solid var(--accent) !important; }
+
+    /* ============ Theme 2: Editorial ============
+       Teal side rail, light and airy, marker bullets, no heavy rules. */
     {% elif theme == 2 %}
     :root {
         --font-family: 'Trebuchet MS', 'Segoe UI', sans-serif;
-        --text-color: #20242a;
-        --accent: #7a4fbf;
-        --accent-soft: #efe9fb;
-        --muted: #3d3d3d;
-        --light-muted: #555;
-        --header-border: 1px solid var(--accent);
-        --h2-border: 1px solid var(--accent);
-        --name-color: var(--accent);
+        --text-color: #1f2937;
+        --accent: #0d9488;
+        --accent-soft: #e6f7f5;
+        --muted: #374151;
+        --light-muted: #6b7280;
+        --header-border: 1px solid #e5e7eb;
+        --h2-border: none;
+        --name-color: #111827;
         --section-heading-bg: transparent;
     }
+    .page { position: relative; }
+    .page::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        width: 6mm;
+        background: linear-gradient(var(--accent), #0b6e66);
+    }
+    .resume-header h1 {
+        font-size: 2.1em;
+        font-weight: 600;
+        letter-spacing: -0.5px;
+        color: var(--name-color);
+    }
+    .resume-header { border-bottom: 1px solid #e5e7eb; }
+    .resume-photo {
+        border-radius: 4px;
+        border: 1px solid #d1d5db;
+    }
+    section h2 {
+        color: var(--accent);
+        font-size: 0.9em;
+        letter-spacing: 3px;
+        font-weight: 600;
+        padding-left: 0;
+    }
+    section h2::before {
+        content: '';
+        display: inline-block;
+        width: 0.55em;
+        height: 0.55em;
+        background: var(--accent);
+        margin-right: 0.45em;
+        transform: rotate(45deg);
+    }
+    .entry .title { color: #111827; }
+    .skill-cat { color: var(--accent); }
+    .declaration { border-top: 1px solid var(--accent) !important; }
+
+    /* ============ Theme 3: Classic (unchanged) ============ */
     {% else %}
     :root {
         --font-family: Georgia, 'Times New Roman', Times, serif;
