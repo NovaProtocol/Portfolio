@@ -1,6 +1,6 @@
 {
   "name": "Khyles Gibrian Ramos",
-  "headline": "Software Engineer · Web Developer",
+  "headline": "Mechanical Engineer · Software Developer · Full-stack Web Developer",
   "photo": "assets/images/resume_image.JPG",
   "contact": {
     "address": "Brgy. Mateuna, Tayabas, Quezon",
@@ -30,7 +30,8 @@
       "level": "Junior High School",
       "school": "Luis Palad Integrated High School",
       "degree": "Junior High School",
-      "years": "2015-2019"
+      "years": "2015-2019",
+      "awards": ["Academic Excellence Awardee - With Honours"]
     }
   ],
   "certifications": [
