@@ -57,32 +57,25 @@
     <div class="container">
         <div class="resume-wrap">
             <div class="resume-toolbar">
-                <a href="{{ url_for('resume_blueprint.pdf') }}" download="resume.pdf" title="Download PDF">
+                <button type="button" title="Save as PDF" onclick="printResume()">
                     <i class="fas fa-download"></i>
-                </a>
+                </button>
                 <button type="button" title="Print" onclick="printResume()">
                     <i class="fas fa-print"></i>
                 </button>
             </div>
-            <iframe id="resume-frame" class="resume-frame" src="{{ url_for('resume_blueprint.pdf') }}" title="Resume"></iframe>
+            <iframe id="resume-frame" class="resume-frame" src="{{ url_for('resume_blueprint.view') }}" title="Resume"></iframe>
         </div>
     </div>
 </div>
 
-<iframe id="print-frame" style="position:absolute; width:0; height:0; border:0; visibility:hidden;" title="Print"></iframe>
-
 <script>
-    const PDF_URL = "{{ url_for('resume_blueprint.pdf') }}";
-
     function printResume() {
-        // Print the PDF file itself in a fresh hidden iframe, so the
-        // visible viewer's CSS sizing never affects print output.
-        const printFrame = document.getElementById('print-frame');
-        printFrame.src = PDF_URL;
-        printFrame.onload = function() {
-            printFrame.contentWindow.focus();
-            printFrame.contentWindow.print();
-        };
+        const frame = document.getElementById('resume-frame');
+        if (frame && frame.contentWindow) {
+            frame.contentWindow.focus();
+            frame.contentWindow.print();
+        }
     }
 </script>
 {% endblock %}
