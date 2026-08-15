@@ -10,7 +10,7 @@
     "github": "https://github.com/NovaProtocol",
     "portfolio": "https://portfolio.projectnova.download/?access_code=bb829542bf71ca5e"
   },
-  "summary": "Mechanical Engineering graduate with experience in AutoCAD facility layouts, safety inspections, technical documentation, and technical systems development. Skilled in CAD, technical drawing, blueprint reading, fabrication, and occupational safety, complemented by hands-on experience in software development, embedded systems, and automation.",
+  "summary": "Mechanical Engineering graduate with experience in AutoCAD facility layouts, safety inspections, technical documentation, and technical systems development. Skilled in CAD, technical drawing, blueprint reading, fabrication, and occupational safety, complemented by hands-on software development, embedded systems, automation, and systems integration. Brings a multidisciplinary approach to engineering problems, combining mechanical fundamentals with programming and hardware-oriented development.",
   "education": [
     {
       "level": "Tertiary",
@@ -63,6 +63,7 @@
       "responsibilities": [
         "Built a signature verification system using a ResNet-18 neural network with Triplet Loss, achieving 86.96% validation accuracy on the reference dataset.",
         "Developed data preprocessing pipelines to prepare, normalize, and format image datasets for model training.",
+        "Integrated the trained model into a backend service for on-demand inference and image processing.",
         "Delivered functional code and technical documentation within project deadlines."
       ]
     }
@@ -72,8 +73,9 @@
       "name": "MELE Review — Personal Project",
       "tech": "Python, MySQL, Docker",
       "highlights": [
-        "Built a unit-aware engineering equation solver that evaluates multi-step formulas across metric and English conventions",
-        "Board exam reviewer tool for the Mechanical Engineering Licensure Exam with a self-maintained question bank"
+        "Built a unit-aware engineering equation solver for multi-step formulas across metric and English conventions",
+        "Developed a Mechanical Engineering Licensure Exam reviewer with a self-maintained question bank",
+        "Implemented answer feedback, flag-for-review, and progress tracking across supported engineering topics"
       ]
     },
     {
@@ -90,7 +92,8 @@
       "name": "SolveSpace — Personal Project",
       "tech": "Python, Docker, Bubblewrap",
       "highlights": [
-        "Isolated execution sandbox for untrusted code with hard memory, CPU, and process limits and zero network access"
+        "Isolated execution sandbox for untrusted code with hard memory, CPU, and process limits and zero network access",
+        "Implemented containerized process isolation with read-only filesystem and resource constraint enforcement"
       ]
     },
     {
@@ -114,6 +117,10 @@
     {
       "category": "Safety & Compliance",
       "value": "DOLE BOSH SO2, OSH Standards, Safety Inspection, Fire Safety Planning"
+    },
+    {
+      "category": "Engineering & Automation",
+      "value": "Embedded Systems, Hardware/Software Integration, Sensor Interfaces, Automation"
     },
     {
       "category": "Programming Languages",
