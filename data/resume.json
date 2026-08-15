@@ -10,7 +10,7 @@
     "github": "https://github.com/NovaProtocol",
     "portfolio": "https://portfolio.projectnova.download/?access_code=bb829542bf71ca5e"
   },
-  "summary": "DOST Scholar and engineering student building software across the stack having backend services in Python (FastAPI, Flask), containerized deployments with Docker, and secure web infrastructure. Seeking an entry-level technical role to apply hands-on coding and system design skills, and to keep learning from experienced engineers in a collaborative team.",
+  "summary": "Full-Stack Software Developer and DOST Scholar with a mechanical engineering background that informs a systems-thinking approach to software. Expertise in architecting backend systems in Python (FastAPI, Flask), containerized deployments with Docker, and secure networking infrastructure. Skilled in building robust, offline-first architectures and automated tooling.",
   "education": [
     {
       "level": "Tertiary",
@@ -66,7 +66,7 @@
       "period": "Aug 2025 - Nov 2025",
       "responsibilities": [
         "Developed a full-stack signature verification application using PyTorch, ResNet-18, and Flask to support academic thesis research.",
-        "Built a signature verification system that utilizes Triplet Loss to compare known reference signatures against unknown samples for authentication.",
+        "Built a signature verification system using Triplet Loss with a ResNet-18 backbone, achieving 86.96% validation accuracy on the reference dataset.",
         "Developed a web-based user interface using Flask to allow users to upload signature samples and view real-time verification results.",
         "Integrated PyTorch models into the backend to handle real-time image processing and model inference upon user request.",
         "Created data preprocessing scripts to prepare, normalize, and format signature image datasets for model training.",
@@ -89,7 +89,8 @@
       "highlights": [
         "Offline-first NFC meter reading architecture with on-device cryptographic key derivation so tag data never crosses the network",
         "Automated 5-tier progressive tariff billing with late penalties and waterfall payment application",
-        "Confidential customer and payment data sealed in internal Docker networks with role-scoped API access"
+        "Confidential customer and payment data sealed in internal Docker networks with role-scoped API access",
+        "Unifies meter reading and bill distribution into a single end-to-end workflow with live bill access for customers"
       ]
     },
     {
