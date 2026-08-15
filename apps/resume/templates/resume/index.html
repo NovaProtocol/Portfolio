@@ -8,17 +8,48 @@
         background: #e9ecef;
         padding: 2rem 0 4rem;
     }
+    .resume-wrap {
+        position: relative;
+        max-width: 210mm;
+        margin: 0 auto;
+    }
     .resume-frame {
         width: 100%;
-        max-width: 210mm;
         height: 297mm;
         max-height: 90vh;
-        margin: 0 auto;
         display: block;
         border: 1px solid #ddd;
         border-radius: 4px;
         box-shadow: 0 2px 16px rgba(0, 0, 0, 0.18);
         background: #ffffff;
+    }
+    .resume-toolbar {
+        position: absolute;
+        top: 0.75rem;
+        right: 0.75rem;
+        display: flex;
+        gap: 0.5rem;
+        z-index: 10;
+    }
+    .resume-toolbar a,
+    .resume-toolbar button {
+        width: 2.5rem;
+        height: 2.5rem;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid rgba(255, 255, 255, 0.25);
+        border-radius: 50%;
+        background: rgba(10, 10, 15, 0.85);
+        color: var(--accent);
+        font-size: 1rem;
+        cursor: pointer;
+        transition: background 0.2s, color 0.2s;
+    }
+    .resume-toolbar a:hover,
+    .resume-toolbar button:hover {
+        background: var(--accent);
+        color: var(--bg-primary);
     }
 </style>
 {% endblock %}
@@ -26,13 +57,27 @@
 {% block content %}
 <div class="resume-page">
     <div class="container">
-        <div class="text-center mb-3">
-            <a href="{{ url_for('static', filename='assets/images/resume.pdf') }}" target="_blank" class="btn btn-accent save-btn">
-                <i class="fas fa-download mr-1"></i>Download PDF
-            </a>
+        <div class="resume-wrap">
+            <div class="resume-toolbar">
+                <a href="{{ url_for('static', filename='assets/images/resume.pdf') }}" download="resume.pdf" title="Download PDF">
+                    <i class="fas fa-download"></i>
+                </a>
+                <button type="button" title="Print" onclick="printResume()">
+                    <i class="fas fa-print"></i>
+                </button>
+            </div>
+            <iframe id="resume-frame" class="resume-frame" src="{{ url_for('static', filename='assets/images/resume.pdf') }}" title="Resume"></iframe>
         </div>
-
-        <iframe class="resume-frame" src="{{ url_for('static', filename='assets/images/resume.pdf') }}" title="Resume"></iframe>
     </div>
 </div>
+
+<script>
+    function printResume() {
+        const frame = document.getElementById('resume-frame');
+        if (frame && frame.contentWindow) {
+            frame.contentWindow.focus();
+            frame.contentWindow.print();
+        }
+    }
+</script>
 {% endblock %}
