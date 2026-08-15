@@ -10,18 +10,56 @@
     }
     .resume-wrap {
         position: relative;
-        max-width: 210mm;
         margin: 0 auto;
+        max-width: 900px;
     }
-    .resume-frame {
+    .resume-pdf-viewer {
         width: 100%;
-        height: 297mm;
-        max-height: 90vh;
-        display: block;
+        max-height: 92vh;
+        overflow: auto;
         border: 1px solid #ddd;
         border-radius: 4px;
         box-shadow: 0 2px 16px rgba(0, 0, 0, 0.18);
+        background: #525659;
+        padding: 1rem;
+    }
+    .resume-page-canvas {
+        position: relative;
+        line-height: 0;
         background: #ffffff;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
+        margin: 0 auto 1rem;
+        max-width: 100%;
+    }
+    .resume-page-canvas:last-child {
+        margin-bottom: 0;
+    }
+    .resume-page-canvas canvas {
+        width: 100%;
+        height: auto;
+        display: block;
+    }
+    .resume-page-canvas .textLayer {
+        position: absolute;
+        left: 0;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        overflow: hidden;
+        line-height: 1;
+        opacity: 1;
+    }
+    .resume-page-canvas .textLayer span,
+    .resume-page-canvas .textLayer br {
+        color: transparent;
+        position: absolute;
+        white-space: pre;
+        cursor: text;
+        transform-origin: 0% 0%;
+    }
+    .resume-page-canvas .textLayer ::selection {
+        background: rgba(0, 100, 0, 0.3);
+        color: transparent;
     }
     .resume-toolbar {
         position: absolute;
@@ -51,6 +89,11 @@
         background: var(--accent);
         color: var(--bg-primary);
     }
+    .resume-loading {
+        text-align: center;
+        padding: 3rem;
+        color: var(--text-secondary);
+    }
 </style>
 {% endblock %}
 
@@ -66,18 +109,77 @@
                     <i class="fas fa-print"></i>
                 </button>
             </div>
-            <iframe id="resume-frame" class="resume-frame" src="{{ url_for('static', filename='assets/images/resume.pdf') }}" title="Resume"></iframe>
+            <div id="pdf-viewer" class="resume-pdf-viewer">
+                <div id="pdf-loading" class="resume-loading">Loading resume...</div>
+            </div>
         </div>
     </div>
 </div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 <script>
+    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+
+    const PDF_URL = "{{ url_for('static', filename='assets/images/resume.pdf') }}";
+    const container = document.getElementById('pdf-viewer');
+    const loadingEl = document.getElementById('pdf-loading');
+
     function printResume() {
-        const frame = document.getElementById('resume-frame');
-        if (frame && frame.contentWindow) {
+        const frame = document.createElement('iframe');
+        frame.style.display = 'none';
+        frame.src = PDF_URL;
+        document.body.appendChild(frame);
+        frame.onload = function() {
             frame.contentWindow.focus();
             frame.contentWindow.print();
+        };
+    }
+
+    async function renderResume() {
+        try {
+            const pdf = await pdfjsLib.getDocument(PDF_URL).promise;
+            loadingEl.remove();
+
+            const viewerWidth = container.clientWidth - 32;
+            for (let i = 1; i <= pdf.numPages; i++) {
+                const page = await pdf.getPage(i);
+                const baseViewport = page.getViewport({ scale: 1 });
+                const scale = viewerWidth / baseViewport.width;
+                const viewport = page.getViewport({ scale });
+
+                const pageDiv = document.createElement('div');
+                pageDiv.className = 'resume-page-canvas';
+                container.appendChild(pageDiv);
+
+                const canvas = document.createElement('canvas');
+                canvas.width = Math.floor(viewport.width);
+                canvas.height = Math.floor(viewport.height);
+                pageDiv.appendChild(canvas);
+
+                const ctx = canvas.getContext('2d');
+                await page.render({ canvasContext: ctx, viewport }).promise;
+
+                // Text layer keeps the rendered PDF selectable.
+                const textDiv = document.createElement('div');
+                textDiv.className = 'textLayer';
+                textDiv.style.width = viewport.width + 'px';
+                textDiv.style.height = viewport.height + 'px';
+                pageDiv.appendChild(textDiv);
+
+                const textContent = await page.getTextContent();
+                pdfjsLib.renderTextLayer({
+                    textContentSource: textContent,
+                    container: textDiv,
+                    viewport: viewport,
+                    textDivs: [],
+                });
+            }
+        } catch (err) {
+            console.error('Failed to render resume PDF:', err);
+            loadingEl.textContent = 'Failed to load resume.';
         }
     }
+
+    document.addEventListener('DOMContentLoaded', renderResume);
 </script>
 {% endblock %}
