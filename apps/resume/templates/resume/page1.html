@@ -127,20 +127,6 @@
     </section>
 
     <section>
-        <h2>Certification</h2>
-        {% for cert in resume.certifications %}
-        <div class="entry">
-            <div class="head">
-                <span class="title">{{ cert.title }}</span>
-                <span class="period">{{ cert.year }}</span>
-            </div>
-            <p style="margin-bottom:0;">{{ cert.issuer }}</p>
-            {% if cert.detail %}<p style="margin-bottom:0; color:#333;">{{ cert.detail }}</p>{% endif %}
-        </div>
-        {% endfor %}
-    </section>
-
-    <section>
         <h2>Work Experience</h2>
         {% for job in resume.experience %}
         <div class="entry">
