@@ -97,19 +97,28 @@
     }
     @page {
         size: A4;
-        margin: 0;
+        margin: 14mm 16mm;
     }
     @media print {
-        body { background: #ffffff; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+        body { background: #ffffff !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
         .navbar, .footer, .resume-page .save-btn { display: none !important; }
-        main { padding-top: 0 !important; }
-        .resume-page { background: #ffffff; padding: 0; }
-        .resume-pages { gap: 0; }
-        .resume-sheet {
-            box-shadow: none;
-            break-after: page;
+        main { padding: 0 !important; margin: 0 !important; }
+        .resume-page { background: #ffffff !important; padding: 0 !important; margin: 0 !important; }
+        .resume-page > .container {
+            max-width: none !important;
+            width: 100% !important;
+            padding: 0 !important;
+            margin: 0 !important;
         }
-        .resume-sheet:last-child { break-after: auto; }
+        /* Hide the JS-paginated sheets; print the original content in natural flow */
+        .resume-pages { display: none !important; }
+        #resume-source { display: block !important; }
+        #resume-source .resume-header { page-break-after: avoid; }
+        #resume-source section { page-break-inside: avoid; margin-bottom: 1.1rem; }
+        #resume-source .entry { page-break-inside: avoid; }
+        #resume-source .resume-projects-wrap { page-break-inside: avoid; }
+        .resume-photo { border: none; }
+        .resume-projects-qr img { border: none; }
     }
 </style>
 <script>
