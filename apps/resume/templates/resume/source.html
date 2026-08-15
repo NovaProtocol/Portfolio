@@ -97,7 +97,7 @@
     }
     @page {
         size: A4;
-        margin: 14mm 16mm;
+        margin: 12mm 14mm;
     }
     @media print {
         body { background: #ffffff !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
@@ -112,10 +112,11 @@
         }
         /* Hide the JS-paginated sheets; print the original content in natural flow */
         .resume-pages { display: none !important; }
-        #resume-source { display: block !important; }
+        #resume-source { display: block !important; font-size: 11.5px; line-height: 1.45; }
         #resume-source .resume-header { page-break-after: avoid; }
-        #resume-source section { page-break-inside: avoid; margin-bottom: 1.1rem; }
-        #resume-source .entry { page-break-inside: avoid; }
+        #resume-source section { page-break-inside: avoid; margin-bottom: 0.9rem; }
+        #resume-source .entry { page-break-inside: avoid; margin-bottom: 0.7rem; }
+        #resume-source .entry:last-child { margin-bottom: 0; }
         #resume-source .resume-projects-wrap { page-break-inside: avoid; }
         #resume-source,
         #resume-source p,
