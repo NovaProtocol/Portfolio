@@ -64,29 +64,22 @@ def pdf():
     """Generate the resume PDF on the spot and return it.
 
     Renders the resume source HTML, inlines images as data URIs, then
-    uses Chromium (Playwright) print-to-PDF to emit a real vector PDF
-    with selectable text. Nothing is written to disk and no state is
-    kept between requests.
+    converts to PDF with WeasyPrint (pure Python, no browser). Output
+    is a real vector PDF with selectable text — ATS-friendly. Nothing
+    is written to disk and no state is kept between requests.
     """
     try:
-        from playwright.sync_api import sync_playwright
+        import weasyprint
     except ImportError:
         return Response(
-            "PDF generation needs Playwright. Install locally: "
-            "pip install playwright && playwright install chromium",
+            "PDF generation needs WeasyPrint. Install locally: pip install weasyprint",
             status=503,
             mimetype="text/plain",
         )
 
     html = _inline_images(render_template("resume/source.html", resume=_RESUME))
 
-    with sync_playwright() as p:
-        browser = p.chromium.launch(headless=True)
-        page = browser.new_page()
-        page.set_content(html, wait_until="networkidle")
-        page.wait_for_timeout(1500)
-        pdf_bytes = page.pdf(format="A4", print_background=True)
-        browser.close()
+    pdf_bytes = weasyprint.HTML(string=html).write_pdf()
 
     return Response(
         pdf_bytes,
