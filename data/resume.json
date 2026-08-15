@@ -83,7 +83,7 @@
     },
     {
       "name": "GateKeeper",
-      "tech": "Flask, SQLite, Docker, Cloudflare Tunnel",
+      "tech": "Flask, itsdangerous, SQLite, Docker, Cloudflare Tunnel",
       "highlights": [
         "Single sign-on auth gate protecting a family of web apps with signed, tamper-evident cookies and forward-auth session verification",
         "Admin panel to issue and revoke access codes, with a backup code so the owner is never locked out"
