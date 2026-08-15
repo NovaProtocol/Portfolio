@@ -79,17 +79,17 @@
       "name": "MELE Review",
       "tech": "FastAPI, Granian, SQLAlchemy, MySQL, Docker, Caddy, Cloudflare Tunnel",
       "highlights": [
-        "Self-hosted board exam reviewer with a self-maintained question bank from various sources, with answer feedback and flag-for-review",
-        "Notebook-style solution editor with a unit-aware solver that handles multi-step engineering equations in both metric and English conventions"
+        "Built a unit-aware engineering equation solver that evaluates multi-step formulas across both metric and English conventions",
+        "Self-hosted board exam reviewer with a self-maintained question bank, answer feedback, and flag-for-review"
       ]
     },
     {
       "name": "Water Billing System",
       "tech": "FastAPI, Granian, SQLAlchemy, MySQL, Docker, React Native, NFC, Xendit, Caddy, Cloudflare Tunnel",
       "highlights": [
-        "Designed a utility billing platform that keeps confidential customer and payment data isolated on internal Docker networks, with role-scoped API access so each user reaches only what they need",
-        "Built an offline-first meter reading app with tamper-proof NFC tags whose security keys derive on-device, so tag data never crosses the network",
-        "Automated billing from a 5-tier progressive tariff and reconciled 22 payment channels end-to-end"
+        "Offline-first NFC meter reading architecture with on-device cryptographic key derivation so tag data never crosses the network",
+        "Automated 5-tier progressive tariff billing with late penalties and waterfall payment application",
+        "Confidential customer and payment data sealed in internal Docker networks with role-scoped API access"
       ]
     },
     {
@@ -104,7 +104,7 @@
       "name": "SolveSpace",
       "tech": "Flask, MySQL, Docker, Bubblewrap, Cloudflare Tunnel",
       "highlights": [
-        "Practice sandbox that runs untrusted user code in isolated containers with hard memory, CPU, and process limits and no network access"
+        "Isolated execution sandbox for untrusted code with hard memory, CPU, and process limits and zero network access"
       ]
     }
   ],
