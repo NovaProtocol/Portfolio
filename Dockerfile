@@ -10,7 +10,7 @@ RUN pip3 install --no-cache-dir -r requirements.txt
 COPY . .
 RUN python3 -m compileall -q . 2>/dev/null || true
 RUN rm -f .env
-RUN useradd -m appuser
+RUN useradd -m appuser 2>/dev/null || true
 RUN chown -R appuser:appuser /app
 
 EXPOSE 7010
