@@ -23,10 +23,12 @@
         }
         .page {
             width: 210mm;
-            min-height: 297mm;
+            height: 297mm;
+            overflow: hidden;
             padding: 15mm 18mm;
             margin: 0 auto;
             background: #ffffff;
+            box-shadow: 0 2px 16px rgba(0, 0, 0, 0.18);
         }
         .page + .page {
             margin-top: 2rem;
@@ -36,11 +38,14 @@
             .resume { margin: 0; }
             .page {
                 width: auto;
-                min-height: 0;
+                height: auto;
+                overflow: visible;
                 padding: 0;
                 margin: 0;
                 box-shadow: none;
+                break-after: page;
             }
+            .page:last-child { break-after: auto; }
             .page + .page { margin-top: 0; }
         }
         .resume-header {
