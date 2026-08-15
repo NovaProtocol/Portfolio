@@ -69,13 +69,20 @@
     </div>
 </div>
 
+<iframe id="print-frame" style="position:absolute; width:0; height:0; border:0; visibility:hidden;" title="Print"></iframe>
+
 <script>
+    const PDF_URL = "{{ url_for('static', filename='assets/images/resume.pdf') }}";
+
     function printResume() {
-        const frame = document.getElementById('resume-frame');
-        if (frame && frame.contentWindow) {
-            frame.contentWindow.focus();
-            frame.contentWindow.print();
-        }
+        // Print the PDF file itself in a fresh hidden iframe, so the
+        // visible viewer's CSS sizing never affects print output.
+        const printFrame = document.getElementById('print-frame');
+        printFrame.src = PDF_URL;
+        printFrame.onload = function() {
+            printFrame.contentWindow.focus();
+            printFrame.contentWindow.print();
+        };
     }
 </script>
 {% endblock %}
