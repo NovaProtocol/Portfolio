@@ -17,10 +17,11 @@
         --name-color: #ffffff;
         --section-heading-bg: transparent;
     }
-    .page { padding: 0; overflow: hidden; display: grid; grid-template-columns: 38% 62%; }
+    .page { padding: 0; overflow: hidden; display: grid; grid-template-columns: 38% 62%; grid-auto-rows: min-content; background: linear-gradient(to right, #f4f6fa 0, #f4f6fa 38%, #ffffff 38%); }
     body { font-size: 10px !important; }
     .resume-header {
         grid-column: 1 / -1;
+        grid-row: 1;
         display: flex;
         align-items: center;
         gap: 6mm;
@@ -45,19 +46,22 @@
         border-radius: 50%;
         margin: 0;
     }
-    /* side column = education, certification, skills */
-    .section-education, .section-certification, .section-skills {
-        grid-column: 1;
-        padding: 3mm 5mm 3mm 8mm;
-        background: #f4f6fa;
-        margin: 0;
-    }
-    /* main column = summary, experience, projects */
+    /* Main column (right) */
     .section-summary, .section-experience, .section-projects {
         grid-column: 2;
         padding: 3mm 8mm;
         margin: 0;
     }
+    .section-summary { grid-row: 2; }
+    .section-experience, .section-projects { grid-row: 3; }
+    /* Side column (left): education, certification, skills */
+    .section-education, .section-certification, .section-skills {
+        grid-column: 1;
+        padding: 3mm 5mm 3mm 8mm;
+        margin: 0;
+    }
+    .section-education { grid-row: 2; }
+    .section-certification, .section-skills { grid-row: 3; }
     section h2 {
         color: #14213d;
         font-size: 0.78em;
@@ -70,7 +74,7 @@
     .entry .title { color: #14213d; }
     .entry { margin-bottom: 0.4rem; }
     .entry ul li { margin-bottom: 0.05rem; }
-    .declaration { grid-column: 2; grid-row: auto; margin: 3mm 8mm 0; padding-top: 0.4rem !important; border-top: 2px solid var(--accent) !important; font-size: 0.9em; }
+    .declaration { grid-column: 1 / -1; grid-row: 4; margin: 2mm 12mm 0; padding-top: 0.4rem !important; border-top: 2px solid var(--accent) !important; font-size: 0.9em; }
     .resume-projects-wrap { flex-direction: column; }
 
     /* ============================================================
