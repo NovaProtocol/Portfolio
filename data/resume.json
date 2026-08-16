@@ -93,7 +93,8 @@
       "tech": "Python, Docker, Bubblewrap",
       "highlights": [
         "Isolated execution sandbox for untrusted code with hard memory, CPU, and process limits and zero network access",
-        "Implemented containerized process isolation with read-only filesystem and resource constraint enforcement"
+        "Implemented Bubblewrap-based process isolation with read-only filesystem, 1 GB memory cap, 25s CPU limit, and 64-process ceiling",
+        "Built a background execution queue with signal-based timeout handling and numeric-lenient test-case comparison"
       ]
     },
     {
@@ -101,7 +102,8 @@
       "tech": "Python, SQLite, Docker",
       "highlights": [
         "Single sign-on auth gate with signed, tamper-evident cookies and forward-auth session verification",
-        "Admin panel to issue and revoke access codes, with a backup code so the owner is never locked out"
+        "Admin panel to issue and revoke access codes, with a backup code so the owner is never locked out",
+        "Implemented redirect-based SSO flow with signed cookie validation and session management"
       ]
     }
   ],
