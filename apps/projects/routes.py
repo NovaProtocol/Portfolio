@@ -78,7 +78,16 @@ PROJECTS: dict[str, dict] = {
             "Project Note: this is a live demo of the full system, hosted on a low-end server to stay affordable. The live site shows the features, not the real performance headroom. You can log in with the given demo credentials and explore.",
         ],
         "tech": {
-            "web": ["FastAPI", "SQLAlchemy", "MySQL 8.4", "Caddy", "Granian", "Xendit API", "Cloudflare Tunnel", "Docker"],
+            "web": [
+                "FastAPI",
+                "SQLAlchemy",
+                "MySQL 8.4",
+                "Caddy",
+                "Granian",
+                "Xendit API",
+                "Cloudflare Tunnel",
+                "Docker",
+            ],
             "mobile": ["React Native", "Expo", "TypeScript", "NFC (NTAG215)", "SQLite"],
         },
         "features": [
@@ -106,10 +115,26 @@ PROJECTS: dict[str, dict] = {
         "github": "https://github.com/NovaProtocol/WaterBillingSystem",
         "image": "assets/images/water-billing-system/water-billing-system-preview.png",
         "links": [
-            {"name": "Staff Site", "url": "https://water-billing-system-private.projectnova.download/staff/", "icon": "fas fa-user-tie"},
-            {"name": "Dev Site", "url": "https://water-billing-system-private.projectnova.download/developer/", "icon": "fas fa-code-branch"},
-            {"name": "Documentation", "url": "https://water-billing-system-private.projectnova.download/documentation/", "icon": "fas fa-book"},
-            {"name": "phpMyAdmin", "url": "https://water-billing-system-private.projectnova.download/phpmyadmin/", "icon": "fas fa-database"},
+            {
+                "name": "Staff Site",
+                "url": "https://water-billing-system-private.projectnova.download/staff/",
+                "icon": "fas fa-user-tie",
+            },
+            {
+                "name": "Dev Site",
+                "url": "https://water-billing-system-private.projectnova.download/developer/",
+                "icon": "fas fa-code-branch",
+            },
+            {
+                "name": "Documentation",
+                "url": "https://water-billing-system-private.projectnova.download/documentation/",
+                "icon": "fas fa-book",
+            },
+            {
+                "name": "phpMyAdmin",
+                "url": "https://water-billing-system-private.projectnova.download/phpmyadmin/",
+                "icon": "fas fa-database",
+            },
         ],
         "testing": {
             "staff": {
@@ -133,7 +158,16 @@ PROJECTS: dict[str, dict] = {
             "Each question carries a notebook-style solution editor. Build solutions from blocks: constants with unit autosuggestion, MathQuill formula blocks, and answer blocks. Hitting Run evaluates the formulas top-to-bottom with a unit-aware solver, auto-solves single-variable equations by binary search, and normalizes metric/English conventions. Solutions persist per question and render read-only for anyone, while a write-access password lets the owner edit and upload.",
         ],
         "tech": {
-            "web": ["FastAPI", "Granian", "SQLAlchemy", "MySQL 8.4", "Caddy", "Docker", "Cloudflare Tunnel", "itsdangerous"],
+            "web": [
+                "FastAPI",
+                "Granian",
+                "SQLAlchemy",
+                "MySQL 8.4",
+                "Caddy",
+                "Docker",
+                "Cloudflare Tunnel",
+                "itsdangerous",
+            ],
             "lib": ["MathQuill", "math.js"],
         },
         "features": [

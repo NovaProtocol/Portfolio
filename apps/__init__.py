@@ -15,7 +15,7 @@ def register_blueprints(app: Flask) -> None:
         "projects",
         "resume",
     ):
-        module = import_module("apps.{}.routes".format(module_name))
+        module = import_module(f"apps.{module_name}.routes")
         app.register_blueprint(module.blueprint)
 
 

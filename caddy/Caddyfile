@@ -3,6 +3,13 @@
         reverse_proxy portfolio_main:7010
     }
 
+    handle_path /documentation/* {
+        forward_auth gatekeeper:7000 {
+            uri /api/authz/forward-auth
+        }
+        reverse_proxy portfolio_documentation:8005
+    }
+
     handle {
         forward_auth gatekeeper:7000 {
             uri /api/authz/forward-auth
