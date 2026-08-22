@@ -1,10 +1,13 @@
-FROM python3146t
+FROM python:3.14-slim
+
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
+ENV PYTHON_GIL=0
 
 WORKDIR /app
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
     gcc g++ libc6-dev \
-    # WeasyPrint system dependencies (GLib, Pango, Cairo, GDK-Pixbuf)
     libglib2.0-0 \
     libpango-1.0-0 libpangoft2-1.0-0 \
     libharfbuzz0b \
@@ -14,19 +17,15 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
 
 COPY requirements.txt .
-RUN pip3 install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
-RUN python3 -m compileall -q . 2>/dev/null || true
+RUN python3 -m compileall -q /app 2>/dev/null || true
 RUN rm -f .env
-RUN useradd -m appuser 2>/dev/null || true
-RUN chown -R appuser:appuser /app
+RUN useradd --create-home --uid 10001 appuser \
+    && chown -R appuser:appuser /app
 
 EXPOSE 7010
-
-ENV PYTHON_GIL=0
-ENV PYTHONDONTWRITEBYTECODE=1
-ENV PYTHONUNBUFFERED=1
 
 USER appuser
 

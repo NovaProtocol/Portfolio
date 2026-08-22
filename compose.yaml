@@ -1,5 +1,5 @@
 services:
-  portfolio_main:
+  app:
     build:
       context: .
       dockerfile: Dockerfile
@@ -9,7 +9,7 @@ services:
       PYTHON_GIL: ${PYTHON_GIL:-0}
       DEPLOYMENT_TYPE: ${DEPLOYMENT_TYPE:?DEPLOYMENT_TYPE is required}
     healthcheck:
-      test: ["CMD", "python3", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:7010/health')"]
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:7010/health')"]
       interval: 30s
       timeout: 5s
       retries: 3
