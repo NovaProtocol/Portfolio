@@ -63,7 +63,13 @@ PROJECTS: dict[str, dict] = {
         ),
         "url": "https://portfolio.projectnova.download/",
         "github": "https://github.com/NovaProtocol/Portfolio",
-        "links": [],
+        "links": [
+            {
+                "name": "Documentation",
+                "url": "https://portfolio.projectnova.download/documentation/",
+                "icon": "fas fa-book",
+            },
+        ],
         "buttons": [],
     },
     "water-billing-system": {
