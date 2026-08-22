@@ -194,7 +194,13 @@ PROJECTS: dict[str, dict] = {
         ),
         "url": "https://melereview.projectnova.download/",
         "github": "https://github.com/NovaProtocol/MELEReviewSite",
-        "links": [],
+        "links": [
+            {
+                "name": "Documentation",
+                "url": "https://melereview.projectnova.download/documentation/",
+                "icon": "fas fa-book",
+            },
+        ],
         "buttons": [],
     },
     "solvespace": {
@@ -226,7 +232,13 @@ PROJECTS: dict[str, dict] = {
         ],
         "url": "https://solver.projectnova.download/",
         "github": "https://github.com/NovaProtocol/SolveSpace",
-        "links": [],
+        "links": [
+            {
+                "name": "Documentation",
+                "url": "https://solver.projectnova.download/documentation/",
+                "icon": "fas fa-book",
+            },
+        ],
         "buttons": [],
     },
     "buddys-freelance-project": {
@@ -260,7 +272,13 @@ PROJECTS: dict[str, dict] = {
         ),
         "url": "https://buddys.projectnova.download/",
         "github": "https://github.com/NovaProtocol/BuddysFreelanceProject",
-        "links": [],
+        "links": [
+            {
+                "name": "Documentation",
+                "url": "https://buddys.projectnova.download/documentation/",
+                "icon": "fas fa-book",
+            },
+        ],
         "buttons": [],
     },
     "novaprotocol": {
@@ -295,7 +313,13 @@ PROJECTS: dict[str, dict] = {
         ),
         "url": "https://github.projectnova.download/test",
         "github": "https://github.com/NovaProtocol/NovaProtocol",
-        "links": [],
+        "links": [
+            {
+                "name": "Documentation",
+                "url": "https://github.projectnova.download/documentation/",
+                "icon": "fas fa-book",
+            },
+        ],
         "buttons": [],
     },
 }
