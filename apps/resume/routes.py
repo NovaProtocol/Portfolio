@@ -15,7 +15,7 @@ logger = logging.getLogger(__name__)
 
 def _load_resume() -> dict:
     try:
-        return json.loads(_RESUME_PATH.read_text())
+        return json.loads(_RESUME_PATH.read_text())  # type: ignore[no-any-return]
     except (OSError, json.JSONDecodeError):
         logger.exception("Failed to load resume data from %s", _RESUME_PATH)
         return {}

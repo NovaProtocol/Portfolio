@@ -54,11 +54,9 @@ def tech_tag(name: str) -> Markup:
     url = TAG_LINKS.get(name)
     if url:
         return Markup(
-            '<a class="tag" href="{}" target="_blank" rel="noopener noreferrer">{}</a>'.format(
-                escape(url), escape(name)
-            )
+            f'<a class="tag" href="{escape(url)}" target="_blank" rel="noopener noreferrer">{escape(name)}</a>'
         )
-    return Markup('<span class="tag">{}</span>'.format(escape(name)))
+    return Markup(f'<span class="tag">{escape(name)}</span>')
 
 
 def init_app(app) -> None:
