@@ -18,7 +18,6 @@ services:
     container_name: portfolio_main
     restart: unless-stopped
     environment:
-      PYTHON_GIL: ${PYTHON_GIL:-0}
       DEPLOYMENT_TYPE: ${DEPLOYMENT_TYPE:?DEPLOYMENT_TYPE is required}
     healthcheck:
       test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:7010/health')"]
@@ -57,7 +56,7 @@ networks:
 ```dockerfile
 FROM python:3.14-slim
 
-ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1 PYTHON_GIL=0
+ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1
 WORKDIR /app
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -163,7 +162,6 @@ docker compose exec documentation python -c "import urllib.request; print(urllib
 | Variable | Required | Where | Value |
 |----------|----------|-------|-------|
 | `DEPLOYMENT_TYPE` | yes | `app` env | `DEBUG` or `PRODUCTION` (`${VAR:?}`) |
-| `PYTHON_GIL` | no | `app` env | `0` (free-threading) or `1` |
 
 No `SECRET_KEY` or GateKeeper vars in the app — the gate lives entirely in Caddy.
 
