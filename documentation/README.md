@@ -12,7 +12,6 @@ Full project documentation for **Portfolio**, built with [MkDocs](https://www.mk
 | [Blueprints](docs/blueprints/home.md) | Home, Projects, Resume blueprints |
 | [Templates & Static](docs/templates-static.md) | Jinja2 and static assets |
 | [Docker](docs/docker.md) | Compose, Dockerfile, Caddy, GateKeeper |
-| [Why No gRPC](docs/why-no-grpc.md) | Monolith rationale for no internal RPC |
 
 ## Building Locally
 

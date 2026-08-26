@@ -69,4 +69,3 @@ nav:
       - Resume: blueprints/resume.md
   - Templates & Static: templates-static.md
   - Docker & Deployment: docker.md
-  - Why No gRPC: why-no-grpc.md

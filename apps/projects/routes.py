@@ -34,7 +34,13 @@ PROJECTS: dict[str, dict] = {
             "auth system."
         ),
         "github": "https://github.com/NovaProtocol/GateKeeper",
-        "links": [],
+        "links": [
+            {
+                "name": "Documentation",
+                "url": "https://gatekeeper.projectnova.download/documentation/",
+                "icon": "fas fa-book",
+            },
+        ],
         "buttons": [],
     },
     "portfolio": {
