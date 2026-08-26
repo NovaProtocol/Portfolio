@@ -86,7 +86,7 @@
             <p class="contact-line"><a href="{{ resume.contact.github }}">GitHub: {{ resume.contact.github }}</a></p>
             {% endif %}
             {% if resume.contact.portfolio %}
-            <p class="contact-line"><a href="{{ resume.contact.portfolio }}">Portfolio: portfolio.projectnova.download</a></p>
+            <p class="contact-line" style="word-break: break-all;"><a href="{{ resume.contact.portfolio }}">Portfolio: {{ resume.contact.portfolio }}</a></p>
             {% endif %}
         </div>
         {% if resume.photo %}
