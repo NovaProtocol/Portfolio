@@ -23,7 +23,6 @@ Env vars are **injected by compose interpolation** — no `.env` file is read. D
 |----------|----------|-------------|--------------|
 | `DEPLOYMENT_TYPE` | yes | `DEBUG` or `PRODUCTION` | `${DEPLOYMENT_TYPE:?…}` in compose.yaml |
 | `SECRET_KEY` | reserved | Session signing secret (future) | `${SECRET_KEY:-}` if consumed |
-| `PYTHON_GIL` | no | `0` for free-threading on 3.14 | `${PYTHON_GIL:-0}` |
 
 > Never `cp .env.example .env`. In production the deployment tool exports the vars; locally `export DEPLOYMENT_TYPE=DEBUG` then run.
 

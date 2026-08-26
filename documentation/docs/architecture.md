@@ -4,7 +4,7 @@
 
 | Layer | Choice |
 |-------|--------|
-| Runtime | Python 3.14-slim (`PYTHON_GIL=0`), `gunicorn` gthread (prod), Flask dev server (dev) |
+| Runtime | Python 3.14-slim, `gunicorn` gthread (prod), Flask dev server (dev) |
 | Framework | Flask 3.1 modular — `create_app()` factory in `apps/__init__.py`, three blueprints |
 | Config | `apps/config.py` — `BaseConfig` / `DebugConfig` / `ProductionConfig` + `config_dict`, selected by `DEPLOYMENT_TYPE` |
 | Templates | Jinja2 via Flask — `apps/templates/base.html` shared, per-blueprint `templates/<sector>/` |
