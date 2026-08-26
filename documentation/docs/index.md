@@ -44,7 +44,6 @@ Request → Caddy `:7011` → `forward_auth gatekeeper:7000 { uri /api/authz/for
 | [Resume Blueprint](blueprints/resume.md) | `/resume/` and `/resume/view` (themes, print) |
 | [Templates & Static](templates-static.md) | Jinja2 inheritance and static assets |
 | [Docker & Deployment](docker.md) | Compose, Dockerfile, Caddyfile, networks |
-| [Why No gRPC](why-no-grpc.md) | Single-service rationale — no internal RPC |
 
 ## Project Map
 
