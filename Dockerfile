@@ -24,8 +24,8 @@ RUN rm -f .env
 RUN useradd --create-home --uid 10001 appuser \
     && chown -R appuser:appuser /app
 
-EXPOSE 7010
+EXPOSE 8000
 
 USER appuser
 
-CMD ["gunicorn", "--bind", "0.0.0.0:7010", "--worker-class", "gthread", "--workers", "2", "--threads", "4", "--access-logfile", "-", "--error-logfile", "-", "wsgi:app"]
+CMD ["gunicorn", "--bind", "0.0.0.0:8000", "--worker-class", "gthread", "--workers", "2", "--threads", "4", "--access-logfile", "-", "--error-logfile", "-", "wsgi:app"]
