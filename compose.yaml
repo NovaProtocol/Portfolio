@@ -44,6 +44,7 @@ services:
     networks:
       - default
       - gatekeeper_dynamic
+      - cloudflared-tunnel
 networks:
   default:
   gatekeeper:
