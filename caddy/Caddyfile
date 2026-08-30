@@ -1,6 +1,6 @@
 :7011 {
     handle /health {
-        reverse_proxy portfolio_main:7010
+        reverse_proxy portfolio_main:8000
     }
 
     handle_path /documentation/* {
@@ -8,6 +8,6 @@
     }
 
     handle {
-        reverse_proxy portfolio_main:7010
+        reverse_proxy portfolio_main:8000
     }
 }
