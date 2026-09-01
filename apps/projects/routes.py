@@ -11,18 +11,19 @@ PROJECTS: dict[str, dict] = {
         "subtitle": "Access code auth gate for web apps",
         "description": [
             "A single sign-on system that protects a family of web apps behind one shared access code. Visitors prove access once by entering a code on the login page, and GateKeeper signs them in across every subdomain of the same domain: the portfolio, staff portals, the solver, and any future app. No user accounts, no per-app passwords, no hardcoded domains anywhere in the stack.",
-            "An admin panel issues and revokes codes, with a backup code so the owner is never locked out. Apps never trust the cookie blindly: sessions are verified against GateKeeper's internal API over the Docker network, and the cookie itself is tamper-evident, so a code revoked in the panel is a hard kill switch across every protected app.",
+            "An admin panel issues and revokes codes, with a backup code so the owner is never locked out. The access cookie is tamper-evident and every check validates it against the live database, so a code revoked in the panel is a hard kill switch across every protected app.",
         ],
         "tech": {
-            "web": ["Flask", "SQLite", "Docker", "itsdangerous", "Cloudflare Tunnel"],
+            "web": ["FastAPI", "Granian", "SQLAlchemy", "MySQL 8.4", "Docker", "Caddy", "itsdangerous", "Cloudflare Tunnel"],
         },
         "features": [
             "Access code authentication with signed cookies",
             "Forward-auth session verification via Caddy",
             "Cross-subdomain cookie for shared auth across apps",
+            "DB-driven routing and rule-group dispatch",
             "Admin panel to create and revoke access codes",
             "Backup code fallback for emergency access",
-            "REST API for integration with protected apps",
+            "Audit logging and warning detection",
         ],
         "status": "operational",
         "reason": (
@@ -33,6 +34,7 @@ PROJECTS: dict[str, dict] = {
             "security through a simple, verifiable boundary instead of a sprawling "
             "auth system."
         ),
+        "url": "https://gatekeeper.projectnova.download/",
         "github": "https://github.com/NovaProtocol/GateKeeper",
         "links": [
             {
