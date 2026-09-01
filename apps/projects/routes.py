@@ -289,6 +289,7 @@ PROJECTS: dict[str, dict] = {
         ],
         "buttons": [],
     },
+    # intentionally public — SVG embeds (GitHub has no cookie jar, gate would break)
     "novaprotocol": {
         "active": True,
         "title": "NovaProtocol",
