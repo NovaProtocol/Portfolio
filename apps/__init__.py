@@ -43,6 +43,21 @@ def create_app(config: object) -> Flask:
     static_dir = Path(__file__).resolve().parent.parent / "static"
     app = Flask(__name__, static_folder=str(static_dir), static_url_path="/static")
     app.config.from_object(config)
+
+    @app.after_request
+    def _csp_frame_src(resp):
+        # Allow GateKeeper iframe on portfolio detail page (same-apex)
+        resp.headers["Content-Security-Policy"] = (
+            "default-src 'self'; "
+            "script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://stackpath.bootstrapcdn.com https://cdnjs.cloudflare.com; "
+            "style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://stackpath.bootstrapcdn.com https://fonts.googleapis.com https://cdnjs.cloudflare.com; "
+            "font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; "
+            "img-src 'self' data:; connect-src 'self'; "
+            "frame-src 'self' https://*.projectnova.download; "
+            "frame-ancestors 'self' https://*.projectnova.download"
+        )
+        return resp
+
     app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1)
     tags.init_app(app)
     register_blueprints(app)
