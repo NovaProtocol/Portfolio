@@ -56,16 +56,18 @@ Registered centrally in `apps/__init__.py:register_blueprints()` via `import_mod
 ```caddyfile
 :7011 {
     handle /health {
-        reverse_proxy portfolio_main:7010
+        reverse_proxy portfolio_main:8000
+    }
+    handle_path /documentation/* {
+        reverse_proxy portfolio_documentation:8005
     }
     handle {
-        forward_auth gatekeeper:7000 { uri /api/authz/forward-auth }
-        reverse_proxy portfolio_main:7010
+        reverse_proxy portfolio_main:8000
     }
 }
 ```
 
-`/health` is intentionally **ungated** so `docker compose ps` / tunnel probes succeed without a cookie.
+Gate is at the **wildcard** (`gatekeeper_dynamic`) — local `Caddyfile` has no per-app `forward_auth` (see live `caddy/Caddyfile`). `/health` is the liveness probe; wildcard enforces `gatekeeper_token` / `?access_code=` before Caddy proxies.
 
 ## Healthcheck
 
@@ -73,7 +75,7 @@ Compose probes the Flask container directly (no Caddy hop):
 
 ```yaml
 healthcheck:
- test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:7010/health')"]
+ test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health')"]
  interval: 30s
  timeout: 5s
  retries: 3
@@ -83,6 +85,6 @@ healthcheck:
 Manual:
 
 ```bash
-curl http://127.0.0.1:7010/health          # direct (container network)
-curl -i http://127.0.0.1:7011/health   # via Caddy, 200 without auth
+curl http://127.0.0.1:8000/health          # direct (container network)
+curl -i http://127.0.0.1:7011/health   # via Caddy, 200
 ```

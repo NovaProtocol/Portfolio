@@ -4,7 +4,7 @@
 
 | Service | Build | Container | Port | Notes |
 |---------|-------|-----------|------|-------|
-| **app** | `Dockerfile` | `portfolio_main` | 7010 gunicorn gthread | `HEALTHCHECK` on `/health` |
+| **app** | `Dockerfile` | `portfolio_main` | 8000 gunicorn gthread | `HEALTHCHECK` on `/health` (`127.0.0.1:8000`) |
 | **documentation** | `documentation/Dockerfile` | `portfolio_documentation` | 8005 granian | `expose:` only, `HEALTHCHECK` on `:8005/health` |
 | **caddy** | `caddy/Dockerfile` | `portfolio_caddy` | 7011 | `127.0.0.1:7011:7011` loopback-only |
 
@@ -20,7 +20,7 @@ services:
     environment:
       DEPLOYMENT_TYPE: ${DEPLOYMENT_TYPE:?DEPLOYMENT_TYPE is required}
     healthcheck:
-      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:7010/health')"]
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health')"]
       interval: 30s
       timeout: 5s
       retries: 3
@@ -43,11 +43,12 @@ services:
     container_name: portfolio_caddy
     restart: unless-stopped
     ports: ["127.0.0.1:7011:7011"]
-    networks: [default, gatekeeper, cloudflared-tunnel]
+    networks: [default, gatekeeper_dynamic, cloudflared-tunnel]
 
 networks:
   default:
-  gatekeeper: {external: true, name: gatekeeper_default}
+  gatekeeper: {external: true, name: gatekeeper_default}  # legacy, caddy uses gatekeeper_dynamic
+  gatekeeper_dynamic: {external: true, name: gatekeeper_dynamic}
   cloudflared-tunnel: {external: true, name: cloudflared-tunnel_default}
 ```
 
@@ -74,9 +75,9 @@ RUN python3 -m compileall -q /app 2>/dev/null || true
 RUN rm -f .env
 RUN useradd --create-home --uid 10001 appuser && chown -R appuser:appuser /app
 
-EXPOSE 7010
+EXPOSE 8000
 USER appuser
-CMD ["gunicorn", "--bind", "0.0.0.0:7010", "--worker-class", "gthread", "--workers", "2", "--threads", "4", "--access-logfile", "-", "--error-logfile", "-", "wsgi:app"]
+CMD ["gunicorn", "--bind", "0.0.0.0:8000", "--worker-class", "gthread", "--workers", "2", "--threads", "4", "--access-logfile", "-", "--error-logfile", "-", "wsgi:app"]
 ```
 
 - `python:3.14-slim` (house default — no custom `python3146t` base).
@@ -84,7 +85,7 @@ CMD ["gunicorn", "--bind", "0.0.0.0:7010", "--worker-class", "gthread", "--worke
 - `--no-cache-dir` on pip.
 - `compileall` catches syntax errors at build time.
 - `USER appuser` (uid 10001) — never `root` in production.
-- `EXPOSE 7010` matches Caddy's `reverse_proxy portfolio_main:7010` and the gunicorn `--bind`.
+- `EXPOSE 8000` matches Caddy's `reverse_proxy portfolio_main:8000` and the gunicorn `--bind` (`Dockerfile` + `compose healthcheck` source of truth).
 
 ## Dockerfile — Documentation
 
@@ -115,39 +116,32 @@ CMD ["granian", "--interface", "asgi", "--host", "0.0.0.0", "--port", "8005", "-
 ```caddyfile
 :7011 {
     handle /health {
-        reverse_proxy portfolio_main:7010
+        reverse_proxy portfolio_main:8000
     }
 
     handle_path /documentation/* {
-        forward_auth gatekeeper:7000 {
-            uri /api/authz/forward-auth
-        }
         reverse_proxy portfolio_documentation:8005
     }
 
     handle {
-        forward_auth gatekeeper:7000 {
-            uri /api/authz/forward-auth
-        }
-        reverse_proxy portfolio_main:7010
+        reverse_proxy portfolio_main:8000
     }
 }
 ```
 
 - Built from `caddy:2-alpine` (`caddy/Dockerfile: FROM caddy:2-alpine / COPY Caddyfile`).
 - Exactly one `Caddyfile` (no `.dev`/`.prod` variants — production is the only config).
-- Site address `:7011` matches compose publish.
-- Proxy targets use **`container_name`** (`portfolio_main:7010`, `portfolio_documentation:8005`), never the service name `app`, to avoid the shared-network DNS collision on `cloudflared-tunnel_default` and `gatekeeper_default`.
-- `/health` is **ungated**; docs at `/documentation/*` are **gated** via `forward_auth` (intentional — private portfolio). For a public-docs variant, omit `forward_auth`.
-- `handle_path` strips `/documentation` before proxying so the FastAPI docs app sees `/` and `/{path}` without the prefix.
+- Site address `:7011` matches compose publish `127.0.0.1:7011:7011`.
+- Proxy targets use **`container_name`** (`portfolio_main:8000`, `portfolio_documentation:8005`), never the service name `app`, to avoid the shared-network DNS collision on `cloudflared-tunnel_default` / `gatekeeper_dynamic`.
+- Gate is at the **wildcard** (`gatekeeper_dynamic`) — local `Caddyfile` has no per-app `forward_auth`; see `caddy/Caddyfile` live (3 handles: `/health`, `/documentation/*`, catch-all). `handle_path` strips `/documentation` before proxying.
 - `X-Forwarded-*` headers are forwarded unchanged for GateKeeper's redirect reconstruction.
 
-Compose networks: app + docs on `default`; caddy on `default` + `gatekeeper` (external) + `cloudflared-tunnel` (external). Caddy publishes `127.0.0.1:7011:7011` (loopback-only — public ingress is the tunnel). Tunnel config must point at `portfolio_caddy:7011`.
+Compose networks: app + docs on `default`; caddy on `default` + `gatekeeper_dynamic` + `cloudflared-tunnel`. Caddy publishes `127.0.0.1:7011:7011` (loopback-only — tunnel ingress is `portfolio_caddy:7011`).
 
 ## Health
 
-- App: `http://127.0.0.1:7010/health` (container) and `http://127.0.0.1:7011/health` (via Caddy).
-- Docs: `http://127.0.0.1:8005/health` (container) and `http://127.0.0.1:7011/documentation/` (via Caddy, requires auth — probe `http://portfolio_documentation:8005/health` from a sibling container instead).
+- App: `http://127.0.0.1:8000/health` (container) and `http://127.0.0.1:7011/health` (via Caddy).
+- Docs: `http://127.0.0.1:8005/health` (container) and `http://127.0.0.1:7011/documentation/` (via Caddy) — probe `http://portfolio_documentation:8005/health` from a sibling container.
 
 ```bash
 docker compose ps                    # HEALTH columns

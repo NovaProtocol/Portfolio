@@ -18,4 +18,4 @@ if __name__ == "__main__":
 
     app = create_app(config_dict["Debug" if mode == "DEBUG" else "Production"])
     if mode == "DEBUG":
-        app.run(host="0.0.0.0", port=7010, debug=True)
+        app.run(host="0.0.0.0", port=8000, debug=True)

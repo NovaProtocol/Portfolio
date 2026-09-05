@@ -14,7 +14,7 @@ PROJECTS: dict[str, dict] = {
             "An admin panel issues and revokes codes, with a backup code so the owner is never locked out. The access cookie is tamper-evident and every check validates it against the live database, so a code revoked in the panel is a hard kill switch across every protected app.",
         ],
         "tech": {
-            "web": ["FastAPI", "Granian", "SQLAlchemy", "MySQL 8.4", "Docker", "Caddy", "itsdangerous", "Cloudflare Tunnel"],
+            "web": ["FastAPI", "Granian", "SQLAlchemy", "MySQL 8.4", "Docker", "Caddy", "PyJWT", "Cloudflare Tunnel"],
         },
         "features": [
             "Access code authentication with signed cookies",
