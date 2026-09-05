@@ -9,29 +9,28 @@ Personal portfolio site built with **Flask 3.1 + Gunicorn**, served behind a **C
 
 | Service | Container | Internal Port | Caddy Route | Network |
 |---------|-----------|---------------|-------------|---------|
-| **App** | `portfolio_main` | 7010 (gunicorn) | `/*` via `:7011` | default |
-| **Documentation** | `portfolio_documentation` | 8005 (granian) | `/documentation/*` via `:7011` (gated) | default |
-| **Caddy** | `portfolio_caddy` | 7011 | — | default, gatekeeper, cloudflared-tunnel |
-| **GateKeeper** | `gatekeeper` (external) | 7000 | `forward_auth` | gatekeeper_default |
+| **App** | `portfolio_main` | 8000 (gunicorn) | `/*` via `:7011` | default |
+| **Documentation** | `portfolio_documentation` | 8005 (granian) | `/documentation/*` via `:7011` | default |
+| **Caddy** | `portfolio_caddy` | 7011 | — | default, gatekeeper_dynamic, cloudflared-tunnel |
 
-- Caddy listens on `:7011` (loopback-only publish `127.0.0.1:7011:7011`), reachable publicly via the Cloudflare tunnel.
-- `/health` bypasses the gate for uptime probes; every other path requires a valid `gatekeeper_token` cookie or `?access_code=` magic link.
-- Docs are **gated** — same `forward_auth` as the app — at `/documentation/*` via `handle_path` (prefix stripped).
+- Caddy listens on `:7011` (loopback-only publish `127.0.0.1:7011:7011`), reachable publicly via the Cloudflare tunnel on `gatekeeper_dynamic`.
+- Gate is at the **wildcard** (`gatekeeper_caddy:7000` → `gatekeeper_auth:8001` on `gatekeeper_dynamic`) — local `caddy/Caddyfile` proxies without a per-app `forward_auth` (wildcard per `reference/gatekeeper/caddy-setup.md`).
+- `/health` is the liveness probe; gated paths enforce `gatekeeper_token` / `?access_code=` at the wildcard.
 
 ## How It Works
 
 ```mermaid
 graph TB
     TUN["Cloudflare Tunnel<br/>cloudflared-tunnel_default"] --> CADDY
-    GK["GateKeeper<br/>gatekeeper:7000<br/>gatekeeper_default"] --- CADDY
-    CADDY["Caddy<br/>:7011<br/>portfolio_caddy"] --> APP["portfolio_main:7010<br/>Flask + Gunicorn gthread"]
+    GK["GateKeeper wildcard<br/>gatekeeper_caddy:7000 → gatekeeper_auth:8001<br/>gatekeeper_dynamic"] --- CADDY
+    CADDY["Caddy<br/>:7011<br/>portfolio_caddy"] --> APP["portfolio_main:8000<br/>Flask + Gunicorn gthread"]
     CADDY --> DOCS["portfolio_documentation:8005<br/>FastAPI + Granian<br/>MkDocs site"]
-    CADDY -->|"/health<br/>no auth"| APP
-    CADDY -->|"/documentation/*<br/>forward_auth"| DOCS
-    CADDY -->|"/*<br/>forward_auth"| APP
+    CADDY -->|"/health"| APP
+    CADDY -->|"/documentation/*"| DOCS
+    CADDY -->|"/*"| APP
 ```
 
-Request → Caddy `:7011` → `forward_auth gatekeeper:7000 { uri /api/authz/forward-auth }` → `200` → `reverse_proxy` to the target. Without a cookie or valid `?access_code=`, GateKeeper returns `302` to the login page; the code flow sets an apex cookie and strips the param.
+Request → `portfolio_caddy:7011` → `reverse_proxy` to `portfolio_main:8000` / `portfolio_documentation:8005`. When fronted by the wildcard, GateKeeper enforces `GET /api/authz/forward-auth` before Caddy proxies; without a cookie or valid `?access_code=`, GateKeeper returns `302` to login and the flow sets an apex `gatekeeper_token` and strips the param.
 
 ## Quick Links
 
@@ -77,7 +76,7 @@ Informational / portfolio content with a clean, professional presentation. No ap
 
 | Port | Service | Publish |
 |------|---------|---------|
-| 7010 | App (gunicorn, internal) | not published — via Caddy |
+| 8000 | App (gunicorn, internal) | not published — via Caddy `portfolio_main:8000` |
 | 7011 | Caddy | `127.0.0.1:7011:7011` (loopback, tunnel only) |
 | 8005 | Documentation (granian, internal) | `expose:` only — via Caddy `/documentation/*` |
 

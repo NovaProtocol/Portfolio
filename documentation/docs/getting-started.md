@@ -34,24 +34,24 @@ docker compose config > /dev/null  # fails fast on missing ${VAR:?}
 
 ---
 
-## 2. Run Locally (dev, port 7010, no auth)
+## 2. Run Locally (dev, port 8000, no auth)
 
 ```bash
 export DEPLOYMENT_TYPE=DEBUG
 python -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
 python run.py
-# → http://127.0.0.1:7010/
-# → http://127.0.0.1:7010/health → {"status":"ok"}
-# → http://127.0.0.1:7010/projects/
-# → http://127.0.0.1:7010/resume/
+# → http://127.0.0.1:8000/
+# → http://127.0.0.1:8000/health → {"status":"ok"}
+# → http://127.0.0.1:8000/projects/
+# → http://127.0.0.1:8000/resume/
 ```
 
-`run.py` reads `DEPLOYMENT_TYPE` **inside** `if __name__ == "__main__"` and fails fast if it is not `DEBUG` or `PRODUCTION`. In `DEBUG` it runs `app.run(host="0.0.0.0", port=7010, debug=True)`. Production is served by gunicorn via `wsgi:app` (see Dockerfile).
+`run.py` reads `DEPLOYMENT_TYPE` **inside** `if __name__ == "__main__"` and fails fast if it is not `DEBUG` or `PRODUCTION`. In `DEBUG` it runs `app.run(host="0.0.0.0", port=8000, debug=True)` — actual `Dockerfile EXPOSE 8000` / compose healthcheck `127.0.0.1:8000/health`. Production is served by gunicorn via `wsgi:app` (see Dockerfile).
 
 ---
 
-## 3. Run with Docker (app :7010 internal, Caddy :7011 exposed, gated)
+## 3. Run with Docker (app :8000 internal via Caddy :7011, gated at wildcard)
 
 ```bash
 export DEPLOYMENT_TYPE=PRODUCTION
@@ -63,14 +63,14 @@ curl -i http://127.0.0.1:7011/       # 302 → GateKeeper login (no cookie)
 
 | URL | Result |
 |-----|--------|
-| `http://127.0.0.1:7011/health` | `{"status":"ok"}` — public |
-| `http://127.0.0.1:7011/documentation/` | 302 unless gated cookie present — docs are gated |
-| `http://127.0.0.1:7011/?access_code=<code>` | 302 + `Set-Cookie` → `gatekeeper_token`, param stripped → authed |
+| `http://127.0.0.1:7011/health` | `{"status":"ok"}` — via Caddy to `portfolio_main:8000` |
+| `http://127.0.0.1:7011/documentation/` | via Caddy to `portfolio_documentation:8005` (wildcard-gated when fronted) |
+| `http://127.0.0.1:7011/?access_code=<code>` | 302 + `Set-Cookie` → `gatekeeper_token`, param stripped → authed (wildcard) |
 
 Prerequisite networks (run once):
 
 ```bash
-docker network create gatekeeper_default
+docker network create gatekeeper_dynamic  # wildcard GateKeeper (preferred)
 docker network create cloudflared-tunnel_default  # if tunnel is used
 ```
 

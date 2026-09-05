@@ -50,10 +50,10 @@ Place preview images in `static/assets/images/<slug>/`.
 ## Running
 
 ```bash
-# Development (port 7010, no auth)
+# Development (port 8000, no auth — matches Dockerfile EXPOSE 8000)
 DEPLOYMENT_TYPE=DEBUG python run.py
 
-# Docker (app :7010 internal, Caddy :7011 exposed)
+# Docker (app :8000 internal via Caddy :7011)
 docker compose up --build
 ```
 
@@ -70,18 +70,14 @@ The Cloudflare tunnel ingress must point at the Caddy container
 
 | Port | Service |
 |------|---------|
-| 7010 | App (gunicorn, internal) |
+| 8000 | App (gunicorn, internal — via `portfolio_main:8000`; Caddy :7011) |
 | 7011 | Caddy (loopback-bound — tunnel only) |
+| 8005 | Documentation (granian, internal — via Caddy) |
 
-Ports are allotted in groups of 10 per project (Portfolio owns the 7010 block).
+Portfolio's block is 7010; Caddy owns :7011, app is exposed internally as :8000 (Dockerfile `EXPOSE 8000`, `gunicorn --bind 0.0.0.0:8000`, compose healthcheck `127.0.0.1:8000/health`, Caddy `reverse_proxy portfolio_main:8000`).
 
 ## Auth
 
-Every request through Caddy is checked against GateKeeper's forward-auth
-endpoint (`/api/authz/forward-auth`). A valid `gatekeeper_token` cookie passes
-(200). Without one, a valid `?access_code=` in the URL logs in on the spot and
-is stripped from the URL. Otherwise the request is redirected to the GateKeeper
-login page. Only `/health` bypasses the gate.
+This project is gated via the **wildcard** GateKeeper ingress — `gatekeeper_caddy:7000` on the shared `gatekeeper_dynamic` network checks `GET /api/authz/forward-auth` before Caddy proxies. The local `caddy/Caddyfile` has no per-app `forward_auth`; gating is at the apex wildcard (same as other gated apps on `gatekeeper_dynamic`). A valid `gatekeeper_token` cookie (or `?access_code=` magic link) passes; otherwise GateKeeper redirects to login. `/health` bypasses via GateKeeper rule.
 
-See `caddy/Caddyfile`: GateKeeper is reached as `gatekeeper:7000` over the
-external `gatekeeper_default` Docker network.
+See `compose.yaml`: `portfolio_caddy` joins `gatekeeper_dynamic` (external `gatekeeper_dynamic`), and `caddy/Caddyfile` proxies `portfolio_main:8000`/`portfolio_documentation:8005` without a local `forward_auth`.

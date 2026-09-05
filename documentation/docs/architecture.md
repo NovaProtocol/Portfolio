@@ -10,9 +10,9 @@
 | Templates | Jinja2 via Flask — `apps/templates/base.html` shared, per-blueprint `templates/<sector>/` |
 | Static | `static/` served at `/static` via `Flask(static_folder=...)` |
 | Data | `data/resume.json` (JSON, no DB) + `apps/projects/routes.py:PROJECTS` dict |
-| Proxy | `caddy:2-alpine` on `:7011`, loopback-only publish, `forward_auth gatekeeper:7000` |
-| Docs | MkDocs Material on `:8005` (`portfolio_documentation`), FastAPI + granian, gated at `/documentation/*` |
-| Auth | GateKeeper forward-auth at the edge; the Flask app holds zero auth code |
+| Proxy | `caddy:2-alpine` on `:7011`, loopback-only `127.0.0.1:7011:7011`, joins `gatekeeper_dynamic` — wildcard gate `gatekeeper_caddy:7000 → gatekeeper_auth:8001` |
+| Docs | MkDocs Material on `:8005` (`portfolio_documentation`), FastAPI + granian, via Caddy `/documentation/*` |
+| Auth | Wildcard GateKeeper at the edge (`gatekeeper_dynamic`); the Flask app holds zero auth code |
 
 ---
 
@@ -45,7 +45,7 @@ Portfolio/
 ├── data/resume.json
 ├── caddy/Caddyfile + Dockerfile
 ├── documentation/         # MkDocs site — FastAPI on :8005
-├── Dockerfile             # python:3.14-slim → gunicorn wsgi:app on :7010
+├── Dockerfile             # python:3.14-slim → gunicorn wsgi:app on :8000
 └── compose.yaml           # app + caddy + documentation
 ```
 
@@ -124,7 +124,7 @@ if __name__ == "__main__":
         sys.exit(1)
     app = create_app(config_dict["Debug" if mode == "DEBUG" else "Production"])
     if mode == "DEBUG":
-        app.run(host="0.0.0.0", port=7010, debug=True)
+        app.run(host="0.0.0.0", port=8000, debug=True)
 ```
 
 ```python
@@ -146,14 +146,14 @@ app = create_app(config_dict["Production"])
 sequenceDiagram
     participant Browser
     participant Caddy as Caddy :7011
-    participant GK as GateKeeper :7000
-    participant Flask as portfolio_main:7010
+    participant GK as GateKeeper wildcard caddy:7000→auth:8001
+    participant Flask as portfolio_main:8000
 
     Browser->>Caddy: GET /projects/info/gatekeeper
-    Caddy->>GK: GET /api/authz/forward-auth<br/>X-Forwarded-Uri: /projects/info/gatekeeper
+    Caddy->>GK: GET /api/authz/forward-auth via gatekeeper_dynamic<br/>X-Forwarded-Uri: /projects/info/gatekeeper
     alt valid gatekeeper_token cookie or ?access_code=
         GK-->>Caddy: 200
-        Caddy->>Flask: reverse_proxy portfolio_main:7010
+        Caddy->>Flask: reverse_proxy portfolio_main:8000
         Flask-->>Caddy: render projects/detail.html
         Caddy-->>Browser: 200 HTML
     else no credential
@@ -161,11 +161,11 @@ sequenceDiagram
         Caddy-->>Browser: 302 Location (relay)
     end
 
-    Note over Caddy,Flask: /health bypasses GK entirely:<br/>handle /health { reverse_proxy portfolio_main:7010 }
+    Note over Caddy,Flask: Gate is at wildcard gatekeeper_dynamic;<br/>local Caddy has no per-app forward_auth<br/>handle /health { reverse_proxy portfolio_main:8000 }
 ```
 
-- Flask itself sees no auth — Caddy enforces the gate. The app only renders pages and serves `/static`.
-- Health: `GET /health` returns `{"status":"ok"}` JSON and is the compose `healthcheck` target (`python -c urllib.request.urlopen(http://127.0.0.1:7010/health)`).
+- Flask itself sees no auth — the wildcard gate enforces it. The app only renders pages and serves `/static`.
+- Health: `GET /health` returns `{"status":"ok"}` JSON and is the compose `healthcheck` target (`python -c urllib.request.urlopen(http://127.0.0.1:8000/health)`).
 
 ## Data Layer
 
@@ -178,7 +178,7 @@ This keeps the portfolio a **single deployable** with no volumes or migrations.
 
 ## Security & Auth
 
-- Caddy `forward_auth gatekeeper:7000 { uri /api/authz/forward-auth }` on every `handle` except `/health`. Apex `gatekeeper_token` cookie (HttpOnly, Lax) covers all subdomains.
+- Gate is at the wildcard (`gatekeeper_caddy:7000` → `gatekeeper_auth:8001` on `gatekeeper_dynamic`) — local `caddy/Caddyfile` has no per-app `forward_auth` (per `reference/gatekeeper/caddy-setup.md` wildcard primary). Apex `gatekeeper_token` cookie (HttpOnly, Lax) covers all subdomains.
 - No per-app accounts, no `itsdangerous` cookie signing in Portfolio itself (reserved `SECRET_KEY` in `.env.example` for future use).
 - Flask `ProxyFix` ensures `request.scheme` and `remote_addr` are correct behind the tunnel.
 
