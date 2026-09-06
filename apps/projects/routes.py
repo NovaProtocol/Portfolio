@@ -131,22 +131,22 @@ PROJECTS: dict[str, dict] = {
         "links": [
             {
                 "name": "Staff Site",
-                "url": "https://water-billing-system-private.projectnova.download/staff/",
+                "url": "https://water-billing-system.projectnova.download/staff/",
                 "icon": "fas fa-user-tie",
             },
             {
                 "name": "Dev Site",
-                "url": "https://water-billing-system-private.projectnova.download/developer/",
+                "url": "https://water-billing-system.projectnova.download/developer/",
                 "icon": "fas fa-code-branch",
             },
             {
                 "name": "Documentation",
-                "url": "https://water-billing-system-private.projectnova.download/documentation/",
+                "url": "https://water-billing-system.projectnova.download/documentation/",
                 "icon": "fas fa-book",
             },
             {
                 "name": "phpMyAdmin",
-                "url": "https://water-billing-system-private.projectnova.download/phpmyadmin/",
+                "url": "https://water-billing-system.projectnova.download/phpmyadmin/",
                 "icon": "fas fa-database",
             },
         ],
