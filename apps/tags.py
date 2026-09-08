@@ -59,5 +59,9 @@ def tech_tag(name: str) -> Markup:
     return Markup(f'<span class="tag">{escape(name)}</span>')
 
 
-def init_app(app) -> None:
-    app.jinja_env.globals["tech_tag"] = tech_tag
+def init_app(app=None) -> None:
+    # legacy Flask helper — no-op on FastAPI; templating.py exposes tech_tag
+    try:
+        app.jinja_env.globals["tech_tag"] = tech_tag  # type: ignore[attr-defined]
+    except Exception:
+        pass

@@ -1,6 +1,6 @@
 # Home Blueprint
 
-**Module:** `apps/home/` — `home_blueprint`, `url_prefix=""`
+**Module:** `apps/routes/home.py` — `APIRouter`
 
 Serves the landing page and the public health probe.
 
@@ -8,43 +8,29 @@ Serves the landing page and the public health probe.
 
 | Route | Handler | Description |
 |-------|---------|-------------|
-| `GET /` | `apps.home.routes.index` | Renders `home/index.html` — hero, project highlights, live embeds |
-| `GET /health` | `apps.home.routes.health` | Returns `{"status":"ok"}` JSON — compose healthcheck and Caddy bypass |
+| `GET /` | `apps.routes.home.index` | Renders `home/index.html` — hero, project highlights, live embeds |
+| `GET /health` | `apps.routes.home.health` | Returns `{"status":"ok"}` JSON — compose healthcheck and Caddy bypass |
 
 ```python
-# apps/home/routes.py
-from __future__ import annotations
+# apps/routes/home.py
+from fastapi import APIRouter, Request
+from fastapi.responses import HTMLResponse
+from apps.templating import templates
 
-from flask import jsonify, render_template
+router = APIRouter()
 
-from apps.home import blueprint
+@router.get("/", response_class=HTMLResponse)
+async def index(request: Request):
+    return templates.TemplateResponse(request, "home/index.html", {})
 
-
-@blueprint.route("/")
-def index():
-    return render_template("home/index.html")
-
-
-@blueprint.route("/health")
-def health():
-    return jsonify({"status": "ok"})
+@router.get("/health")
+async def health():
+    return {"status": "ok"}
 ```
 
-## Blueprint Registration
+## Route Registration
 
-```python
-# apps/home/__init__.py
-from flask import Blueprint
-
-blueprint = Blueprint(
-    "home_blueprint",
-    __name__,
-    url_prefix="",
-    template_folder="templates",
-)
-```
-
-Registered centrally in `apps/__init__.py:register_blueprints()` via `import_module("apps.{}.routes".format(name))`.
+Registered centrally in `apps/routes/__init__.py` and included in `apps/__init__.py:create_app()` via `app.include_router(router)`.
 
 ## Templates
 
@@ -71,7 +57,7 @@ Gate is at the **wildcard** (`gatekeeper_dynamic`) — local `Caddyfile` has no 
 
 ## Healthcheck
 
-Compose probes the Flask container directly (no Caddy hop):
+Compose probes the FastAPI container directly (no Caddy hop):
 
 ```yaml
 healthcheck:

@@ -47,7 +47,7 @@ python run.py
 # → http://127.0.0.1:8000/resume/
 ```
 
-`run.py` reads `DEPLOYMENT_TYPE` **inside** `if __name__ == "__main__"` and fails fast if it is not `DEBUG` or `PRODUCTION`. In `DEBUG` it runs `app.run(host="0.0.0.0", port=8000, debug=True)` — actual `Dockerfile EXPOSE 8000` / compose healthcheck `127.0.0.1:8000/health`. Production is served by gunicorn via `wsgi:app` (see Dockerfile).
+`run.py` uses `argparse --mode debug/production` and runs `uvicorn apps:create_app --reload` in debug or `granian --interface asgi wsgi:app` in production — actual `Dockerfile EXPOSE 8000` / compose healthcheck `127.0.0.1:8000/health` (see Dockerfile).
 
 ---
 

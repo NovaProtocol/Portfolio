@@ -4,7 +4,7 @@
 
 | Service | Build | Container | Port | Notes |
 |---------|-------|-----------|------|-------|
-| **app** | `Dockerfile` | `portfolio_main` | 8000 gunicorn gthread | `HEALTHCHECK` on `/health` (`127.0.0.1:8000`) |
+| **app** | `Dockerfile` | `portfolio_main` | 8000 granian | `HEALTHCHECK` on `/health` (`127.0.0.1:8000`) |
 | **documentation** | `documentation/Dockerfile` | `portfolio_documentation` | 8005 granian | `expose:` only, `HEALTHCHECK` on `:8005/health` |
 | **caddy** | `caddy/Dockerfile` | `portfolio_caddy` | 7011 | `127.0.0.1:7011:7011` loopback-only |
 
@@ -77,7 +77,7 @@ RUN useradd --create-home --uid 10001 appuser && chown -R appuser:appuser /app
 
 EXPOSE 8000
 USER appuser
-CMD ["gunicorn", "--bind", "0.0.0.0:8000", "--worker-class", "gthread", "--workers", "2", "--threads", "4", "--access-logfile", "-", "--error-logfile", "-", "wsgi:app"]
+CMD ["granian", "--interface", "asgi", "--host", "0.0.0.0", "--port", "8000", "--workers", "1", "wsgi:app"]
 ```
 
 - `python:3.14-slim` (house default — no custom `python3146t` base).
@@ -85,7 +85,7 @@ CMD ["gunicorn", "--bind", "0.0.0.0:8000", "--worker-class", "gthread", "--worke
 - `--no-cache-dir` on pip.
 - `compileall` catches syntax errors at build time.
 - `USER appuser` (uid 10001) — never `root` in production.
-- `EXPOSE 8000` matches Caddy's `reverse_proxy portfolio_main:8000` and the gunicorn `--bind` (`Dockerfile` + `compose healthcheck` source of truth).
+- `EXPOSE 8000` matches Caddy's `reverse_proxy portfolio_main:8000` and the granian `--port` (`Dockerfile` + `compose healthcheck` source of truth).
 
 ## Dockerfile — Documentation
 

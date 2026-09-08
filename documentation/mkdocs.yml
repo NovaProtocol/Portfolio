@@ -1,5 +1,5 @@
 site_name: Portfolio · Documentation
-site_description: Documentation for Portfolio — personal portfolio site built with Flask 3.1 + Gunicorn, served behind Caddy and gated by GateKeeper
+site_description: Documentation for Portfolio — personal portfolio site built with Python 3.14 + FastAPI + Granian + Jinja2, served behind Caddy and gated by GateKeeper
 site_author: Portfolio
 repo_url: https://github.com/NovaProtocol/Portfolio
 repo_name: NovaProtocol/Portfolio

@@ -1,0 +1,58 @@
+from __future__ import annotations
+
+import uuid
+
+from starlette.middleware.base import BaseHTTPMiddleware, RequestResponseEndpoint
+from starlette.requests import Request
+from starlette.responses import Response
+
+try:
+    import structlog.contextvars as _ctx  # type: ignore
+
+    _HAS_STRUCTLOG = True
+except ImportError:
+    _HAS_STRUCTLOG = False
+
+
+class RequestIDMiddleware(BaseHTTPMiddleware):
+    async def dispatch(self, request: Request, call_next: RequestResponseEndpoint) -> Response:
+        request_id = request.headers.get("X-Request-ID") or uuid.uuid4().hex
+        request.state.request_id = request_id
+        if _HAS_STRUCTLOG:
+            try:
+                _ctx.bind_contextvars(request_id=request_id)
+            except Exception:
+                pass
+        try:
+            response = await call_next(request)
+            response.headers["X-Request-ID"] = request_id
+            existing = response.headers.get("Access-Control-Expose-Headers", "")
+            expose = "X-Request-ID"
+            if existing:
+                parts = {part.strip() for part in existing.split(",") if part.strip()}
+                parts.add(expose)
+                response.headers["Access-Control-Expose-Headers"] = ", ".join(sorted(parts))
+            else:
+                response.headers["Access-Control-Expose-Headers"] = expose
+            return response
+        finally:
+            if _HAS_STRUCTLOG:
+                try:
+                    _ctx.unbind_contextvars("request_id")
+                except Exception:
+                    pass
+
+
+class SecurityHeadersMiddleware(BaseHTTPMiddleware):
+    async def dispatch(self, request: Request, call_next: RequestResponseEndpoint) -> Response:
+        response = await call_next(request)
+        response.headers["Content-Security-Policy"] = (
+            "default-src 'self'; "
+            "script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://stackpath.bootstrapcdn.com https://cdnjs.cloudflare.com; "
+            "style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://stackpath.bootstrapcdn.com https://fonts.googleapis.com https://cdnjs.cloudflare.com; "
+            "font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; "
+            "img-src 'self' data:; connect-src 'self'; "
+            "frame-src 'self' https://*.projectnova.download; "
+            "frame-ancestors 'self' https://*.projectnova.download"
+        )
+        return response

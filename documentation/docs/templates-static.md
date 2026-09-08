@@ -3,8 +3,8 @@
 ## Layout
 
 - **Shared base:** `apps/templates/base.html` — every blueprinted page extends it, so nav, footer, and layout are defined once.
-- **Per-blueprint templates:** `apps/<sector>/templates/<sector>/*.html` — namespaced by sector (`home/index.html`, `projects/index.html`, `projects/detail.html`, `resume/view.html`, etc.). Flask's template search includes both the shared folder and the blueprint's `template_folder`.
-- **Static:** `static/` served at `/static` via `Flask(static_folder=str(static_dir), static_url_path="/static")` in the factory. Referenced in templates with `url_for('static', filename='…')`.
+- **Per-route templates:** `apps/templates/<sector>/*.html` — namespaced by sector (`home/index.html`, `projects/index.html`, `projects/detail.html`, `resume/view.html`, etc.). Jinja2 `templates` from `apps/templating.py` resolves the shared `apps/templates/` folder.
+- **Static:** `static/` served at `/static` via `StaticFiles` mounted in `create_app()` (`app.mount("/static", StaticFiles(...))`). Referenced in templates with `url_for('static', path='…')`.
 
 ```
 apps/
@@ -66,7 +66,11 @@ Each demo is a self-contained JS module that renders a live config / command exa
 
 - Images for new projects: `static/assets/images/<slug>/preview.png` → referenced as `image: "assets/images/<slug>/preview.png"` in `PROJECTS` (the template prefixes `/static/` via `url_for`).
 - Reuse `TAG_LINKS` for tech tags — add a new entry when a novel stack appears so the tag becomes clickable.
-- For resume or marketing visuals, keep assets under `static/assets/images/` so the Flask `static` mount serves them without extra Caddy config.
+- For resume or marketing visuals, keep assets under `static/assets/images/` so the `StaticFiles` mount serves them without extra Caddy config.
+
+## Errors
+
+JS: `console.error({status, request_id, stack})` + toast; Server: `structlog` JSON + `X-Request-ID` to docker logs; envelope `{error:{code,message,request_id}}`. No traceback to client.
 
 ## No Build Step
 
