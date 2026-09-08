@@ -1,6 +1,6 @@
 # Projects Blueprint
 
-**Module:** `apps/projects/` — `projects_blueprint`, `url_prefix="/projects"`
+**Module:** `apps/routes/projects.py` — `APIRouter(prefix="/projects")`
 
 Project catalog — listing, detail pages, and the data shape that drives them.
 
@@ -8,37 +8,31 @@ Project catalog — listing, detail pages, and the data shape that drives them.
 
 | Route | Handler | Description |
 |-------|---------|-------------|
-| `GET /projects/` | `apps.projects.routes.index` | Listing — renders `projects/index.html` with active projects |
-| `GET /projects/info/<slug>/` | `apps.projects.routes.detail` | Detail — renders `projects/detail.html` for `PROJECTS[slug]` or `404` |
+| `GET /projects/` | `apps.routes.projects.index` | Listing — renders `projects/index.html` with active projects |
+| `GET /projects/info/{slug}/` | `apps.routes.projects.detail` | Detail — renders `projects/detail.html` for `PROJECTS[slug]` or `404` |
 
 ```python
-# apps/projects/routes.py (trimmed)
-from __future__ import annotations
+# apps/routes/projects.py (trimmed)
+from fastapi import APIRouter, HTTPException, Request
+from fastapi.responses import HTMLResponse
+from apps.data import PROJECTS
+from apps.templating import templates
 
-from flask import abort, render_template
-
-from apps.projects import blueprint
-
-PROJECTS: dict[str, dict] = {
-    "gatekeeper": {"title": "GateKeeper", ...},
-    "portfolio":  {"title": "Portfolio", ...},
-    "water-billing-system": {"title": "Water Billing System", ...},
-    # buddys-freelance-project (active=false), novaprotocol, solvelspace (halted), mle-review
-}
+router = APIRouter(prefix="/projects")
 
 def ordered_projects() -> list[tuple[str, dict]]:
     return [(slug, p) for slug, p in PROJECTS.items() if p.get("active")]
 
-@blueprint.route("/")
-def index():
-    return render_template("projects/index.html", projects=ordered_projects())
+@router.get("/", response_class=HTMLResponse)
+async def index(request: Request):
+    return templates.TemplateResponse(request, "projects/index.html", {"projects": ordered_projects()})
 
-@blueprint.route("/info/<slug>/")
-def detail(slug: str):
+@router.get("/info/{slug}/", response_class=HTMLResponse)
+async def detail(request: Request, slug: str):
     project = PROJECTS.get(slug)
     if not project:
-        abort(404)
-    return render_template("projects/detail.html", project=project, slug=slug)
+        raise HTTPException(status_code=404, detail="Project not found")
+    return templates.TemplateResponse(request, "projects/detail.html", {"project": project, "slug": slug})
 ```
 
 ## Data Shape
@@ -66,27 +60,15 @@ Place preview images at `static/assets/images/<slug>/preview.png` and reference 
 
 `reason:` (freeform) explains *why* the project exists — shown on detail pages as context.
 
-## Blueprint Definition
+## Data Source
 
-```python
-# apps/projects/__init__.py
-from flask import Blueprint
-
-blueprint = Blueprint(
-    "projects_blueprint",
-    __name__,
-    url_prefix="/projects",
-    template_folder="templates",
-)
-```
-
-Templates are namespaced `templates/projects/{index,detail,_card}.html` but resolved by the Flask template search that includes the shared `apps/templates/`.
+`apps/data.py:PROJECTS` is the single source of truth; routes import it. Templates are namespaced `templates/projects/{index,detail,_card}.html` but resolved by the Jinja2 `templates` object from `apps/templating.py`.
 
 ## Templates
 
 - `apps/projects/templates/projects/index.html` — loops `projects` from `ordered_projects()`, includes `_card.html` partial per entry.
 - `apps/projects/templates/projects/detail.html` — title, subtitle, description paragraphs, tech tags (via `apps/tags. tech_tag`), features, status, live embed (`url`), and `links` / `buttons`.
-- `apps/templates/base.html` is the parent for both — all blueprints extend it so layout, nav, and footer are consistent.
+- `apps/templates/base.html` is the parent for both — all routes extend it so layout, nav, and footer are consistent.
 
 ## Embeds & Links
 

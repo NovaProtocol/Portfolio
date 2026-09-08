@@ -1,6 +1,6 @@
 # Resume Blueprint
 
-**Module:** `apps/resume/` — `resume_blueprint`, `url_prefix="/resume"`
+**Module:** `apps/routes/resume.py` — `APIRouter(prefix="/resume")`
 
 Renders the resume from `data/resume.json`. Three themes, two printable pages, and a combined view.
 
@@ -8,54 +8,35 @@ Renders the resume from `data/resume.json`. Three themes, two printable pages, a
 
 | Route | Handler | Query params | Description |
 |-------|---------|--------------|-------------|
-| `GET /resume/` | `apps.resume.routes.index` | — | Resume hub — renders `resume/index.html` |
-| `GET /resume/view` | `apps.resume.routes.view` | `theme=1,2,3` (default 3), `page=1,2` (optional) | Single or combined page — `resume/view.html` (both pages) or `resume/page1.html` / `page2.html` for print |
+| `GET /resume/` | `apps.routes.resume.index` | — | Resume hub — renders `resume/index.html` |
+| `GET /resume/view` | `apps.routes.resume.view` | `theme=1,2,3` (default 3), `page=1,2` (optional) | Single or combined page — `resume/view.html` (both pages) or `resume/page1.html` / `page2.html` for print |
 
 ```python
-# apps/resume/routes.py (trimmed)
-from __future__ import annotations
+# apps/routes/resume.py (trimmed)
+from fastapi import APIRouter, HTTPException, Request
+from fastapi.responses import HTMLResponse
+from apps.templating import templates
 
-import json
-import logging
-from pathlib import Path
-
-from flask import abort, render_template, request
-
-from apps.resume import blueprint
-
-_RESUME_PATH = Path(__file__).resolve().parent.parent.parent / "data" / "resume.json"
-logger = logging.getLogger(__name__)
-
-
-def _load_resume() -> dict:
-    try:
-        return json.loads(_RESUME_PATH.read_text())
-    except (OSError, json.JSONDecodeError):
-        logger.exception("Failed to load resume data from %s", _RESUME_PATH)
-        return {}
-
+router = APIRouter(prefix="/resume")
 
 _RESUME = _load_resume()
 _THEMES = {1, 2, 3}
 
+@router.get("/", response_class=HTMLResponse)
+async def index(request: Request):
+    return templates.TemplateResponse(request, "resume/index.html", {"resume": _RESUME})
 
-@blueprint.route("/")
-def index():
-    return render_template("resume/index.html", resume=_RESUME)
-
-
-@blueprint.route("/view")
-def view():
-    theme = request.args.get("theme", type=int, default=3)
+@router.get("/view", response_class=HTMLResponse)
+async def view(request: Request, page: int | None = None, theme: int = 3):
     if theme not in _THEMES:
         theme = 3
-    page = request.args.get("page", type=int)
     if page is not None:
-        template = {1: "resume/page1.html", 2: "resume/page2.html"}.get(page)
+        mapping = {1: "resume/page1.html", 2: "resume/page2.html"}
+        template = mapping.get(page)
         if not template:
-            abort(404)
-        return render_template(template, resume=_RESUME, theme=theme)
-    return render_template("resume/view.html", resume=_RESUME, theme=theme)
+            raise HTTPException(status_code=404, detail="Not found")
+        return templates.TemplateResponse(request, template, {"resume": _RESUME, "theme": theme})
+    return templates.TemplateResponse(request, "resume/view.html", {"resume": _RESUME, "theme": theme})
 ```
 
 ## Data — `data/resume.json`
@@ -64,19 +45,9 @@ def view():
 - Loaded **once at import**; a missing or malformed file is logged at `exception` level and falls back to `{}` so the app stays up (pages render empty rather than crashing).
 - No DB, no migrations — edit the JSON and reload.
 
-## Blueprint Definition
+## Route Registration
 
-```python
-# apps/resume/__init__.py
-from flask import Blueprint
-
-blueprint = Blueprint(
-    "resume_blueprint",
-    __name__,
-    url_prefix="/resume",
-    template_folder="templates",
-)
-```
+Router is `APIRouter(prefix="/resume")` and aggregated in `apps/routes/__init__.py`.
 
 ## Templates
 
@@ -110,4 +81,4 @@ All extend `apps/templates/base.html` via the shared template folder. Theme sele
 ## Static Assets
 
 - Portrait photo: `static/assets/images/resume_image.JPG`
-- No additional JS for the resume — pure Flask + Jinja2 + CSS for reliable printing.
+- No additional JS for the resume — pure FastAPI + Jinja2 + CSS for reliable printing.

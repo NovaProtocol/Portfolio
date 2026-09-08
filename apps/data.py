@@ -1,9 +1,5 @@
 from __future__ import annotations
 
-from flask import abort, render_template
-
-from apps.projects import blueprint
-
 PROJECTS: dict[str, dict] = {
     "gatekeeper": {
         "active": True,
@@ -50,16 +46,16 @@ PROJECTS: dict[str, dict] = {
         "title": "Portfolio",
         "subtitle": "Personal portfolio site",
         "description": [
-            "This site. A Flask portfolio documenting every project in the stack, each with a detail page, tech tags, a live-site embed with online/offline status, and key features. Served by Gunicorn in a Docker container, exposed through a Cloudflare tunnel, with ProxyFix so HTTPS and forwarded headers behave correctly behind it.",
+            "This site. A FastAPI portfolio documenting every project in the stack, each with a detail page, tech tags, a live-site embed with online/offline status, and key features. Served by Granian (ASGI, 1 worker) in a Docker container, exposed through a Cloudflare tunnel and Caddy, with RequestID + SecurityHeaders middleware and structured errors.",
             "It doubles as the integration test for the rest of the ecosystem: protected by GateKeeper, so unauthenticated visitors are redirected to log in and sent back with a verified session, and project pages embed the other live apps directly, so you can solve problems in the sandbox, browse bills, or manage access codes without leaving the page.",
         ],
         "tech": {
-            "web": ["Flask", "Gunicorn", "Docker", "Cloudflare Tunnel"],
+            "web": ["FastAPI", "Granian", "Jinja2", "Docker", "Caddy", "Cloudflare Tunnel"],
         },
         "features": [
             "Project showcase with detail pages and tech tags",
-            "GateKeeper integration for access control",
-            "ProxyFix middleware for correct HTTPS behind tunnel",
+            "GateKeeper integration for access control (wildcard gate)",
+            "RequestIDMiddleware + structlog JSON + {error:{code,message,request_id}} envelope",
         ],
         "status": "operational",
         "reason": (
@@ -332,20 +328,3 @@ PROJECTS: dict[str, dict] = {
         "buttons": [],
     },
 }
-
-
-def ordered_projects() -> list[tuple[str, dict]]:
-    return [(slug, project) for slug, project in PROJECTS.items() if project.get("active")]
-
-
-@blueprint.route("/")
-def index():
-    return render_template("projects/index.html", projects=ordered_projects())
-
-
-@blueprint.route("/info/<slug>/")
-def detail(slug: str):
-    project = PROJECTS.get(slug)
-    if not project:
-        abort(404)
-    return render_template("projects/detail.html", project=project, slug=slug)

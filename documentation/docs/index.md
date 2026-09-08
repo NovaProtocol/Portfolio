@@ -1,15 +1,15 @@
 # Portfolio
 
-Personal portfolio site built with **Flask 3.1 + Gunicorn**, served behind a **Caddy** reverse proxy that gates access through [GateKeeper](https://github.com/NovaProtocol/GateKeeper). It documents every project in the stack — detail pages, tech tags, live-site embeds with online/offline status, and a print-ready resume.
+Personal portfolio site built with **Python 3.14 + FastAPI + Granian + Jinja2**, served behind a **Caddy** reverse proxy that gates access through [GateKeeper](https://github.com/NovaProtocol/GateKeeper). It documents every project in the stack — detail pages, tech tags, live-site embeds with online/offline status, and a print-ready resume.
 
-**Stack:** Python 3.14 + Flask 3.1 + Gunicorn (gthread) + Caddy 2-alpine
+**Stack:** Python 3.14 + FastAPI + Granian + Jinja2 + Caddy 2-alpine
 **Docs:** MkDocs Material at `documentation/` (this site, served by FastAPI + granian on `:8005`)
 
 ## Services Overview
 
 | Service | Container | Internal Port | Caddy Route | Network |
 |---------|-----------|---------------|-------------|---------|
-| **App** | `portfolio_main` | 8000 (gunicorn) | `/*` via `:7011` | default |
+| **App** | `portfolio_main` | 8000 (granian) | `/*` via `:7011` | default |
 | **Documentation** | `portfolio_documentation` | 8005 (granian) | `/documentation/*` via `:7011` | default |
 | **Caddy** | `portfolio_caddy` | 7011 | — | default, gatekeeper_dynamic, cloudflared-tunnel |
 
@@ -23,7 +23,7 @@ Personal portfolio site built with **Flask 3.1 + Gunicorn**, served behind a **C
 graph TB
     TUN["Cloudflare Tunnel<br/>cloudflared-tunnel_default"] --> CADDY
     GK["GateKeeper wildcard<br/>gatekeeper_caddy:7000 → gatekeeper_auth:8001<br/>gatekeeper_dynamic"] --- CADDY
-    CADDY["Caddy<br/>:7011<br/>portfolio_caddy"] --> APP["portfolio_main:8000<br/>Flask + Gunicorn gthread"]
+    CADDY["Caddy<br/>:7011<br/>portfolio_caddy"] --> APP["portfolio_main:8000<br/>FastAPI + Granian"]
     CADDY --> DOCS["portfolio_documentation:8005<br/>FastAPI + Granian<br/>MkDocs site"]
     CADDY -->|"/health"| APP
     CADDY -->|"/documentation/*"| DOCS
@@ -48,8 +48,8 @@ Request → `portfolio_caddy:7011` → `reverse_proxy` to `portfolio_main:8000` 
 
 ```
 Portfolio/
-├── run.py                      # dev entrypoint (DEBUG only)
-├── wsgi.py                     # gunicorn target wsgi:app
+├── run.py                      # dev entrypoint (argparse, granian/uvicorn)
+├── wsgi.py                     # ASGI target wsgi:app (FastAPI)
 ├── apps/
 │   ├── __init__.py             # create_app() factory + ProxyFix + blueprints
 │   ├── config.py               # Base/Debug/Production + config_dict
@@ -63,8 +63,8 @@ Portfolio/
 ├── caddy/Caddyfile + Dockerfile
 ├── documentation/              # MkDocs site (this site) on :8005
 ├── compose.yaml                # app + caddy + documentation
-├── Dockerfile                  # python:3.14-slim → gunicorn wsgi:app
-├── requirements.txt            # flask, gunicorn
+├── Dockerfile                  # python:3.14-slim → granian wsgi:app on :8000
+├── requirements.txt            # fastapi, granian, jinja2
 └── pyproject.toml              # ruff, mypy, yamllint
 ```
 
@@ -76,7 +76,7 @@ Informational / portfolio content with a clean, professional presentation. No ap
 
 | Port | Service | Publish |
 |------|---------|---------|
-| 8000 | App (gunicorn, internal) | not published — via Caddy `portfolio_main:8000` |
+| 8000 | App (granian, internal) | not published — via Caddy `portfolio_main:8000` |
 | 7011 | Caddy | `127.0.0.1:7011:7011` (loopback, tunnel only) |
 | 8005 | Documentation (granian, internal) | `expose:` only — via Caddy `/documentation/*` |
 
