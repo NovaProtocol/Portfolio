@@ -21,18 +21,18 @@ from apps.templating import templates
 router = APIRouter(prefix="/projects")
 
 def ordered_projects() -> list[tuple[str, dict]]:
-    return [(slug, p) for slug, p in PROJECTS.items() if p.get("active")]
+ return [(slug, p) for slug, p in PROJECTS.items() if p.get("active")]
 
 @router.get("/", response_class=HTMLResponse)
 async def index(request: Request):
-    return templates.TemplateResponse(request, "projects/index.html", {"projects": ordered_projects()})
+ return templates.TemplateResponse(request, "projects/index.html", {"projects": ordered_projects()})
 
 @router.get("/info/{slug}/", response_class=HTMLResponse)
 async def detail(request: Request, slug: str):
-    project = PROJECTS.get(slug)
-    if not project:
-        raise HTTPException(status_code=404, detail="Project not found")
-    return templates.TemplateResponse(request, "projects/detail.html", {"project": project, "slug": slug})
+ project = PROJECTS.get(slug)
+ if not project:
+ raise HTTPException(status_code=404, detail="Project not found")
+ return templates.TemplateResponse(request, "projects/detail.html", {"project": project, "slug": slug})
 ```
 
 ## Data Shape
@@ -80,18 +80,18 @@ Place preview images at `static/assets/images/<slug>/preview.png` and reference 
 
 ```python
 "my-project": {
-    "active": True,
-    "title": "My Project",
-    "subtitle": "Client or context",
-    "description": ["What it does, who it's for.", "Why it was built."],
-    "tech": {"web": ["Flask", "Docker"]},
-    "features": ["Feature one", "Feature two"],
-    "url": "https://my-project.example.com",
-    "github": "https://github.com/you/my-project",
-    "image": "assets/images/my-project/preview.png",
-    "links": [
-        {"name": "Admin Panel", "url": "https://my-project.example.com/admin", "icon": "fas fa-shield-alt"},
-    ],
-    "buttons": [],
+ "active": True,
+ "title": "My Project",
+ "subtitle": "Client or context",
+ "description": ["What it does, who it's for.", "Why it was built."],
+ "tech": {"web": ["Flask", "Docker"]},
+ "features": ["Feature one", "Feature two"],
+ "url": "https://my-project.example.com",
+ "github": "https://github.com/you/my-project",
+ "image": "assets/images/my-project/preview.png",
+ "links": [
+ {"name": "Admin Panel", "url": "https://my-project.example.com/admin", "icon": "fas fa-shield-alt"},
+ ],
+ "buttons": [],
 }
 ```

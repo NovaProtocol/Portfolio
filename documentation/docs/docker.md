@@ -13,43 +13,41 @@ All services have `restart: unless-stopped`.
 ```yaml
 # compose.yaml (trimmed)
 services:
-  app:
-    build: {context: ., dockerfile: Dockerfile}
-    container_name: portfolio_main
-    restart: unless-stopped
-    environment:
-      DEPLOYMENT_TYPE: ${DEPLOYMENT_TYPE:?DEPLOYMENT_TYPE is required}
-    healthcheck:
-      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health')"]
-      interval: 30s
-      timeout: 5s
-      retries: 3
-      start_period: 10s
-    networks: [default]
-  documentation:
-    build: {context: ., dockerfile: documentation/Dockerfile}
-    container_name: portfolio_documentation
-    restart: unless-stopped
-    expose: ["8005"]
-    healthcheck:
-      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8005/health')"]
-      interval: 30s
-      timeout: 5s
-      retries: 3
-      start_period: 10s
-    networks: [default]
-  caddy:
-    build: {context: ./caddy, dockerfile: Dockerfile}
-    container_name: portfolio_caddy
-    restart: unless-stopped
-    ports: ["127.0.0.1:7011:7011"]
-    networks: [default, gatekeeper_dynamic, cloudflared-tunnel]
+ app:
+ build: {context: ., dockerfile: Dockerfile}
+ container_name: portfolio_main
+ restart: unless-stopped
+ environment:
+ DEPLOYMENT_TYPE: ${DEPLOYMENT_TYPE:?DEPLOYMENT_TYPE is required}
+ healthcheck:
+ test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health')"]
+ interval: 30s
+ timeout: 5s
+ retries: 3
+ start_period: 10s
+ networks: [default]
+ documentation:
+ build: {context: ., dockerfile: documentation/Dockerfile}
+ container_name: portfolio_documentation
+ restart: unless-stopped
+ expose: ["8005"]
+ healthcheck:
+ test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8005/health')"]
+ interval: 30s
+ timeout: 5s
+ retries: 3
+ start_period: 10s
+ networks: [default]
+ caddy:
+ build: {context: ./caddy, dockerfile: Dockerfile}
+ container_name: portfolio_caddy
+ restart: unless-stopped
+ ports: ["127.0.0.1:7011:7011"]
+ networks: [default, gatekeeper]
 
 networks:
-  default:
-  gatekeeper: {external: true, name: gatekeeper_default}  # legacy, caddy uses gatekeeper_dynamic
-  gatekeeper_dynamic: {external: true, name: gatekeeper_dynamic}
-  cloudflared-tunnel: {external: true, name: cloudflared-tunnel_default}
+ default:
+ gatekeeper: {external: true, name: gatekeeper}
 ```
 
 ## Dockerfile — App
@@ -61,10 +59,10 @@ ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1
 WORKDIR /app
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    gcc g++ libc6-dev \
-    libglib2.0-0 libpango-1.0-0 libpangoft2-1.0-0 libharfbuzz0b \
-    libffi8 libjpeg62-turbo libopenjp2-7 libcairo2 libgdk-pixbuf-2.0-0 \
-    shared-mime-info fonts-dejavu \
+ gcc g++ libc6-dev \
+ libglib2.0-0 libpango-1.0-0 libpangoft2-1.0-0 libharfbuzz0b \
+ libffi8 libjpeg62-turbo libopenjp2-7 libcairo2 libgdk-pixbuf-2.0-0 \
+ shared-mime-info fonts-dejavu \
  && rm -rf /var/lib/apt/lists/*
 
 COPY requirements.txt .
@@ -115,28 +113,28 @@ CMD ["granian", "--interface", "asgi", "--host", "0.0.0.0", "--port", "8005", "-
 
 ```caddyfile
 :7011 {
-    handle /health {
-        reverse_proxy portfolio_main:8000
-    }
+ handle /health {
+ reverse_proxy portfolio_main:8000
+ }
 
-    handle_path /documentation/* {
-        reverse_proxy portfolio_documentation:8005
-    }
+ handle_path /documentation/* {
+ reverse_proxy portfolio_documentation:8005
+ }
 
-    handle {
-        reverse_proxy portfolio_main:8000
-    }
+ handle {
+ reverse_proxy portfolio_main:8000
+ }
 }
 ```
 
 - Built from `caddy:2-alpine` (`caddy/Dockerfile: FROM caddy:2-alpine / COPY Caddyfile`).
 - Exactly one `Caddyfile` (no `.dev`/`.prod` variants — production is the only config).
 - Site address `:7011` matches compose publish `127.0.0.1:7011:7011`.
-- Proxy targets use **`container_name`** (`portfolio_main:8000`, `portfolio_documentation:8005`), never the service name `app`, to avoid the shared-network DNS collision on `cloudflared-tunnel_default` / `gatekeeper_dynamic`.
-- Gate is at the **wildcard** (`gatekeeper_dynamic`) — local `Caddyfile` has no per-app `forward_auth`; see `caddy/Caddyfile` live (3 handles: `/health`, `/documentation/*`, catch-all). `handle_path` strips `/documentation` before proxying.
+- Proxy targets use **`container_name`** (`portfolio_main:8000`, `portfolio_documentation:8005`), never the service name `app`, to avoid the shared-network DNS collision on `cloudflared-tunnel` / `gatekeeper`.
+- Gate is at the **wildcard** (`gatekeeper`) — local `Caddyfile` has zero per-app `forward_auth`; see `caddy/Caddyfile` live (3 handles: `/health`, `/documentation/*`, catch-all). `handle_path` strips `/documentation` before proxying.
 - `X-Forwarded-*` headers are forwarded unchanged for GateKeeper's redirect reconstruction.
 
-Compose networks: app + docs on `default`; caddy on `default` + `gatekeeper_dynamic` + `cloudflared-tunnel`. Caddy publishes `127.0.0.1:7011:7011` (loopback-only — tunnel ingress is `portfolio_caddy:7011`).
+Compose networks: app + docs on `default`; caddy on `default` + `gatekeeper`. Caddy publishes `127.0.0.1:7011:7011` (loopback-only — tunnel ingress is `portfolio_caddy:7011`).
 
 ## Health
 
@@ -144,7 +142,7 @@ Compose networks: app + docs on `default`; caddy on `default` + `gatekeeper_dyna
 - Docs: `http://127.0.0.1:8005/health` (container) and `http://127.0.0.1:7011/documentation/` (via Caddy) — probe `http://portfolio_documentation:8005/health` from a sibling container.
 
 ```bash
-docker compose ps                    # HEALTH columns
+docker compose ps # HEALTH columns
 docker inspect --format='{{.State.Health.Status}}' portfolio_main
 docker inspect --format='{{.State.Health.Status}}' portfolio_documentation
 curl -i http://127.0.0.1:7011/health
@@ -163,14 +161,14 @@ No `SECRET_KEY` or GateKeeper vars in the app — the gate lives entirely in Cad
 
 ```bash
 export DEPLOYMENT_TYPE=PRODUCTION
-docker compose up -d --build          # build + start (layer-cached)
-docker compose ps                     # status + health
+docker compose up -d --build # build + start (layer-cached)
+docker compose ps # status + health
 docker compose logs -f app
 docker compose logs --tail=100 caddy
 docker compose logs -f documentation
-docker compose build documentation    # rebuild docs only
+docker compose build documentation # rebuild docs only
 docker compose up -d --build --no-deps documentation
-docker compose exec app sh            # shell (slim image — sh, not bash)
+docker compose exec app sh # shell (slim image — sh, not bash)
 docker compose exec app python -c "import os; print(os.environ['DEPLOYMENT_TYPE'])"
-docker compose down                   # stop, keep volumes
+docker compose down # stop, keep volumes
 ```
