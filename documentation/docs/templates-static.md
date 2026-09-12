@@ -14,12 +14,12 @@ apps/
 └── resume/templates/resume/{index,view,page1,page2,_theme}.html
 static/
 ├── assets/images/
-│   ├── resume_image.JPG
-│   ├── portfolio-qr.png
-│   └── water-billing-system/water-billing-system-preview.png
+│ ├── resume_image.JPG
+│ ├── portfolio-qr.png
+│ └── water-billing-system/water-billing-system-preview.png
 └── js/code-demo/
-    ├── engine.js, registrar.js, demos.js
-    └── demos/{caddy,docker,flask,git,gunicorn,cloudflare,react-native}.js
+ ├── engine.js, registrar.js, demos.js
+ └── demos/{caddy,docker,flask,git,gunicorn,cloudflare,react-native}.js
 ```
 
 ## Base Template
@@ -32,21 +32,21 @@ static/
 from markup safe import Markup, escape
 
 TAG_LINKS: dict[str, str] = {
-    "Flask": "https://flask.palletsprojects.com/",
-    "Gunicorn": "https://gunicorn.org/",
-    "Docker": "https://www.docker.com/",
-    # ~40 entries — covers Python, JS, infra, design, hardware
+ "Flask": "https://flask.palletsprojects.com/",
+ "Gunicorn": "https://gunicorn.org/",
+ "Docker": "https://www.docker.com/",
+ # ~40 entries — covers Python, JS, infra, design, hardware
 }
 
 def tech_tag(name: str) -> Markup:
-    url = TAG_LINKS.get(name)
-    if url:
-        return Markup(
-            '<a class="tag" href="{}" target="_blank" rel="noopener noreferrer">{}</a>'.format(
-                escape(url), escape(name)
-            )
-        )
-    # fallback renders a plain span
+ url = TAG_LINKS.get(name)
+ if url:
+ return Markup(
+ '<a class="tag" href="{}" target="_blank" rel="noopener noreferrer">{}</a>'.format(
+ escape(url), escape(name)
+ )
+ )
+ # fallback renders a plain span
 ```
 
 - Registered on the app via `tags.init_app(app)` in the factory (exposes `tech_tag` to Jinja2 globals).

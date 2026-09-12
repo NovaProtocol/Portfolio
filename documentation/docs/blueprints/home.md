@@ -21,11 +21,11 @@ router = APIRouter()
 
 @router.get("/", response_class=HTMLResponse)
 async def index(request: Request):
-    return templates.TemplateResponse(request, "home/index.html", {})
+ return templates.TemplateResponse(request, "home/index.html", {})
 
 @router.get("/health")
 async def health():
-    return {"status": "ok"}
+ return {"status": "ok"}
 ```
 
 ## Route Registration
@@ -41,19 +41,19 @@ Registered centrally in `apps/routes/__init__.py` and included in `apps/__init__
 
 ```caddyfile
 :7011 {
-    handle /health {
-        reverse_proxy portfolio_main:8000
-    }
-    handle_path /documentation/* {
-        reverse_proxy portfolio_documentation:8005
-    }
-    handle {
-        reverse_proxy portfolio_main:8000
-    }
+ handle /health {
+ reverse_proxy portfolio_main:8000
+ }
+ handle_path /documentation/* {
+ reverse_proxy portfolio_documentation:8005
+ }
+ handle {
+ reverse_proxy portfolio_main:8000
+ }
 }
 ```
 
-Gate is at the **wildcard** (`gatekeeper_dynamic`) — local `Caddyfile` has no per-app `forward_auth` (see live `caddy/Caddyfile`). `/health` is the liveness probe; wildcard enforces `gatekeeper_token` / `?access_code=` before Caddy proxies.
+Gate is at the **wildcard** (`gatekeeper`) — local `Caddyfile` has zero per-app `forward_auth` (see live `caddy/Caddyfile`). `/health` is the liveness probe; wildcard enforces `gatekeeper_token` / `?access_code=` before Caddy proxies.
 
 ## Healthcheck
 
@@ -71,6 +71,6 @@ healthcheck:
 Manual:
 
 ```bash
-curl http://127.0.0.1:8000/health          # direct (container network)
-curl -i http://127.0.0.1:7011/health   # via Caddy, 200
+curl http://127.0.0.1:8000/health # direct (container network)
+curl -i http://127.0.0.1:7011/health # via Caddy, 200
 ```

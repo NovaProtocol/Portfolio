@@ -24,19 +24,19 @@ _THEMES = {1, 2, 3}
 
 @router.get("/", response_class=HTMLResponse)
 async def index(request: Request):
-    return templates.TemplateResponse(request, "resume/index.html", {"resume": _RESUME})
+ return templates.TemplateResponse(request, "resume/index.html", {"resume": _RESUME})
 
 @router.get("/view", response_class=HTMLResponse)
 async def view(request: Request, page: int | None = None, theme: int = 3):
-    if theme not in _THEMES:
-        theme = 3
-    if page is not None:
-        mapping = {1: "resume/page1.html", 2: "resume/page2.html"}
-        template = mapping.get(page)
-        if not template:
-            raise HTTPException(status_code=404, detail="Not found")
-        return templates.TemplateResponse(request, template, {"resume": _RESUME, "theme": theme})
-    return templates.TemplateResponse(request, "resume/view.html", {"resume": _RESUME, "theme": theme})
+ if theme not in _THEMES:
+ theme = 3
+ if page is not None:
+ mapping = {1: "resume/page1.html", 2: "resume/page2.html"}
+ template = mapping.get(page)
+ if not template:
+ raise HTTPException(status_code=404, detail="Not found")
+ return templates.TemplateResponse(request, template, {"resume": _RESUME, "theme": theme})
+ return templates.TemplateResponse(request, "resume/view.html", {"resume": _RESUME, "theme": theme})
 ```
 
 ## Data — `data/resume.json`
@@ -70,12 +70,12 @@ All extend `apps/templates/base.html` via the shared template folder. Theme sele
 ## URLs
 
 ```
-/resume/                        → hub
-/resume/view                    → combined, theme 3 (default)
-/resume/view?theme=1            → combined, theme 1
-/resume/view?page=1             → page 1 only, theme 3
-/resume/view?page=2&theme=2     → page 2 only, theme 2
-/resume/view?page=3             → 404 (only 1 and 2 exist)
+/resume/ → hub
+/resume/view → combined, theme 3 (default)
+/resume/view?theme=1 → combined, theme 1
+/resume/view?page=1 → page 1 only, theme 3
+/resume/view?page=2&theme=2 → page 2 only, theme 2
+/resume/view?page=3 → 404 (only 1 and 2 exist)
 ```
 
 ## Static Assets
