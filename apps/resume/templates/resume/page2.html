@@ -11,7 +11,7 @@
         body {
             background: #ffffff;
             font-size: 11px;
-            line-height: 1.4;
+            line-height: 1.32;
         }
         .page {
             width: 210mm;
@@ -19,7 +19,7 @@
             padding: 15mm 18mm;
             box-sizing: border-box;
         }
-        section { margin-bottom: 0.8rem; }
+        section { margin-bottom: 0.65rem; }
         section h2 {
             font-size: 0.95em;
             font-weight: 700;
@@ -30,7 +30,7 @@
             margin-bottom: 0.4rem;
             background: var(--section-heading-bg);
         }
-        .entry { margin-bottom: 0.6rem; }
+        .entry { margin-bottom: 0.45rem; }
         .entry:last-child { margin-bottom: 0; }
         .entry .head {
             display: flex;
@@ -42,14 +42,11 @@
         .entry .org { font-weight: 600; font-size: 0.95em; }
         .entry .period { font-style: italic; font-size: 0.89em; white-space: nowrap; }
         .entry ul { margin: 0.15rem 0 0; padding-left: 1.2rem; }
-        .entry ul li { margin-bottom: 0.15rem; }
-        .tech-stack { font-size: 0.85em; margin-bottom: 0.2rem; }
+        .entry ul li { margin-bottom: 0.1rem; }
+        .tech-stack { font-size: 0.85em; margin-bottom: 0.15rem; }
         .resume-projects-wrap { display: flex; gap: 1rem; align-items: flex-start; }
         .resume-projects-list { flex: 1; min-width: 0; }
-        .resume-projects-qr { flex-shrink: 0; text-align: center; }
-        .resume-projects-qr img { width: 80px; height: 80px; border: 1px solid #ddd; }
-        .resume-projects-qr p { font-size: 0.72em; color: var(--light-muted); margin: 0.2rem 0 0; }
-        .skill-row { margin: 0 0 0.3rem; }
+        .skill-row { margin: 0 0 0.22rem; }
         .skill-cat { font-weight: 700; }
     </style>
 </head>
@@ -58,6 +55,7 @@
     {% if resume.projects %}
     <section class="section-projects">
         <h2>Selected Technical Projects</h2>
+        <p>Source code available on request — repositories are private.</p>
         <div class="resume-projects-wrap">
             <div class="resume-projects-list">
                 {% for proj in resume.projects %}
@@ -81,7 +79,7 @@
     <section class="section-skills">
         <h2>Technical Skills</h2>
         {% for skill in resume.skills %}
-        <p class="skill-row" style="margin-bottom:0.5rem;"><span class="skill-cat">{{ skill.category }}:</span> {{ skill.value }}</p>
+        <p class="skill-row"><span class="skill-cat">{{ skill.category }}:</span> {{ skill.value }}</p>
         {% endfor %}
     </section>
 </div>

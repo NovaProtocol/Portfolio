@@ -32,9 +32,9 @@ Portfolio/
 │ ├── templates/base.html
 │ ├── routes/ # APIRouters
 │ │ ├── __init__.py # aggregates home + projects + resume routers
-│ │ ├── home.py # GET / , GET /health
+│ │ ├── home.py # GET / , GET /health, GET /robots.txt
 │ │ ├── projects.py # GET /projects/ , GET /projects/info/{slug}/
-│ │ └── resume.py # GET /resume/ , GET /resume/view
+│ │ └── resume.py # GET /resume/ , GET /resume/view, GET /resume/qr.svg
 │ └── data.py # PROJECTS dict + helpers
 ├── static/
 │ ├── assets/images/{portfolio-qr,resume_image,water-billing-system}/
@@ -132,6 +132,7 @@ sequenceDiagram
 
 - App itself sees no auth — the gate enforces it. The app only renders pages and serves `/static` via `StaticFiles`.
 - Health: `GET /health` returns `{"status":"ok"}` JSON and is the compose `healthcheck` target (`python -c urllib.request.urlopen(http://127.0.0.1:8000/health)`).
+- Crawler discouragement: `GET /robots.txt` returns `User-agent: *` + `Disallow: /` as `text/plain`; the primary noindex signal is the `X-Robots-Tag: noindex, nofollow` header at the site-block level in `caddy/Caddyfile` (covers app, `/static`, and the separately-containerised docs service), with a `<meta name="robots">` tag in `base.html` as defence-in-depth.
 
 ## Data Layer
 

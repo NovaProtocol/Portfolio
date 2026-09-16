@@ -1,6 +1,6 @@
 {
   "name": "Khyles Gibrian Ramos",
-  "headline": "Mechanical Engineering Graduate | CAD & Design | Systems Development",
+  "headline": "Mechanical Engineer | Self-Taught Software Developer | Systems & Automation",
   "photo": "assets/images/resume_image.JPG",
   "contact": {
     "address": "Brgy. Mateuna, Tayabas, Quezon",
@@ -8,9 +8,10 @@
     "email": "khyles.gibrian.ramos19@gmail.com",
     "linkedin": "https://www.linkedin.com/in/khyles-gibrian-ramos/",
     "github": "https://github.com/NovaProtocol",
-    "portfolio": "https://portfolio.projectnova.download/?access_code=bb829542bf71ca5e"
+    "portfolio": "https://portfolio.projectnova.download",
+    "access_code": "resume-access"
   },
-  "summary": "Mechanical Engineering graduate with experience in AutoCAD facility layouts, safety inspections, technical documentation, and technical systems development. Skilled in CAD, technical drawing, blueprint reading, fabrication, and occupational safety, complemented by hands-on software development, embedded systems, automation, and systems integration. Brings a multidisciplinary approach to engineering problems, combining mechanical fundamentals with programming and hardware-oriented development.",
+  "summary": "Mechanical Engineering graduate with a self-taught software background developed over several years outside the classroom, spanning embedded systems, backend development, and applied machine learning. Professional experience includes AutoCAD facility design, safety inspection, and technical documentation. Builds independently-driven technical projects \u2014 from neural network model training to sandboxed execution environments \u2014 as a complement to formal mechanical engineering training.",
   "education": [
     {
       "level": "Tertiary",
@@ -50,25 +51,36 @@
       "organization": "Southern Luzon State University",
       "period": "Mar 2024 - Apr 2024",
       "responsibilities": [
-        "Designed and updated facility layouts and emergency fire exit plans using AutoCAD to meet safety and compliance standards.",
-        "Inspected campus emergency lights and fire extinguishers for proper working order and safety compliance.",
-        "Conducted inventory audits and applied asset tags to university property to improve tracking accuracy.",
-        "Coordinated cross-department documentation and message routing for daily facility operations."
+        "Designed facility layouts and emergency fire exit plans in AutoCAD, applying code-compliant safety and egress standards",
+        "Performed inspections of emergency lighting and fire suppression equipment against OSH compliance standards",
+        "Conducted facility asset audits and implemented an improved tracking system for university property",
+        "Coordinated documentation and communication across departments to support daily facility operations"
       ]
     },
     {
-      "role": "Freelance Technical Developer",
-      "organization": "Freelance",
+      "role": "Independent technical contributor for a university thesis project",
+      "organization": "Thesis Support \u2014 ResNet-18 Signature Verification",
       "period": "Aug 2025 - Nov 2025",
       "responsibilities": [
-        "Built a signature verification system using a ResNet-18 neural network with Triplet Loss, achieving 86.96% validation accuracy on the reference dataset.",
-        "Developed data preprocessing pipelines to prepare, normalize, and format image datasets for model training.",
-        "Integrated the trained model into a backend service for on-demand inference and image processing.",
-        "Delivered functional code and technical documentation within project deadlines."
+        "Self-taught ResNet-18 with Triplet Loss from scratch to build a signature verification model, achieving 86.96% validation accuracy on the thesis author's reference dataset",
+        "Built preprocessing pipelines to normalize and format image datasets for training",
+        "Integrated the trained model into a backend service for on-demand inference",
+        "Delivered working code and documentation to support the thesis defense",
+        "Collaborated with the thesis author to translate verification requirements into a working model pipeline"
       ]
     }
   ],
   "projects": [
+    {
+      "name": "Water Billing System — Personal Project (Architecture & Core Modules Complete)",
+      "tech": "React Native, NFC, Docker, MySQL",
+      "highlights": [
+        "Designed an end-to-end utility billing workflow that unifies meter reading, tariff computation, and bill distribution into a single process",
+        "Offline-first NFC meter reading with on-device cryptographic key derivation so meter data never crosses the network",
+        "Automated 5-tier progressive tariff billing with late penalties and waterfall payment application",
+        "Customer and payment data isolated in internal networks with role-scoped access"
+      ]
+    },
     {
       "name": "MELE Review — Personal Project",
       "tech": "Python, MySQL, Docker",
@@ -79,21 +91,11 @@
       ]
     },
     {
-      "name": "Water Billing System — Personal Project, In Development",
-      "tech": "React Native, NFC, Docker, MySQL",
-      "highlights": [
-        "Designed an end-to-end utility billing workflow that unifies meter reading, tariff computation, and bill distribution into a single process",
-        "Offline-first NFC meter reading with on-device cryptographic key derivation so meter data never crosses the network",
-        "Automated 5-tier progressive tariff billing with late penalties and waterfall payment application",
-        "Customer and payment data isolated in internal networks with role-scoped access"
-      ]
-    },
-    {
       "name": "SolveSpace — Personal Project",
       "tech": "Python, Docker, Bubblewrap",
       "highlights": [
         "Isolated execution sandbox for untrusted code with hard memory, CPU, and process limits and zero network access",
-        "Implemented Bubblewrap-based process isolation with read-only filesystem, 1 GB memory cap, 25s CPU limit, and 64-process ceiling",
+        "Process isolation with read-only filesystem, 1 GB memory cap, 25s CPU limit, and 64-process ceiling via Bubblewrap",
         "Built a background execution queue with signal-based timeout handling and numeric-lenient test-case comparison"
       ]
     },
@@ -103,50 +105,30 @@
       "highlights": [
         "Single sign-on auth gate with signed, tamper-evident cookies and forward-auth session verification",
         "Admin panel to issue and revoke access codes, with a backup code so the owner is never locked out",
-        "Implemented redirect-based SSO flow with signed cookie validation and session management"
+        "Redirect-based SSO flow with signed cookie validation and session management"
       ]
     }
   ],
   "skills": [
     {
-      "category": "Mechanical Design",
-      "value": "AutoCAD, Fusion 360, OnShape, Technical Drawing, Blueprint Reading"
-    },
-    {
-      "category": "Manufacturing & Fabrication",
-      "value": "Shielded Metal Arc Welding (SMAW), 3D Printing (UltiMaker Cura), Prototyping"
+      "category": "Mechanical Design & Fabrication",
+      "value": "AutoCAD, Fusion 360, OnShape, SMAW, 3D Printing, Blueprint Reading, Prototyping"
     },
     {
       "category": "Safety & Compliance",
       "value": "DOLE BOSH SO2, OSH Standards, Safety Inspection, Fire Safety Planning"
     },
     {
-      "category": "Engineering & Automation",
-      "value": "Embedded Systems, Hardware/Software Integration, Sensor Interfaces, Automation"
+      "category": "Embedded Systems & Automation",
+      "value": "Arduino, ESP32, Raspberry Pi, NFC, Sensor Interfaces, Hardware/Software Integration"
     },
     {
-      "category": "Programming Languages",
-      "value": "Python, C++, JavaScript, TypeScript, SQL"
+      "category": "Software Development",
+      "value": "Python, C++, JavaScript, TypeScript, SQL, FastAPI, Flask, React Native"
     },
     {
-      "category": "Backend Development",
-      "value": "FastAPI, Flask, SQLAlchemy, REST APIs"
-    },
-    {
-      "category": "Databases",
-      "value": "MySQL, SQLite"
-    },
-    {
-      "category": "Deployment & Infrastructure",
-      "value": "Docker, Linux, Cloudflare Tunnel, Caddy, Gunicorn"
-    },
-    {
-      "category": "Electronics & Hardware",
-      "value": "Arduino, ESP32, Raspberry Pi, NFC (NTAG215)"
-    },
-    {
-      "category": "Mobile Development",
-      "value": "React Native, Expo"
+      "category": "Data & Infrastructure",
+      "value": "MySQL, SQLite, Docker, Linux, Cloudflare Tunnel, Caddy, Gunicorn"
     }
   ]
 }
