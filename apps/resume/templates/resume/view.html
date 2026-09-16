@@ -11,7 +11,7 @@
             margin: 0;
             background: #ffffff;
             font-size: 11px;
-            line-height: 1.4;
+            line-height: 1.32;
         }
         @page {
             size: A4;
@@ -71,7 +71,7 @@
             margin-left: 1.5rem;
             flex-shrink: 0;
         }
-        section { page-break-inside: avoid; margin-bottom: 0.8rem; }
+        section { page-break-inside: avoid; margin-bottom: 0.65rem; }
         section h2 {
             font-size: 0.95em;
             font-weight: 700;
@@ -82,7 +82,7 @@
             margin-bottom: 0.4rem;
             background: var(--section-heading-bg);
         }
-        .entry { page-break-inside: avoid; margin-bottom: 0.6rem; }
+        .entry { page-break-inside: avoid; margin-bottom: 0.45rem; }
         .entry:last-child { margin-bottom: 0; }
         .entry .head {
             display: flex;
@@ -94,14 +94,14 @@
         .entry .org { font-weight: 400; font-size: 0.95em; }
         .entry .period { font-style: italic; font-size: 0.89em; white-space: nowrap; }
         .entry ul { margin: 0.1rem 0 0; padding-left: 1.2rem; }
-        .entry ul li { margin-bottom: 0.1rem; font-size: 0.95em; }
+        .entry ul li { margin-bottom: 0.08rem; font-size: 0.95em; }
         .tech-stack { font-size: 0.85em; margin-bottom: 0.2rem; }
         .resume-projects-wrap { display: flex; gap: 1rem; align-items: flex-start; }
         .resume-projects-list { flex: 1; min-width: 0; }
         .resume-projects-qr { flex-shrink: 0; text-align: center; }
         .resume-projects-qr img { width: 80px; height: 80px; border: 1px solid #ddd; }
         .resume-projects-qr p { font-size: 0.72em; color: var(--light-muted); margin: 0.2rem 0 0; }
-        .skill-row { margin: 0 0 0.3rem; }
+        .skill-row { margin: 0 0 0.22rem; }
         .skill-cat { font-weight: 700; }
     </style>
 </head>
@@ -123,8 +123,8 @@
             {% if resume.contact.github %}
             <p class="contact-line"><a href="{{ resume.contact.github }}">GitHub: {{ resume.contact.github }}</a></p>
             {% endif %}
-            {% if resume.contact.portfolio %}
-            <p class="contact-line" style="word-break: break-all;"><a href="{{ resume.contact.portfolio }}">Portfolio: {{ resume.contact.portfolio }}</a></p>
+            {% if portfolio_url %}
+            <p class="contact-line" style="word-break: break-all;"><a href="{{ portfolio_url }}">Portfolio: {{ portfolio_label }}</a></p>
             {% endif %}
         </div>
         {% if resume.photo %}
@@ -201,6 +201,7 @@
     {% if resume.projects %}
     <section class="section-projects">
         <h2>Selected Technical Projects</h2>
+        <p>Source code available on request — repositories are private.</p>
         <div class="resume-projects-wrap">
             <div class="resume-projects-list">
                 {% for proj in resume.projects %}
@@ -217,9 +218,9 @@
                 </div>
                 {% endfor %}
             </div>
-            {% if resume.contact.portfolio %}
+            {% if portfolio_url %}
             <div class="resume-projects-qr">
-                <img src="{{ url_for('static', filename='assets/images/portfolio-qr.png') }}" alt="Portfolio QR code">
+                <img src="/resume/qr.svg" alt="Portfolio QR code">
                 <p>Scan for my project portfolio</p>
             </div>
             {% endif %}
@@ -230,7 +231,7 @@
     <section class="section-skills">
         <h2>Technical Skills</h2>
         {% for skill in resume.skills %}
-        <p class="skill-row" style="margin-bottom:0.5rem;"><span class="skill-cat">{{ skill.category }}:</span> {{ skill.value }}</p>
+        <p class="skill-row"><span class="skill-cat">{{ skill.category }}:</span> {{ skill.value }}</p>
         {% endfor %}
     </section>
 

@@ -2,7 +2,7 @@
 
 ## Layout
 
-- **Shared base:** `apps/templates/base.html` — every blueprinted page extends it, so nav, footer, and layout are defined once.
+- **Shared base:** `apps/templates/base.html` — blueprinted pages extend it, so nav, footer, and layout are defined once. The standalone resume print templates (`resume/page1.html`, `page2.html`, `view.html`) are the exception: they do not extend `base.html`.
 - **Per-route templates:** `apps/templates/<sector>/*.html` — namespaced by sector (`home/index.html`, `projects/index.html`, `projects/detail.html`, `resume/view.html`, etc.). Jinja2 `templates` from `apps/templating.py` resolves the shared `apps/templates/` folder.
 - **Static:** `static/` served at `/static` via `StaticFiles` mounted in `create_app()` (`app.mount("/static", StaticFiles(...))`). Referenced in templates with `url_for('static', path='…')`.
 
@@ -15,7 +15,6 @@ apps/
 static/
 ├── assets/images/
 │ ├── resume_image.JPG
-│ ├── portfolio-qr.png
 │ └── water-billing-system/water-billing-system-preview.png
 └── js/code-demo/
  ├── engine.js, registrar.js, demos.js
