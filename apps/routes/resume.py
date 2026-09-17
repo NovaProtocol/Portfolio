@@ -62,10 +62,11 @@ async def qr_svg():
     qr = segno.make(magic_link)
     buf = io.BytesIO()
     qr.save(buf, kind="svg", scale=10, border=2)
+    # No explicit header: the cache middleware applies the QR lifespan in
+    # production and a blanket no-store in debug.
     return Response(
         content=buf.getvalue(),
         media_type="image/svg+xml",
-        headers={"Cache-Control": "public, max-age=86400"},
     )
 
 

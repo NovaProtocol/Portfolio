@@ -52,18 +52,23 @@ def create_app() -> FastAPI:
         debug=config.DEBUG,
     )
 
-    from apps.middleware import RequestIDMiddleware, SecurityHeadersMiddleware
+    from apps.middleware import (
+        CacheControlMiddleware,
+        RequestIDMiddleware,
+        SecurityHeadersMiddleware,
+    )
 
     app.add_middleware(RequestIDMiddleware)
     app.add_middleware(SecurityHeadersMiddleware)
+    app.add_middleware(CacheControlMiddleware, is_debug=config.DEBUG)
 
     static_dir = _PROJECT_ROOT / "static"
     static_dir.mkdir(parents=True, exist_ok=True)
     app.mount("/static", StaticFiles(directory=str(static_dir)), name="static")
 
+    from apps.errors import install_error_handlers
     from apps.routes import router
     from apps.templating import templates
-    from apps.errors import install_error_handlers
 
     app.include_router(router)
     install_error_handlers(app, templates)
