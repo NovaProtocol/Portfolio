@@ -8,7 +8,7 @@
 | Framework | FastAPI modular with `create_app()` factory in `apps/__init__.py` and APIRouters in `apps/routes/` |
 | Config | `apps/config.py` using `Settings(BaseSettings)` via `pydantic-settings` with `get_config()` cached |
 | Templates | Jinja2 via `apps/templating.py` with `apps/templates/base.html` shared and per-route `templates/<sector>/` |
-| Static | `static/` served at `/static` via `StaticFiles` mounted in `create_app()` |
+| Static | `static/` served at `/static` via `StaticFiles` mounted in `create_app()`; cache lifespans applied by `CacheControlMiddleware` |
 | Data | `data/resume.json` (JSON, no DB) + `apps/data.py:PROJECTS` dict |
 | Proxy | `caddy:2-alpine` on `:7011` with loopback-only `127.0.0.1:7011:7011` joining `gatekeeper`. Gate is `gatekeeper_caddy:7000 → gatekeeper_auth:8001` |
 | Docs | MkDocs Material on `:8005` (`portfolio_documentation`), FastAPI + granian, via Caddy `/documentation/*` |
@@ -26,7 +26,7 @@ Portfolio/
 │ ├── __init__.py # create_app() → FastAPI + RequestID/SecurityHeaders + StaticFiles + routers
 │ ├── config.py # Settings(BaseSettings) + get_config() cached
 │ ├── errors.py # install_error_handlers + structlog + {error:{code,message,request_id}}
-│ ├── middleware.py # RequestIDMiddleware + SecurityHeadersMiddleware
+│ ├── middleware.py # RequestID + SecurityHeaders + CacheControl
 │ ├── tags.py # TAG_LINKS + tech_tag() helper
 │ ├── templating.py # Jinja2Templates
 │ ├── templates/base.html
@@ -57,20 +57,21 @@ The split into `apps/` sectors was chosen because Portfolio has genuinely distin
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 from apps.config import get_config
-from apps.middleware import RequestIDMiddleware, SecurityHeadersMiddleware
+from apps.middleware import CacheControlMiddleware, RequestIDMiddleware, SecurityHeadersMiddleware
 
 def create_app() -> FastAPI:
  config = get_config()
  app = FastAPI(title="Portfolio", debug=config.DEBUG)
  app.add_middleware(RequestIDMiddleware)
  app.add_middleware(SecurityHeadersMiddleware)
+ app.add_middleware(CacheControlMiddleware, is_debug=config.DEBUG)
  app.mount("/static", StaticFiles(directory=str(static_dir)), name="static")
  app.include_router(router)
  install_error_handlers(app, templates)
  return app
 ```
 
-- Factory reads `get_config()` (BaseSettings with env via compose `${VAR:?}`), mounts `StaticFiles`, and installs `RequestIDMiddleware`, `SecurityHeadersMiddleware`, and the `errors` handlers.
+- Factory reads `get_config()` (BaseSettings with env via compose `${VAR:?}`), mounts `StaticFiles`, and installs `RequestIDMiddleware`, `SecurityHeadersMiddleware`, `CacheControlMiddleware`, and the `errors` handlers.
 - No env reads outside `get_config()`, no DB, no global state.
 - `from __future__ import annotations` on every module (house style).
 
@@ -133,6 +134,28 @@ sequenceDiagram
 - App itself sees no auth because the gate enforces it. The app only renders pages and serves `/static` via `StaticFiles`.
 - Health: `GET /health` returns `{"status":"ok"}` JSON and is the compose `healthcheck` target (`python -c urllib.request.urlopen(http://127.0.0.1:8000/health)`).
 - Crawler discouragement: `GET /robots.txt` returns `User-agent: *` + `Disallow: /` as `text/plain`; the primary noindex signal is the `X-Robots-Tag: noindex, nofollow` header at the site-block level in `caddy/Caddyfile` (covers app, `/static`, and the separately-containerised docs service), with a `<meta name="robots">` tag in `base.html` as defence-in-depth.
+
+## Cache Headers
+
+Cache behavior is decided in the app, not in Cloudflare or the `Caddyfile`. `CacheControlMiddleware` takes one boolean (`config.DEBUG`) and sets `Cache-Control` on every response after the handler runs, so mounted `StaticFiles`, HTML routes, `/robots.txt`, `/health`, error pages, and the QR endpoint are all covered by a single mechanism (a `StaticFiles` wrapper would cover only `/static`).
+
+- **`DEPLOYMENT_TYPE=DEBUG`** (`config.DEBUG`, case-insensitive) — overwrites `Cache-Control` on every response with exactly `no-store`. `no-cache` is weaker: it still permits a cache to store gated bytes and only forces revalidation, and `private` still permits storing on shared infrastructure. `no-store` forbids storing outright. Overwriting rather than filling gaps means no route can accidentally stay public.
+- **Any other value (production)** — fills `Cache-Control` only when the handler set none, so an explicit route header stays authoritative. Lifespans are `UPPER_SNAKE_CASE` constants at the top of `apps/middleware.py`; retuning one is a one-line edit plus a redeploy (deliberately not env vars — four integers do not justify new required config).
+
+| Class | Paths | Header |
+|-------|-------|--------|
+| Static assets | `/static/*` | `public, max-age=86400` |
+| QR SVG | `/resume/qr.svg` | `public, max-age=3600` |
+| Misc small | `/robots.txt`, `/health` | `public, max-age=3600` |
+| HTML (default) | everything else | `private, max-age=300` |
+
+Why this matters: an origin that sends no `Cache-Control` but does send `ETag` / `Last-Modified` is heuristically cacheable, which is how gated images ended up stored at the edge. Sending an explicit header removes that ambiguity — either a deliberate lifespan or `no-store`.
+
+`no-store` stops *future* stores; it does not evict a copy already sitting at the edge. Existing entries expire on their own schedule and revalidation then returns the new headers.
+
+### Reusable pattern
+
+Portable to the sibling apps (GateKeeper auth-gateway, WBS portals/api, MELEReviewSite, SolveSpace `solver_private`, NovaProtocol, Buddys): one `BaseHTTPMiddleware` constructed with `is_debug`, DEBUG overwriting `no-store` everywhere, production filling gaps per path class, route-level explicit headers left authoritative. Before applying it to MELEReviewSite, resolve why `melereview_web` runs with an empty `DEPLOYMENT_TYPE` — an empty value falls back to the `debug` default locally but is untested through its compose path.
 
 ## Data Layer
 
