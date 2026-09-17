@@ -1,15 +1,15 @@
 # Projects Blueprint
 
-**Module:** `apps/routes/projects.py` — `APIRouter(prefix="/projects")`
+**Module:** `apps/routes/projects.py` using `APIRouter(prefix="/projects")`
 
-Project catalog — listing, detail pages, and the data shape that drives them.
+Project catalog for listing and detail pages plus the data shape that drives them.
 
 ## Routes
 
 | Route | Handler | Description |
 |-------|---------|-------------|
-| `GET /projects/` | `apps.routes.projects.index` | Listing — renders `projects/index.html` with active projects |
-| `GET /projects/info/{slug}/` | `apps.routes.projects.detail` | Detail — renders `projects/detail.html` for `PROJECTS[slug]` or `404` |
+| `GET /projects/` | `apps.routes.projects.index` | Listing that renders `projects/index.html` with active projects |
+| `GET /projects/info/{slug}/` | `apps.routes.projects.detail` | Detail page rendering `projects/detail.html` for `PROJECTS[slug]` or `404` |
 
 ```python
 # apps/routes/projects.py (trimmed)
@@ -58,7 +58,7 @@ Add a new project by inserting an entry into `PROJECTS` (see README and Getting 
 
 Place preview images at `static/assets/images/<slug>/preview.png` and reference them via `image:`.
 
-`reason:` (freeform) explains *why* the project exists — shown on detail pages as context.
+`reason:` (freeform) explains *why* the project exists and is shown on detail pages as context.
 
 ## Data Source
 
@@ -66,9 +66,9 @@ Place preview images at `static/assets/images/<slug>/preview.png` and reference 
 
 ## Templates
 
-- `apps/projects/templates/projects/index.html` — loops `projects` from `ordered_projects()`, includes `_card.html` partial per entry.
-- `apps/projects/templates/projects/detail.html` — title, subtitle, description paragraphs, tech tags (via `apps/tags. tech_tag`), features, status, live embed (`url`), and `links` / `buttons`.
-- `apps/templates/base.html` is the parent for both — all routes extend it so layout, nav, and footer are consistent.
+- `apps/projects/templates/projects/index.html` loops `projects` from `ordered_projects()` and includes the `_card.html` partial per entry.
+- `apps/projects/templates/projects/detail.html` shows title, subtitle, description paragraphs, tech tags (via `apps/tags. tech_tag`), features, status, live embed (`url`), and `links` / `buttons`.
+- `apps/templates/base.html` is the parent for both. All routes extend it so layout, nav, and footer stay consistent.
 
 ## Embeds & Links
 

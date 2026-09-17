@@ -2,7 +2,7 @@
 
 Personal portfolio site built with Python 3.14 + FastAPI + Granian + Jinja2, served behind a Caddy reverse proxy that gates access through [GateKeeper](https://github.com/NovaProtocol/GateKeeper).
 
-**Stack:** Python 3.14 + FastAPI + Granian + Jinja2 + Caddy 2-alpine — FastAPI app run by granian (ASGI, 1 worker) with Jinja2 templates and StaticFiles.
+**Stack:** Python 3.14 + FastAPI + Granian + Jinja2 + Caddy 2-alpine. The FastAPI app runs under granian (ASGI, 1 worker) with Jinja2 templates and StaticFiles.
 
 ## Adding a Project
 
@@ -52,7 +52,7 @@ Place preview images in `static/assets/images/<slug>/`.
 ## Running
 
 ```bash
-# Development (port 8000, no auth — matches Dockerfile EXPOSE 8000)
+# Development on port 8000 with no auth to match Dockerfile EXPOSE 8000
 DEPLOYMENT_TYPE=DEBUG python run.py
 
 # Docker (app :8000 internal via Caddy :7011)
@@ -72,15 +72,15 @@ The Cloudflare tunnel ingress must point at the Caddy container
 
 | Port | Service |
 |------|---------|
-| 8000 | App (granian ASGI, internal — via `portfolio_main:8000`; Caddy :7011) |
-| 7011 | Caddy (loopback-bound — tunnel only) |
-| 8005 | Documentation (granian, internal — via Caddy) |
+| 8000 | App (granian ASGI, internal via `portfolio_main:8000` with Caddy on :7011) |
+| 7011 | Caddy (loopback-bound for tunnel only) |
+| 8005 | Documentation (granian, internal via Caddy) |
 
 Portfolio's block is 7010; Caddy owns :7011, app is exposed internally as :8000 (Dockerfile `EXPOSE 8000`, `granian --interface asgi --port 8000 wsgi:app`, compose healthcheck `127.0.0.1:8000/health`, Caddy `reverse_proxy portfolio_main:8000`).
 
 ## Auth
 
-This project is gated via the **wildcard** GateKeeper ingress — `gatekeeper_caddy:7000` on the shared `gatekeeper_dynamic` network checks `GET /api/authz/forward-auth` before Caddy proxies. The local `caddy/Caddyfile` has no per-app `forward_auth`; gating is at the apex wildcard (same as other gated apps on `gatekeeper_dynamic`). A valid `gatekeeper_token` cookie (or `?access_code=` magic link) passes; otherwise GateKeeper redirects to login. `/health` bypasses via GateKeeper rule.
+This project is gated via the **wildcard** GateKeeper ingress. `gatekeeper_caddy:7000` on the shared `gatekeeper_dynamic` network checks `GET /api/authz/forward-auth` before Caddy proxies. The local `caddy/Caddyfile` has no per-app `forward_auth`; gating is at the apex wildcard (same as other gated apps on `gatekeeper_dynamic`). A valid `gatekeeper_token` cookie (or `?access_code=` magic link) passes; otherwise GateKeeper redirects to login. `/health` bypasses via GateKeeper rule.
 
 See `compose.yaml`: `portfolio_caddy` joins `gatekeeper_dynamic` (external `gatekeeper_dynamic`), and `caddy/Caddyfile` proxies `portfolio_main:8000`/`portfolio_documentation:8005` without a local `forward_auth`.
 

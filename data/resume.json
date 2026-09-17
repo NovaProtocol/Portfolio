@@ -11,7 +11,7 @@
     "portfolio": "https://portfolio.projectnova.download",
     "access_code": "resume-access"
   },
-  "summary": "Mechanical Engineering graduate with a self-taught software background developed over several years outside the classroom, spanning embedded systems, backend development, and applied machine learning. Professional experience includes AutoCAD facility design, safety inspection, and technical documentation. Builds independently-driven technical projects \u2014 from neural network model training to sandboxed execution environments \u2014 as a complement to formal mechanical engineering training.",
+  "summary": "Mechanical Engineering graduate with a self-taught software background developed over several years outside the classroom, spanning embedded systems, backend development, and applied machine learning. Professional experience includes AutoCAD facility design, safety inspection, and technical documentation. Builds independently-driven technical projects as a complement to formal mechanical engineering training, spanning neural network model training and sandboxed execution environments.",
   "education": [
     {
       "level": "Tertiary",
@@ -33,10 +33,10 @@
   ],
   "certifications": [
     {
-      "title": "BOSH Safety Officer 2 (SO2) — 40-Hour OSH Training",
+      "title": "BOSH Safety Officer 2 (SO2)",
       "issuer": "",
       "year": "2024",
-      "detail": ""
+      "detail": "40-Hour OSH Training"
     },
     {
       "title": "TESDA SMAW NC I",
@@ -59,7 +59,7 @@
     },
     {
       "role": "Independent technical contributor for a university thesis project",
-      "organization": "Thesis Support \u2014 ResNet-18 Signature Verification",
+      "organization": "Thesis Support for ResNet-18 Signature Verification",
       "period": "Aug 2025 - Nov 2025",
       "responsibilities": [
         "Self-taught ResNet-18 with Triplet Loss from scratch to build a signature verification model, achieving 86.96% validation accuracy on the thesis author's reference dataset",
@@ -72,17 +72,18 @@
   ],
   "projects": [
     {
-      "name": "Water Billing System — Personal Project (Architecture & Core Modules Complete)",
+      "name": "Water Billing System",
       "tech": "React Native, NFC, Docker, MySQL",
       "highlights": [
         "Designed an end-to-end utility billing workflow that unifies meter reading, tariff computation, and bill distribution into a single process",
         "Offline-first NFC meter reading with on-device cryptographic key derivation so meter data never crosses the network",
         "Automated 5-tier progressive tariff billing with late penalties and waterfall payment application",
-        "Customer and payment data isolated in internal networks with role-scoped access"
+        "Customer and payment data isolated in internal networks with role-scoped access",
+        "Architecture and core modules complete."
       ]
     },
     {
-      "name": "MELE Review — Personal Project",
+      "name": "MELE Review",
       "tech": "Python, MySQL, Docker",
       "highlights": [
         "Built a unit-aware engineering equation solver for multi-step formulas across metric and English conventions",
@@ -91,7 +92,7 @@
       ]
     },
     {
-      "name": "SolveSpace — Personal Project",
+      "name": "SolveSpace",
       "tech": "Python, Docker, Bubblewrap",
       "highlights": [
         "Isolated execution sandbox for untrusted code with hard memory, CPU, and process limits and zero network access",
@@ -100,7 +101,7 @@
       ]
     },
     {
-      "name": "GateKeeper — Personal Project",
+      "name": "GateKeeper",
       "tech": "Python, SQLite, Docker",
       "highlights": [
         "Single sign-on auth gate with signed, tamper-evident cookies and forward-auth session verification",

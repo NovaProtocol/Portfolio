@@ -1,6 +1,6 @@
 # Portfolio
 
-Personal portfolio site built with **Python 3.14 + FastAPI + Granian + Jinja2**, served behind a **Caddy** reverse proxy that gates access through [GateKeeper](https://github.com/NovaProtocol/GateKeeper). It documents every project in the stack — detail pages, tech tags, live-site embeds with online/offline status, and a print-ready resume.
+Personal portfolio site built with **Python 3.14 + FastAPI + Granian + Jinja2**, served behind a **Caddy** reverse proxy that gates access through [GateKeeper](https://github.com/NovaProtocol/GateKeeper). It documents every project in the stack with detail pages, tech tags, live-site embeds with online/offline status, and a print-ready resume.
 
 **Stack:** Python 3.14 + FastAPI + Granian + Jinja2 + Caddy 2-alpine
 **Docs:** MkDocs Material at `documentation/` (this site, served by FastAPI + granian on `:8005`)
@@ -11,10 +11,10 @@ Personal portfolio site built with **Python 3.14 + FastAPI + Granian + Jinja2**,
 |---------|-----------|---------------|-------------|---------|
 | **App** | `portfolio_main` | 8000 (granian) | `/*` via `:7011` | default |
 | **Documentation** | `portfolio_documentation` | 8005 (granian) | `/documentation/*` via `:7011` | default |
-| **Caddy** | `portfolio_caddy` | 7011 | — | default, gatekeeper |
+| **Caddy** | `portfolio_caddy` | 7011 | n/a | default, gatekeeper |
 
 - Caddy listens on `:7011` (loopback-only publish `127.0.0.1:7011:7011`), reachable publicly via the Cloudflare tunnel on `gatekeeper`.
-- Gate is at the **wildcard** (`gatekeeper_caddy:7000` → `gatekeeper_auth:8001` on `gatekeeper`) — local `caddy/Caddyfile` proxies without a per-app `GateKeeper gate` (wildcard per `reference/gatekeeper/caddy-setup.md`).
+- Gate is at the **wildcard** (`gatekeeper_caddy:7000` → `gatekeeper_auth:8001` on `gatekeeper`). Local `caddy/Caddyfile` proxies without a per-app `GateKeeper gate` (wildcard per `reference/gatekeeper/caddy-setup.md`).
 - `/health` is the liveness probe; gated paths enforce `gatekeeper_token` / `?access_code=` at the wildcard.
 
 ## How It Works
@@ -70,14 +70,14 @@ Portfolio/
 
 ## Design Language
 
-Informational / portfolio content with a clean, professional presentation. No app-shell portals — content-driven pages using the house base template and static assets.
+Informational / portfolio content with a clean, professional presentation. There are no app-shell portals, only content-driven pages using the house base template and static assets.
 
 ## Ports
 
 | Port | Service | Publish |
 |------|---------|---------|
-| 8000 | App (granian, internal) | not published — via Caddy `portfolio_main:8000` |
+| 8000 | App (granian, internal) | not published, served via Caddy `portfolio_main:8000` |
 | 7011 | Caddy | `127.0.0.1:7011:7011` (loopback, tunnel only) |
-| 8005 | Documentation (granian, internal) | `expose:` only — via Caddy `/documentation/*` |
+| 8005 | Documentation (granian, internal) | `expose:` only with access via Caddy `/documentation/*` |
 
-Ports are allotted in groups of 10 — Portfolio owns the **7010** block.
+Ports are allotted in groups of 10, and Portfolio owns the **7010** block.

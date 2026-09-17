@@ -1,6 +1,6 @@
 # Resume Blueprint
 
-**Module:** `apps/routes/resume.py` — `APIRouter(prefix="/resume")`
+**Module:** `apps/routes/resume.py` using `APIRouter(prefix="/resume")`
 
 Renders the resume from `data/resume.json`. Three themes, two printable pages, and a combined view.
 
@@ -8,9 +8,9 @@ Renders the resume from `data/resume.json`. Three themes, two printable pages, a
 
 | Route | Handler | Query params | Description |
 |-------|---------|--------------|-------------|
-| `GET /resume/` | `apps.routes.resume.index` | — | Resume hub — renders `resume/index.html` |
-| `GET /resume/view` | `apps.routes.resume.view` | `theme=1,2,3` (default 3), `page=1,2` (optional) | Single or combined page — `resume/view.html` (both pages) or `resume/page1.html` / `page2.html` for print |
-| `GET /resume/qr.svg` | `apps.routes.resume.qr_svg` | — | Live portfolio QR — `image/svg+xml` via `segno`, `Cache-Control: public, max-age=86400`; 404 when `contact.access_code` is absent |
+| `GET /resume/` | `apps.routes.resume.index` | n/a | Resume hub rendering `resume/index.html` |
+| `GET /resume/view` | `apps.routes.resume.view` | `theme=1,2,3` (default 3), `page=1,2` (optional) | Single or combined page using `resume/view.html` (both pages) or `resume/page1.html` / `page2.html` for print |
+| `GET /resume/qr.svg` | `apps.routes.resume.qr_svg` | n/a | Live portfolio QR serving `image/svg+xml` via `segno` with `Cache-Control: public, max-age=86400`. Returns 404 when `contact.access_code` is absent |
 
 ```python
 # apps/routes/resume.py (trimmed)
@@ -40,14 +40,14 @@ async def view(request: Request, page: int | None = None, theme: int = 3):
  return templates.TemplateResponse(request, "resume/view.html", {"resume": _RESUME, "theme": theme})
 ```
 
-## Data — `data/resume.json`
+## Data in `data/resume.json`
 
 - Single source of truth for name, contact, experience, education, skills, etc.
-- `contact.portfolio` holds the plain base URL; `contact.access_code` is the single source of truth for the portfolio code. No `portfolio_label` field is authored — one helper (`_portfolio_links()` in `apps/routes/resume.py`) derives the magic link (`?access_code=`) and the display label, feeding both the templates and the QR endpoint so the printed link and QR payload cannot drift.
-- Loaded **once at import**; a missing or malformed file is logged at `exception` level and falls back to `{}` so the app stays up (pages render empty rather than crashing).
-- `page1.html` / `view.html` omit the portfolio line and QR block when the code is absent; `/resume/qr.svg` returns 404 in that case, never 500.
-- Projects carry one shared `Source code available on request — repositories are private.` line (repos are private).
-- No DB, no migrations — edit the JSON and reload.
+- `contact.portfolio` holds the plain base URL, and `contact.access_code` is the single source of truth for the portfolio code. No `portfolio_label` field is authored. One helper (`_portfolio_links()` in `apps/routes/resume.py`) derives the magic link (`?access_code=`) and the display label, feeding both the templates and the QR endpoint so the printed link and QR payload cannot drift.
+- Loaded **once at import**. A missing or malformed file is logged at `exception` level and falls back to `{}` so the app stays up (pages render empty rather than crashing).
+- `page1.html` / `view.html` omit the portfolio line and QR block when the code is absent. `/resume/qr.svg` returns 404 in that case, never 500.
+- Projects carry one shared `Source code is available on request. Repositories are private.` line (repos are private).
+- No DB and no migrations. Edit the JSON and reload.
 
 ## Route Registration
 
@@ -61,13 +61,13 @@ Router is `APIRouter(prefix="/resume")` and aggregated in `apps/routes/__init__.
 | `resume/view.html` | `GET /resume/view` (no `page`) | Combined two-page document for print (both pages, chosen theme) |
 | `resume/page1.html` | `GET /resume/view?page=1&theme=N` | Single page 1 (profile, experience top, etc.) |
 | `resume/page2.html` | `GET /resume/view?page=2&theme=N` | Single page 2 (remaining sections) |
-| `resume/_theme.html` | included by page1/page2/view | Theme styles (1, 2, 3) — colors, typography, print rules |
+| `resume/_theme.html` | included by page1/page2/view | Theme styles (1, 2, 3) for colors, typography, and print rules |
 
-The print templates (`page1.html`, `page2.html`, `view.html`) are standalone documents — they do NOT extend `apps/templates/base.html` (only the `index.html` hub does). Theme selection is pure Jinja2 + CSS (no JS).
+The print templates (`page1.html`, `page2.html`, `view.html`) are standalone documents. They do NOT extend `apps/templates/base.html` (only the `index.html` hub does). Theme selection is pure Jinja2 + CSS (no JS).
 
 ## Themes
 
-- `theme=1, 2, 3` — validated; invalid values silently fall back to `3`.
+- `theme=1, 2, 3` is validated. Invalid values silently fall back to `3`.
 - Each theme has its own CSS variables and layout tweaks (accent color, font weight, spacing) so the same content can be rendered in three visual treatments.
 - Print: use the combined `view.html` (no `page` param) → browser print → two pages.
 
@@ -86,7 +86,7 @@ The print templates (`page1.html`, `page2.html`, `view.html`) are standalone doc
 
 - Portrait photo: `static/assets/images/resume_image.JPG`
 - Portfolio QR is served live at `GET /resume/qr.svg` (SVG via `segno`); no static QR image is committed.
-- No additional JS for the resume — pure FastAPI + Jinja2 + CSS for reliable printing.
+- No additional JS for the resume. It is pure FastAPI + Jinja2 + CSS for reliable printing.
 
 ## Crawler Discouragement
 

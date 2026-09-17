@@ -5,18 +5,18 @@
 | Layer | Choice |
 |-------|--------|
 | Runtime | Python 3.14-slim, `granian` (prod, 1 worker) / `uvicorn --reload` (dev) |
-| Framework | FastAPI modular — `create_app()` factory in `apps/__init__.py`, APIRouters in `apps/routes/` |
-| Config | `apps/config.py` — `Settings(BaseSettings)` via `pydantic-settings`, `get_config()` cached |
-| Templates | Jinja2 via `apps/templating.py` — `apps/templates/base.html` shared, per-route `templates/<sector>/` |
+| Framework | FastAPI modular with `create_app()` factory in `apps/__init__.py` and APIRouters in `apps/routes/` |
+| Config | `apps/config.py` using `Settings(BaseSettings)` via `pydantic-settings` with `get_config()` cached |
+| Templates | Jinja2 via `apps/templating.py` with `apps/templates/base.html` shared and per-route `templates/<sector>/` |
 | Static | `static/` served at `/static` via `StaticFiles` mounted in `create_app()` |
 | Data | `data/resume.json` (JSON, no DB) + `apps/data.py:PROJECTS` dict |
-| Proxy | `caddy:2-alpine` on `:7011`, loopback-only `127.0.0.1:7011:7011`, joins `gatekeeper` — gate `gatekeeper_caddy:7000 → gatekeeper_auth:8001` |
+| Proxy | `caddy:2-alpine` on `:7011` with loopback-only `127.0.0.1:7011:7011` joining `gatekeeper`. Gate is `gatekeeper_caddy:7000 → gatekeeper_auth:8001` |
 | Docs | MkDocs Material on `:8005` (`portfolio_documentation`), FastAPI + granian, via Caddy `/documentation/*` |
 | Auth | GateKeeper at the edge (`gatekeeper`); the FastAPI app holds zero auth code |
 
 ---
 
-## Modular Layout (Portfolio shape — canonical)
+## Modular Layout (Portfolio shape, canonical)
 
 ```
 Portfolio/
@@ -41,12 +41,12 @@ Portfolio/
 │ └── js/code-demo/ # engine + registrar + demos/{caddy,docker,...}.js
 ├── data/resume.json
 ├── caddy/Caddyfile + Dockerfile
-├── documentation/ # MkDocs site — FastAPI on :8005
+├── documentation/ # MkDocs site with FastAPI on :8005
 ├── Dockerfile # python:3.14-slim → granian wsgi:app on :8000
 └── compose.yaml # app + caddy + documentation
 ```
 
-The split into `apps/` sectors was chosen because Portfolio has genuinely distinct purposes (marketing home, project catalog, printable resume) that scale independently — per house convention (modular when sectors scale independently). A tiny single-purpose app would stay a monolithic `app.py` (GateKeeper shape); Portfolio graduated to sectors.
+The split into `apps/` sectors was chosen because Portfolio has genuinely distinct purposes (marketing home, project catalog, printable resume) that scale independently under the house convention for modular sectors that scale independently. A tiny single-purpose app would stay a monolithic `app.py` (GateKeeper shape), while Portfolio graduated to sectors.
 
 ---
 
@@ -70,7 +70,7 @@ def create_app() -> FastAPI:
  return app
 ```
 
-- Factory reads `get_config()` (BaseSettings, env via compose `${VAR:?}`), mounts `StaticFiles`, installs `RequestIDMiddleware` + `SecurityHeadersMiddleware` + `errors` handlers.
+- Factory reads `get_config()` (BaseSettings with env via compose `${VAR:?}`), mounts `StaticFiles`, and installs `RequestIDMiddleware`, `SecurityHeadersMiddleware`, and the `errors` handlers.
 - No env reads outside `get_config()`, no DB, no global state.
 - `from __future__ import annotations` on every module (house style).
 
@@ -89,22 +89,22 @@ class Settings(BaseSettings):
 ```
 
 ```python
-# wsgi.py — ASGI target
+# wsgi.py provides the ASGI target
 from apps import create_app
 app = create_app()
 ```
 
 ```python
-# run.py — argparse --mode
+# run.py provides argparse --mode
 import argparse, os
 parser.add_argument("--mode", choices=["debug","production"])
 os.environ["DEPLOYMENT_TYPE"] = args.mode
 uvicorn.run("apps:create_app", factory=True, host="0.0.0.0", port=8000, reload=args.mode=="debug")
 ```
 
-- Env is read via `BaseSettings` from compose `${DEPLOYMENT_TYPE:?}` — no `.env` file.
-- `wsgi.py` is `create_app()` ASGI target for `granian --interface asgi wsgi:app`.
-- Production uses `Dockerfile CMD ["granian", "--interface", "asgi", "...", "wsgi:app"]`; dev uses `uvicorn` with reload.
+- Env is read via `BaseSettings` from compose `${DEPLOYMENT_TYPE:?}` with no `.env` file.
+- `wsgi.py` is the `create_app()` ASGI target for `granian --interface asgi wsgi:app`.
+- Production uses `Dockerfile CMD ["granian", "--interface", "asgi", "...", "wsgi:app"]` while dev uses `uvicorn` with reload.
 
 ## Request Flow
 
@@ -130,31 +130,31 @@ sequenceDiagram
  Note over Caddy,App: Gate is at gatekeeper;<br/>local Caddy has no per-app GateKeeper gate<br/>handle /health { reverse_proxy portfolio_main:8000 }
 ```
 
-- App itself sees no auth — the gate enforces it. The app only renders pages and serves `/static` via `StaticFiles`.
+- App itself sees no auth because the gate enforces it. The app only renders pages and serves `/static` via `StaticFiles`.
 - Health: `GET /health` returns `{"status":"ok"}` JSON and is the compose `healthcheck` target (`python -c urllib.request.urlopen(http://127.0.0.1:8000/health)`).
 - Crawler discouragement: `GET /robots.txt` returns `User-agent: *` + `Disallow: /` as `text/plain`; the primary noindex signal is the `X-Robots-Tag: noindex, nofollow` header at the site-block level in `caddy/Caddyfile` (covers app, `/static`, and the separately-containerised docs service), with a `<meta name="robots">` tag in `base.html` as defence-in-depth.
 
 ## Data Layer
 
-No database — the only persistent content is:
+No database. The only persistent content is:
 
-- `apps/data.py:PROJECTS` — dict of project metadata (titles, descriptions, tech stacks, links). `ordered_projects()` in `apps/routes/projects.py` returns active entries.
-- `data/resume.json` — loaded once at import in `apps/routes/resume.py:_load_resume()`. Missing or malformed JSON logs and returns `{}`.
+- `apps/data.py:PROJECTS` holds the dict of project metadata (titles, descriptions, tech stacks, links). `ordered_projects()` in `apps/routes/projects.py` returns active entries.
+- `data/resume.json` loads once at import in `apps/routes/resume.py:_load_resume()`. Missing or malformed JSON logs and returns `{}`.
 
 This keeps the portfolio a **single deployable** with no volumes or migrations.
 
 ## Security & Auth
 
-- Gate is at the wildcard (`gatekeeper_caddy:7000` → `gatekeeper_auth:8001` on `gatekeeper`) — local `caddy/Caddyfile` has zero per-app `forward_auth` (per `reference/gatekeeper/caddy-setup.md` wildcard primary). Apex `gatekeeper_token` cookie (HttpOnly, Lax) covers all subdomains.
+- Gate is at the wildcard (`gatekeeper_caddy:7000` → `gatekeeper_auth:8001` on `gatekeeper`). Local `caddy/Caddyfile` has zero per-app `forward_auth` (per `reference/gatekeeper/caddy-setup.md` wildcard primary). Apex `gatekeeper_token` cookie (HttpOnly, Lax) covers all subdomains.
 - No per-app accounts in Portfolio itself (reserved `SECRET_KEY` in config for future use).
-- `RequestIDMiddleware` + `SecurityHeadersMiddleware` on every response; `X-Request-ID` propagated to `structlog` context and error envelope `{error:{code,message,request_id}}`.
+- `RequestIDMiddleware` + `SecurityHeadersMiddleware` on every response, with `X-Request-ID` propagated to `structlog` context and error envelope `{error:{code,message,request_id}}`.
 
 ## Errors
 
-JS: `console.error({status, request_id, stack})` + toast; Server: `structlog` JSON + `X-Request-ID` to docker logs; envelope `{error:{code,message,request_id}}`. No traceback to client.
+JS: `console.error({status, request_id, stack})` + toast. Server: `structlog` JSON + `X-Request-ID` to docker logs with envelope `{error:{code,message,request_id}}`. No traceback to client.
 
 ## Formatting Conventions
 
 - `from __future__ import annotations` on every module.
 - `ruff` with `line-length = 100`, `quote-style = "double"`, `isort` with `known-first-party = ["apps"]`.
-- `requirements.txt` uses `>=` lower bounds (`fastapi>=0.115`, `granian>=2`) — no `==` pins unless justified.
+- `requirements.txt` uses `>=` lower bounds (`fastapi>=0.115`, `granian>=2`) with no `==` pins unless justified.
