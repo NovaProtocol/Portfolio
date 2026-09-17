@@ -1,6 +1,6 @@
 # Home Blueprint
 
-**Module:** `apps/routes/home.py` — `APIRouter`
+**Module:** `apps/routes/home.py` using `APIRouter`
 
 Serves the landing page and the public health probe.
 
@@ -8,8 +8,8 @@ Serves the landing page and the public health probe.
 
 | Route | Handler | Description |
 |-------|---------|-------------|
-| `GET /` | `apps.routes.home.index` | Renders `home/index.html` — hero, project highlights, live embeds |
-| `GET /health` | `apps.routes.home.health` | Returns `{"status":"ok"}` JSON — compose healthcheck and Caddy bypass |
+| `GET /` | `apps.routes.home.index` | Renders `home/index.html` with hero, project highlights, and live embeds |
+| `GET /health` | `apps.routes.home.health` | Returns `{"status":"ok"}` JSON for the compose healthcheck and Caddy bypass |
 
 ```python
 # apps/routes/home.py
@@ -53,7 +53,7 @@ Registered centrally in `apps/routes/__init__.py` and included in `apps/__init__
 }
 ```
 
-Gate is at the **wildcard** (`gatekeeper`) — local `Caddyfile` has zero per-app `forward_auth` (see live `caddy/Caddyfile`). `/health` is the liveness probe; wildcard enforces `gatekeeper_token` / `?access_code=` before Caddy proxies.
+Gate is at the **wildcard** (`gatekeeper`). Local `Caddyfile` has zero per-app `forward_auth` (see live `caddy/Caddyfile`). `/health` is the liveness probe; wildcard enforces `gatekeeper_token` / `?access_code=` before Caddy proxies.
 
 ## Healthcheck
 

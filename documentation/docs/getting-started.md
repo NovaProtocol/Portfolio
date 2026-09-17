@@ -17,7 +17,7 @@ git clone https://github.com/NovaProtocol/Portfolio
 cd Portfolio
 ```
 
-Env vars are **injected by compose interpolation** — no `.env` file is read. Documented in `.env.example` (the source of truth):
+Env vars are **injected by compose interpolation** with no `.env` file read. They are documented in `.env.example` (the source of truth):
 
 | Variable | Required | Description | How injected |
 |----------|----------|-------------|--------------|
@@ -47,7 +47,7 @@ python run.py
 # → http://127.0.0.1:8000/resume/
 ```
 
-`run.py` uses `argparse --mode debug/production` and runs `uvicorn apps:create_app --reload` in debug or `granian --interface asgi wsgi:app` in production — actual `Dockerfile EXPOSE 8000` / compose healthcheck `127.0.0.1:8000/health` (see Dockerfile).
+`run.py` uses `argparse --mode debug/production` and runs `uvicorn apps:create_app --reload` in debug or `granian --interface asgi wsgi:app` in production, matching the actual `Dockerfile EXPOSE 8000` / compose healthcheck `127.0.0.1:8000/health` (see Dockerfile).
 
 ---
 
@@ -57,13 +57,13 @@ python run.py
 export DEPLOYMENT_TYPE=PRODUCTION
 docker compose up -d --build
 docker compose ps # health: portfolio_main (healthy)
-curl -i http://127.0.0.1:7011/health # 200 — bypasses GateKeeper
+curl -i http://127.0.0.1:7011/health # 200 with GateKeeper bypassed
 curl -i http://127.0.0.1:7011/ # 302 → GateKeeper login (no cookie)
 ```
 
 | URL | Result |
 |-----|--------|
-| `http://127.0.0.1:7011/health` | `{"status":"ok"}` — via Caddy to `portfolio_main:8000` |
+| `http://127.0.0.1:7011/health` | `{"status":"ok"}` via Caddy to `portfolio_main:8000` |
 | `http://127.0.0.1:7011/documentation/` | via Caddy to `portfolio_documentation:8005` (wildcard-gated when fronted) |
 | `http://127.0.0.1:7011/?access_code=<code>` | 302 + `Set-Cookie` → `gatekeeper_token`, param stripped → authed |
 
@@ -82,7 +82,7 @@ docker network create gatekeeper # GateKeeper-owned; only gatekeeper_caddy joins
 docker compose up -d --build documentation
 # → http://127.0.0.1:7011/documentation/ (via Caddy; GateKeeper rules decide the gate)
 
-# Direct (no gate) — container network only
+# Direct access without the gate on the container network only
 docker compose exec documentation curl -i http://127.0.0.1:8005/health # 200
 
 # Local preview (no Docker)
@@ -131,4 +131,4 @@ Add an entry to `PROJECTS` in `apps/projects/routes.py` (see README for the full
 DEPLOYMENT_TYPE=DEBUG python run.py # verify /projects/ and /projects/info/<slug>/
 ```
 
-No database, no migrations — content lives in code and `data/resume.json`.
+No database and no migrations. Content lives in code and `data/resume.json`.

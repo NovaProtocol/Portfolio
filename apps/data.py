@@ -162,7 +162,7 @@ PROJECTS: dict[str, dict] = {
     "mle-review": {
         "active": True,
         "title": "MELE Review",
-        "subtitle": "Board exam reviewer — Mechanical Engineering Licensure Exam",
+        "subtitle": "Board exam reviewer for the Mechanical Engineering Licensure Exam",
         "description": [
             "A self-hosted practice site for the Mechanical Engineering Licensure Exam. Upload past-board-exam PDFs as question sources, and the platform turns them into a searchable question bank: filter by answered/unanswered/flagged, search across question text and choices, reveal the correct answer with green/red feedback, and flag questions for review.",
             "Each question carries a notebook-style solution editor. Build solutions from blocks: constants with unit autosuggestion, MathQuill formula blocks, and answer blocks. Hitting Run evaluates the formulas top-to-bottom with a unit-aware solver, auto-solves single-variable equations by binary search, and normalizes metric/English conventions. Solutions persist per question and render read-only for anyone, while a write-access password lets the owner edit and upload.",
@@ -285,7 +285,7 @@ PROJECTS: dict[str, dict] = {
         ],
         "buttons": [],
     },
-    # intentionally public — SVG embeds (GitHub has no cookie jar, gate would break)
+    # Intentionally public. SVG embeds carry no cookies because GitHub has no cookie jar and a gate would break them.
     "novaprotocol": {
         "active": True,
         "title": "NovaProtocol",
