@@ -37,7 +37,7 @@ Portfolio/
 │ │ └── resume.py # GET /resume/ , GET /resume/view, GET /resume/qr.svg
 │ └── data.py # PROJECTS dict + helpers
 ├── static/
-│ ├── assets/images/{portfolio-qr,resume_image,water-billing-system}/
+│ ├── assets/images/{resume_image,water-billing-system}/
 │ └── js/code-demo/ # engine + registrar + demos/{caddy,docker,...}.js
 ├── data/resume.json
 ├── caddy/Caddyfile + Dockerfile
