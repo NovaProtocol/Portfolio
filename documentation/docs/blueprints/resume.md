@@ -46,7 +46,8 @@ async def view(request: Request, page: int | None = None, theme: int = 3):
 - `contact.portfolio` holds the plain base URL, and `contact.access_code` is the single source of truth for the portfolio code. No `portfolio_label` field is authored. One helper (`_portfolio_links()` in `apps/routes/resume.py`) derives the magic link (`?access_code=`) and the display label, feeding both the templates and the QR endpoint so the printed link and QR payload cannot drift.
 - Loaded **once at import**. A missing or malformed file is logged at `exception` level and falls back to `{}` so the app stays up (pages render empty rather than crashing).
 - `page1.html` / `view.html` omit the portfolio line and QR block when the code is absent. `/resume/qr.svg` returns 404 in that case, never 500.
-- Projects carry one shared `Source code is available on request. Repositories are private.` line (repos are private).
+- Projects carry one shared `Live demos of selected projects are hosted on my portfolio. Source code is available on request. Repositories are private.` line (repos are private).
+- A project with a live demo carries a `url` in `resume.json`, rendering a `Live demo: <url>` line under its tech stack. Projects without one (SolveSpace, halted) omit it via the `{% if proj.url %}` guard.
 - No DB and no migrations. Edit the JSON and reload.
 
 ## Route Registration
