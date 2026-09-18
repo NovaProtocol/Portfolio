@@ -74,6 +74,7 @@
     {
       "name": "Water Billing System",
       "tech": "React Native, NFC, Docker, MySQL",
+      "url": "https://water-billing-system.projectnova.download/",
       "highlights": [
         "Designed an end-to-end utility billing workflow that unifies meter reading, tariff computation, and bill distribution into a single process",
         "Offline-first NFC meter reading with on-device cryptographic key derivation so meter data never crosses the network",
@@ -85,6 +86,7 @@
     {
       "name": "MELE Review",
       "tech": "Python, MySQL, Docker",
+      "url": "https://melereview.projectnova.download/",
       "highlights": [
         "Built a unit-aware engineering equation solver for multi-step formulas across metric and English conventions",
         "Developed a Mechanical Engineering Licensure Exam reviewer with a self-maintained question bank",
@@ -103,6 +105,7 @@
     {
       "name": "GateKeeper",
       "tech": "Python, SQLite, Docker",
+      "url": "https://gatekeeper.projectnova.download/",
       "highlights": [
         "Single sign-on auth gate with signed, tamper-evident cookies and forward-auth session verification",
         "Admin panel to issue and revoke access codes, with a backup code so the owner is never locked out",
