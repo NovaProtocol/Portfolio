@@ -18,7 +18,6 @@ except ImportError:
 # plus a redeploy; they are deliberately not env vars.
 _STATIC_MAX_AGE = 86400
 _HTML_MAX_AGE = 300
-_QR_MAX_AGE = 3600
 _MISC_MAX_AGE = 3600
 
 # Debug value: forbids any cache from storing the response at all, so gated
@@ -27,7 +26,6 @@ _NO_STORE = "no-store"
 
 # Path classes. Anything unmatched falls through to the short HTML lifespan.
 _STATIC_PREFIX = "/static/"
-_QR_PATHS = frozenset({"/resume/qr.svg"})
 _MISC_PATHS = frozenset({"/robots.txt", "/health"})
 
 
@@ -40,8 +38,6 @@ def _cache_control_for(path: str) -> str:
         return _public_max_age(_STATIC_MAX_AGE)
     if path in _MISC_PATHS:
         return _public_max_age(_MISC_MAX_AGE)
-    if path in _QR_PATHS:
-        return _public_max_age(_QR_MAX_AGE)
     return f"private, max-age={_HTML_MAX_AGE}"
 
 

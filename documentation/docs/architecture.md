@@ -34,7 +34,7 @@ Portfolio/
 │ │ ├── __init__.py # aggregates home + projects + resume routers
 │ │ ├── home.py # GET / , GET /health, GET /robots.txt
 │ │ ├── projects.py # GET /projects/ , GET /projects/info/{slug}/
-│ │ └── resume.py # GET /resume/ , GET /resume/view, GET /resume/qr.svg
+│ │ └── resume.py # GET /resume/ , GET /resume/view
 │ └── data.py # PROJECTS dict + helpers
 ├── static/
 │ ├── assets/images/{resume_image,water-billing-system}/
@@ -137,7 +137,7 @@ sequenceDiagram
 
 ## Cache Headers
 
-Cache behavior is decided in the app, not in Cloudflare or the `Caddyfile`. `CacheControlMiddleware` takes one boolean (`config.DEBUG`) and sets `Cache-Control` on every response after the handler runs, so mounted `StaticFiles`, HTML routes, `/robots.txt`, `/health`, error pages, and the QR endpoint are all covered by a single mechanism (a `StaticFiles` wrapper would cover only `/static`).
+Cache behavior is decided in the app, not in Cloudflare or the `Caddyfile`. `CacheControlMiddleware` takes one boolean (`config.DEBUG`) and sets `Cache-Control` on every response after the handler runs, so mounted `StaticFiles`, HTML routes, `/robots.txt`, `/health`, and error pages are all covered by a single mechanism (a `StaticFiles` wrapper would cover only `/static`).
 
 - **`DEPLOYMENT_TYPE=DEBUG`** (`config.DEBUG`, case-insensitive) — overwrites `Cache-Control` on every response with exactly `no-store`. `no-cache` is weaker: it still permits a cache to store gated bytes and only forces revalidation, and `private` still permits storing on shared infrastructure. `no-store` forbids storing outright. Overwriting rather than filling gaps means no route can accidentally stay public.
 - **Any other value (production)** — fills `Cache-Control` only when the handler set none, so an explicit route header stays authoritative. Lifespans are `UPPER_SNAKE_CASE` constants at the top of `apps/middleware.py`; retuning one is a one-line edit plus a redeploy (deliberately not env vars — four integers do not justify new required config).
@@ -145,7 +145,6 @@ Cache behavior is decided in the app, not in Cloudflare or the `Caddyfile`. `Cac
 | Class | Paths | Header |
 |-------|-------|--------|
 | Static assets | `/static/*` | `public, max-age=86400` |
-| QR SVG | `/resume/qr.svg` | `public, max-age=3600` |
 | Misc small | `/robots.txt`, `/health` | `public, max-age=3600` |
 | HTML (default) | everything else | `private, max-age=300` |
 

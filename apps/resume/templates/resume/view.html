@@ -100,9 +100,6 @@
         .demo-line a { color: var(--text-color); }
         .resume-projects-wrap { display: flex; gap: 1rem; align-items: flex-start; }
         .resume-projects-list { flex: 1; min-width: 0; }
-        .resume-projects-qr { flex-shrink: 0; text-align: center; }
-        .resume-projects-qr img { width: 80px; height: 80px; border: 1px solid #ddd; }
-        .resume-projects-qr p { font-size: 0.72em; color: var(--light-muted); margin: 0.2rem 0 0; }
         .skill-row { margin: 0 0 0.4rem; }
         .skill-cat { font-weight: 700; }
     </style>
@@ -125,9 +122,6 @@
             {% if resume.contact.github %}
             <p class="contact-line"><a href="{{ resume.contact.github }}">GitHub: {{ resume.contact.github }}</a></p>
             {% endif %}
-            {% if portfolio_url %}
-            <p class="contact-line" style="word-break: break-all;"><a href="{{ portfolio_url }}">Portfolio: {{ portfolio_label }}</a></p>
-            {% endif %}
         </div>
         {% if resume.photo %}
         <img class="resume-photo" src="{{ url_for('static', filename=resume.photo) }}" alt="Profile photo">
@@ -148,6 +142,9 @@
                 <span class="period">{{ edu.years }}</span>
             </div>
             <p class="org" style="margin-bottom:0;">{{ edu.degree }}</p>
+            {% if edu.status %}
+            <p class="org" style="margin-bottom:0;">{{ edu.status }}</p>
+            {% endif %}
             {% if edu.awards %}
             <ul style="margin-top:0.2rem;">
                 {% for award in edu.awards %}
@@ -212,6 +209,9 @@
                     {% if proj.tech %}
                     <p class="tech-stack">Tech Stack: {{ proj.tech }}</p>
                     {% endif %}
+                    {% if proj.status_line %}
+                    <p class="demo-line">{{ proj.status_line }}</p>
+                    {% endif %}
                     {% if proj.url %}
                     <p class="demo-line"><strong>Live demo:</strong> <a href="{{ proj.url }}">{{ proj.url }}</a></p>
                     {% endif %}
@@ -223,12 +223,6 @@
                 </div>
                 {% endfor %}
             </div>
-            {% if portfolio_url %}
-            <div class="resume-projects-qr">
-                <img src="/resume/qr.svg" alt="Portfolio QR code">
-                <p>Scan for my project portfolio</p>
-            </div>
-            {% endif %}
         </div>
     </section>
     {% endif %}

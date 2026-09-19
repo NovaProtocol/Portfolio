@@ -85,9 +85,6 @@
             {% if resume.contact.github %}
             <p class="contact-line"><a href="{{ resume.contact.github }}">GitHub: {{ resume.contact.github }}</a></p>
             {% endif %}
-            {% if portfolio_url %}
-            <p class="contact-line" style="word-break: break-all;"><a href="{{ portfolio_url }}">Portfolio: {{ portfolio_label }}</a></p>
-            {% endif %}
         </div>
         {% if resume.photo %}
         <img class="resume-photo" src="{{ url_for('static', filename=resume.photo) }}" alt="Profile photo">
@@ -108,6 +105,9 @@
                 <span class="period">{{ edu.years }}</span>
             </div>
             <p class="org" style="margin-bottom:0;">{{ edu.degree }}</p>
+            {% if edu.status %}
+            <p class="org" style="margin-bottom:0;">{{ edu.status }}</p>
+            {% endif %}
             {% if edu.awards %}
             <ul style="margin-top:0.2rem;">
                 {% for award in edu.awards %}
