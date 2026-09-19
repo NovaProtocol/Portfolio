@@ -74,7 +74,6 @@ async def handle_http_exception(request: Request, exc: StarletteHTTPException):
     else:
         _log("warning", "http_error", request, status_code=code, error_code=title)
     from pathlib import Path as _Path
-    from jinja2 import ChoiceLoader, FileSystemLoader
     from fastapi.templating import Jinja2Templates as _JT
     # reuse global templates if available
     try:
