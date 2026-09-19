@@ -13,19 +13,9 @@ __pycache__/
 .idea/
 *.code-workspace
 .DS_Store
-/docs/
 documentation/site/
 
-# AI scratch — never commit
-.agents/
-.superpowers/
-.opencode/
-.claude/
-.cursor/
-.continue/
-AGENTS.md
-CLAUDE.md
-GEMINI.md
+# Local scratch
 scratch/
 *.tmp
 *.bak
