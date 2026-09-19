@@ -4,6 +4,18 @@ Personal portfolio site built with Python 3.14 + FastAPI + Granian + Jinja2, ser
 
 **Stack:** Python 3.14 + FastAPI + Granian + Jinja2 + Caddy 2-alpine. The FastAPI app runs under granian (ASGI, 1 worker) with Jinja2 templates and StaticFiles.
 
+## How it works
+
+```text
+Browser → GateKeeper (wildcard, apex domain)
+            └─ 200 on pass → Caddy :7011
+                                   ├─ /health          → portfolio_main:8000
+                                   ├─ /documentation/* → portfolio_documentation:8005
+                                   └─ everything else  → portfolio_main:8000
+```
+
+`portfolio_main` is the FastAPI app: one template tree split across `apps/home`, `apps/projects` and `apps/resume`, a `PROJECTS` dict that drives the project list and detail pages, and a middleware stack that adds a request id, security headers and cache-control. `portfolio_documentation` is the MkDocs site in `documentation/`. Caddy is the only published port and holds no per-app auth — the gate is at the apex wildcard, so every path is decided by GateKeeper rules before Caddy sees the request.
+
 ## Adding a Project
 
 Add an entry to the `PROJECTS` dict in `apps/projects/routes.py`:
@@ -87,3 +99,12 @@ See `compose.yaml`: `portfolio_caddy` joins `gatekeeper_dynamic` (external `gate
 ## Errors
 
 JS: `console.error({status, request_id, stack})` + toast; Server: structlog JSON + X-Request-ID to docker logs; envelope `{error:{code,message,request_id}}`. No traceback to client.
+
+## Tests
+
+```bash
+uv run --no-project --with pytest --with-requirements requirements.txt \
+  --with-requirements requirements-dev.txt pytest -q
+```
+
+The suite is a three-case smoke check — `/health` returns `{"status": "ok"}`, `/` renders HTML, and an unknown project slug returns 404. It asserts the app constructs and serves; it does not cover every route.

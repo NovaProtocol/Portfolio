@@ -167,7 +167,7 @@ This keeps the portfolio a **single deployable** with no volumes or migrations.
 
 ## Security & Auth
 
-- Gate is at the wildcard (`gatekeeper_caddy:7000` → `gatekeeper_auth:8001` on `gatekeeper`). Local `caddy/Caddyfile` has zero per-app `forward_auth` (per `reference/gatekeeper/caddy-setup.md` wildcard primary). Apex `gatekeeper_token` cookie (HttpOnly, Lax) covers all subdomains.
+- Gate is at the wildcard (`gatekeeper_caddy:7000` → `gatekeeper_auth:8001` on `gatekeeper`). Local `caddy/Caddyfile` has zero per-app `forward_auth`; the wildcard is the primary gate. Apex `gatekeeper_token` cookie (HttpOnly, Lax) covers all subdomains.
 - No per-app accounts in Portfolio itself (reserved `SECRET_KEY` in config for future use).
 - `RequestIDMiddleware` + `SecurityHeadersMiddleware` on every response, with `X-Request-ID` propagated to `structlog` context and error envelope `{error:{code,message,request_id}}`.
 
