@@ -113,7 +113,7 @@ PROJECTS: dict[str, dict] = {
             "Full technical documentation with API reference (MkDocs)",
         ],
         "status": "operational",
-        "note": "Update: Did not get hired",
+        "note": "Ongoing: built for a live utility client",
         "reason": (
             "Utility billing handles some of the most sensitive data there is: "
             "customer identities, meter records, payments. This project proves I can "
