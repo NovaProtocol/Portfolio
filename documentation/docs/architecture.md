@@ -32,7 +32,7 @@ Portfolio/
 │ ├── templates/base.html
 │ ├── routes/ # APIRouters
 │ │ ├── __init__.py # aggregates home + projects + resume routers
-│ │ ├── home.py # GET / , GET /health, GET /robots.txt
+│ │ ├── home.py # GET / , GET /health
 │ │ ├── projects.py # GET /projects/ , GET /projects/info/{slug}/
 │ │ └── resume.py # GET /resume/ , GET /resume/view
 │ └── data.py # PROJECTS dict + helpers
@@ -133,11 +133,11 @@ sequenceDiagram
 
 - App itself sees no auth because the gate enforces it. The app only renders pages and serves `/static` via `StaticFiles`.
 - Health: `GET /health` returns `{"status":"ok"}` JSON and is the compose `healthcheck` target (`python -c urllib.request.urlopen(http://127.0.0.1:8000/health)`).
-- Crawler discouragement: `GET /robots.txt` returns `User-agent: *` + `Disallow: /` as `text/plain`; the primary noindex signal is the `X-Robots-Tag: noindex, nofollow` header at the site-block level in `caddy/Caddyfile` (covers app, `/static`, and the separately-containerised docs service), with a `<meta name="robots">` tag in `base.html` as defence-in-depth.
+- Crawler discouragement: the primary noindex signal is the `X-Robots-Tag: noindex, nofollow` header at the site-block level in `caddy/Caddyfile` (covers app, `/static`, and the separately-containerised docs service), with a `<meta name="robots">` tag in `base.html` as defence-in-depth. `/robots.txt` is **no longer served by the app**: GateKeeper answers it from a custom page, matched by `*.projectnova.download/robots.txt` and served only where the host's rules allow `none` (Portfolio's group and the apex do). See the GateKeeper docs § Custom Pages.
 
 ## Cache Headers
 
-Cache behavior is decided in the app, not in Cloudflare or the `Caddyfile`. `CacheControlMiddleware` takes one boolean (`config.DEBUG`) and sets `Cache-Control` on every response after the handler runs, so mounted `StaticFiles`, HTML routes, `/robots.txt`, `/health`, and error pages are all covered by a single mechanism (a `StaticFiles` wrapper would cover only `/static`).
+Cache behavior is decided in the app, not in Cloudflare or the `Caddyfile`. `CacheControlMiddleware` takes one boolean (`config.DEBUG`) and sets `Cache-Control` on every response after the handler runs, so mounted `StaticFiles`, HTML routes, `/health`, and error pages are all covered by a single mechanism (a `StaticFiles` wrapper would cover only `/static`).
 
 - **`DEPLOYMENT_TYPE=DEBUG`** (`config.DEBUG`, case-insensitive) — overwrites `Cache-Control` on every response with exactly `no-store`. `no-cache` is weaker: it still permits a cache to store gated bytes and only forces revalidation, and `private` still permits storing on shared infrastructure. `no-store` forbids storing outright. Overwriting rather than filling gaps means no route can accidentally stay public.
 - **Any other value (production)** — fills `Cache-Control` only when the handler set none, so an explicit route header stays authoritative. Lifespans are `UPPER_SNAKE_CASE` constants at the top of `apps/middleware.py`; retuning one is a one-line edit plus a redeploy (deliberately not env vars — four integers do not justify new required config).
@@ -145,7 +145,7 @@ Cache behavior is decided in the app, not in Cloudflare or the `Caddyfile`. `Cac
 | Class | Paths | Header |
 |-------|-------|--------|
 | Static assets | `/static/*` | `public, max-age=86400` |
-| Misc small | `/robots.txt`, `/health` | `public, max-age=3600` |
+| Misc small | `/health` | `public, max-age=3600` |
 | HTML (default) | everything else | `private, max-age=300` |
 
 Why this matters: an origin that sends no `Cache-Control` but does send `ETag` / `Last-Modified` is heuristically cacheable, which is how gated images ended up stored at the edge. Sending an explicit header removes that ambiguity — either a deliberate lifespan or `no-store`.

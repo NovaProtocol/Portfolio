@@ -26,7 +26,7 @@ _NO_STORE = "no-store"
 
 # Path classes. Anything unmatched falls through to the short HTML lifespan.
 _STATIC_PREFIX = "/static/"
-_MISC_PATHS = frozenset({"/robots.txt", "/health"})
+_MISC_PATHS = frozenset({"/health"})
 
 
 def _public_max_age(seconds: int) -> str:
