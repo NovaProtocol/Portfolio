@@ -1,6 +1,6 @@
 {
   "name": "Khyles Gibrian Ramos",
-  "headline": "Mechanical Engineer | Self-Taught Software Developer | Systems & Automation",
+  "headline": "Systems & Automation Engineer | Software, Embedded Systems & Mechanical Design",
   "photo": "assets/images/resume_image.JPG",
   "contact": {
     "address": "Brgy. Mateuna, Tayabas, Quezon",
@@ -8,16 +8,16 @@
     "email": "khyles.gibrian.ramos19@gmail.com",
     "linkedin": "https://www.linkedin.com/in/khyles-gibrian-ramos/",
     "github": "https://github.com/NovaProtocol",
-    "portfolio": "https://portfolio.projectnova.download",
-    "access_code": "resume-access"
+    "portfolio": "https://portfolio.projectnova.download"
   },
-  "summary": "Mechanical Engineering graduate with a self-taught software background developed over several years outside the classroom, spanning embedded systems, backend development, and applied machine learning. Professional experience includes AutoCAD facility design, safety inspection, and technical documentation. Builds independently-driven technical projects as a complement to formal mechanical engineering training, spanning neural network model training and sandboxed execution environments.",
+  "summary": "Mechanical Engineering graduate who builds software end to end: embedded systems, backend services, and applied machine learning, shipped as working systems rather than prototypes. Professional experience covers AutoCAD facility design, safety inspection, and technical documentation for university facilities. Works across both sides of a problem, from mechanical design and fabrication through to the software that automates it.",
   "education": [
     {
       "level": "Tertiary",
       "school": "Southern Luzon State University",
       "degree": "Bachelor of Science in Mechanical Engineering",
-      "years": "2021-2026",
+      "years": "2021 – 2026",
+      "status": "Graduating <MONTH> 2026",
       "awards": ["DOST S&T Scholarship", "Dean's Lister"]
     }
   ],
@@ -34,18 +34,30 @@
   "certifications": [
     {
       "title": "BOSH Safety Officer 2 (SO2)",
-      "issuer": "",
+      "issuer": "DOLE – Bureau of Working Conditions",
       "year": "2024",
       "detail": "40-Hour OSH Training"
     },
     {
       "title": "TESDA SMAW NC I",
-      "issuer": "",
+      "issuer": "TESDA",
       "year": "2023",
       "detail": ""
     }
   ],
   "experience": [
+    {
+      "role": "Independent technical contributor",
+      "organization": "ResNet-18 Signature Verification (undergraduate thesis support)",
+      "period": "Aug 2025 - Nov 2025",
+      "responsibilities": [
+        "Built a ResNet-18 model with Triplet Loss from scratch for signature verification, reaching 86.96% validation accuracy on the thesis author's reference dataset",
+        "Built preprocessing pipelines to normalize and format image datasets for training",
+        "Integrated the trained model into a backend service for on-demand inference",
+        "Delivered working code and documentation to support the thesis defense",
+        "Collaborated with the thesis author to translate verification requirements into a working model pipeline"
+      ]
+    },
     {
       "role": "Physical Plant Facilities Department - PTP Program",
       "organization": "Southern Luzon State University",
@@ -54,19 +66,7 @@
         "Designed facility layouts and emergency fire exit plans in AutoCAD, applying code-compliant safety and egress standards",
         "Performed inspections of emergency lighting and fire suppression equipment against OSH compliance standards",
         "Conducted facility asset audits and implemented an improved tracking system for university property",
-        "Coordinated documentation and communication across departments to support daily facility operations"
-      ]
-    },
-    {
-      "role": "Independent technical contributor for a university thesis project",
-      "organization": "Thesis Support for ResNet-18 Signature Verification",
-      "period": "Aug 2025 - Nov 2025",
-      "responsibilities": [
-        "Self-taught ResNet-18 with Triplet Loss from scratch to build a signature verification model, achieving 86.96% validation accuracy on the thesis author's reference dataset",
-        "Built preprocessing pipelines to normalize and format image datasets for training",
-        "Integrated the trained model into a backend service for on-demand inference",
-        "Delivered working code and documentation to support the thesis defense",
-        "Collaborated with the thesis author to translate verification requirements into a working model pipeline"
+        "<METRIC: e.g. asset records migrated / inspection items covered>"
       ]
     }
   ],
@@ -75,12 +75,12 @@
       "name": "Water Billing System",
       "tech": "React Native, NFC, Docker, MySQL",
       "url": "https://water-billing-system.projectnova.download/",
+      "status_line": "Live demo — architecture and core modules complete",
       "highlights": [
         "Designed an end-to-end utility billing workflow that unifies meter reading, tariff computation, and bill distribution into a single process",
         "Offline-first NFC meter reading with on-device cryptographic key derivation so meter data never crosses the network",
         "Automated 5-tier progressive tariff billing with late penalties and waterfall payment application",
-        "Customer and payment data isolated in internal networks with role-scoped access",
-        "Architecture and core modules complete."
+        "Customer and payment data isolated in internal networks with role-scoped access"
       ]
     },
     {
@@ -115,24 +115,24 @@
   ],
   "skills": [
     {
-      "category": "Mechanical Design & Fabrication",
-      "value": "AutoCAD, Fusion 360, OnShape, SMAW, 3D Printing, Blueprint Reading, Prototyping"
-    },
-    {
-      "category": "Safety & Compliance",
-      "value": "DOLE BOSH SO2, OSH Standards, Safety Inspection, Fire Safety Planning"
+      "category": "Software Development",
+      "value": "Python, C++, JavaScript, TypeScript, SQL, FastAPI, Flask, React Native"
     },
     {
       "category": "Embedded Systems & Automation",
       "value": "Arduino, ESP32, Raspberry Pi, NFC, Sensor Interfaces, Hardware/Software Integration"
     },
     {
-      "category": "Software Development",
-      "value": "Python, C++, JavaScript, TypeScript, SQL, FastAPI, Flask, React Native"
-    },
-    {
       "category": "Data & Infrastructure",
       "value": "MySQL, SQLite, Docker, Linux, Cloudflare Tunnel, Caddy, Gunicorn"
+    },
+    {
+      "category": "Safety & Compliance",
+      "value": "DOLE BOSH SO2, OSH Standards, Safety Inspection, Fire Safety Planning"
+    },
+    {
+      "category": "Mechanical Design & Fabrication",
+      "value": "AutoCAD, Fusion 360, OnShape, SMAW, 3D Printing, Blueprint Reading, Prototyping"
     }
   ]
 }

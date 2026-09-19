@@ -1,12 +1,11 @@
 from __future__ import annotations
 
-import io
 import json
 import logging
 from pathlib import Path
 
 from fastapi import APIRouter, HTTPException, Request
-from fastapi.responses import HTMLResponse, Response
+from fastapi.responses import HTMLResponse
 
 from apps.templating import templates
 
@@ -30,18 +29,8 @@ _RESUME = _load_resume()
 _THEMES = {1, 2, 3}
 
 
-def _portfolio_links() -> tuple[str, str]:
-    contact = _RESUME.get("contact", {}) if isinstance(_RESUME, dict) else {}
-    base = (contact.get("portfolio") or "").strip().rstrip("/")
-    code = (contact.get("access_code") or "").strip()
-    if not base or not code:
-        return "", ""
-    return f"{base}/?access_code={code}", f"{base} (access code: {code})"
-
-
 def _resume_context(extra: dict | None = None) -> dict:
-    magic_link, label = _portfolio_links()
-    context: dict = {"resume": _RESUME, "portfolio_url": magic_link, "portfolio_label": label}
+    context: dict = {"resume": _RESUME}
     if extra:
         context.update(extra)
     return context
@@ -50,24 +39,6 @@ def _resume_context(extra: dict | None = None) -> dict:
 @router.get("/", response_class=HTMLResponse)
 async def index(request: Request):
     return templates.TemplateResponse(request, "resume/index.html", _resume_context())
-
-
-@router.get("/qr.svg")
-async def qr_svg():
-    magic_link, _label = _portfolio_links()
-    if not magic_link:
-        raise HTTPException(status_code=404, detail="Not found")
-    import segno
-
-    qr = segno.make(magic_link)
-    buf = io.BytesIO()
-    qr.save(buf, kind="svg", scale=10, border=2)
-    # No explicit header: the cache middleware applies the QR lifespan in
-    # production and a blanket no-store in debug.
-    return Response(
-        content=buf.getvalue(),
-        media_type="image/svg+xml",
-    )
 
 
 @router.get("/view", response_class=HTMLResponse)

@@ -65,7 +65,7 @@ curl -i http://127.0.0.1:7011/ # 302 → GateKeeper login (no cookie)
 |-----|--------|
 | `http://127.0.0.1:7011/health` | `{"status":"ok"}` via Caddy to `portfolio_main:8000` |
 | `http://127.0.0.1:7011/documentation/` | via Caddy to `portfolio_documentation:8005` (wildcard-gated when fronted) |
-| `http://127.0.0.1:7011/?access_code=<code>` | 302 + `Set-Cookie` → `gatekeeper_token`, param stripped → authed |
+| `http://127.0.0.1:7011/?access_code=<code>` | 302 + `Set-Cookie` → `gatekeeper_token`, param stripped → authed. `<code>` is any code issued in the GateKeeper panel |
 
 Prerequisite networks (run once):
 

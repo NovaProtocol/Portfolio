@@ -10,7 +10,6 @@ Renders the resume from `data/resume.json`. Three themes, two printable pages, a
 |-------|---------|--------------|-------------|
 | `GET /resume/` | `apps.routes.resume.index` | n/a | Resume hub rendering `resume/index.html` |
 | `GET /resume/view` | `apps.routes.resume.view` | `theme=1,2,3` (default 3), `page=1,2` (optional) | Single or combined page using `resume/view.html` (both pages) or `resume/page1.html` / `page2.html` for print |
-| `GET /resume/qr.svg` | `apps.routes.resume.qr_svg` | n/a | Live portfolio QR serving `image/svg+xml` via `segno` with `Cache-Control: public, max-age=86400`. Returns 404 when `contact.access_code` is absent |
 
 ```python
 # apps/routes/resume.py (trimmed)
@@ -43,9 +42,11 @@ async def view(request: Request, page: int | None = None, theme: int = 3):
 ## Data in `data/resume.json`
 
 - Single source of truth for name, contact, experience, education, skills, etc.
-- `contact.portfolio` holds the plain base URL, and `contact.access_code` is the single source of truth for the portfolio code. No `portfolio_label` field is authored. One helper (`_portfolio_links()` in `apps/routes/resume.py`) derives the magic link (`?access_code=`) and the display label, feeding both the templates and the QR endpoint so the printed link and QR payload cannot drift.
+- `contact.portfolio` holds the plain base URL for the site. It is not printed on the resume: the header carries the LinkedIn and GitHub links, which a reader can follow without a code.
 - Loaded **once at import**. A missing or malformed file is logged at `exception` level and falls back to `{}` so the app stays up (pages render empty rather than crashing).
-- `page1.html` / `view.html` omit the portfolio line and QR block when the code is absent. `/resume/qr.svg` returns 404 in that case, never 500.
+- Optional keys render only when present (`{% if %}` guarded), so a project or school entry that omits them looks exactly as it did before they existed:
+  - `education[].status` — a short line under the degree (for example a graduation status).
+  - `projects[].status_line` — a build-state line directly under the tech stack, above `highlights`, styled with `.demo-line`.
 - Projects carry one shared `Live demos of selected projects are hosted on my portfolio. Source code is available on request. Repositories are private.` line (repos are private).
 - A project with a live demo carries a `url` in `resume.json`, rendering a `Live demo: <url>` line under its tech stack. Projects without one (SolveSpace, halted) omit it via the `{% if proj.url %}` guard.
 - No DB and no migrations. Edit the JSON and reload.
@@ -86,8 +87,13 @@ The print templates (`page1.html`, `page2.html`, `view.html`) are standalone doc
 ## Static Assets
 
 - Portrait photo: `static/assets/images/resume_image.JPG`
-- Portfolio QR is served live at `GET /resume/qr.svg` (SVG via `segno`); no static QR image is committed.
 - No additional JS for the resume. It is pure FastAPI + Jinja2 + CSS for reliable printing.
+
+## Metric Note
+
+The thesis entry cites `86.96% validation accuracy`. That figure is validation accuracy on the thesis author's reference dataset — a single authored split, not a benchmark protocol or a cross-dataset comparison. It is reported as measured, and it is not comparable with published signature-verification benchmarks.
+
+`<FILL: dataset size / split>`
 
 ## Crawler Discouragement
 
