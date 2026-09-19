@@ -97,5 +97,5 @@ The thesis entry cites `86.96% validation accuracy`. That figure is validation a
 
 ## Crawler Discouragement
 
-- `GET /robots.txt` returns `User-agent: *` + `Disallow: /` as `text/plain`.
+- `/robots.txt` is **no longer an app route**: GateKeeper serves it from a custom page, so the file is answered before the request reaches this app. The body is unchanged (`User-agent: *` + `Disallow: /`).
 - Primary noindex signal is the `X-Robots-Tag: noindex, nofollow` header set at the site-block level in `caddy/Caddyfile`, so it covers app routes, `/static` assets, and the separately-containerised documentation service. The resume print templates do not extend `base.html`, so the `<meta name="robots">` tag there is defence-in-depth for `base.html` pages only.
