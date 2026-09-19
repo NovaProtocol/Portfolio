@@ -14,7 +14,7 @@ Personal portfolio site built with **Python 3.14 + FastAPI + Granian + Jinja2**,
 | **Caddy** | `portfolio_caddy` | 7011 | n/a | default, gatekeeper |
 
 - Caddy listens on `:7011` (loopback-only publish `127.0.0.1:7011:7011`), reachable publicly via the Cloudflare tunnel on `gatekeeper`.
-- Gate is at the **wildcard** (`gatekeeper_caddy:7000` → `gatekeeper_auth:8001` on `gatekeeper`). Local `caddy/Caddyfile` proxies without a per-app `GateKeeper gate` (wildcard per `reference/gatekeeper/caddy-setup.md`).
+- Gate is at the **wildcard** (`gatekeeper_caddy:7000` → `gatekeeper_auth:8001` on `gatekeeper`). Local `caddy/Caddyfile` proxies without a per-app `GateKeeper gate`; the wildcard decides.
 - `/health` is the liveness probe; gated paths enforce `gatekeeper_token` / `?access_code=` at the wildcard.
 
 ## How It Works
