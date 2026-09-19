@@ -155,7 +155,7 @@ Why this matters: an origin that sends no `Cache-Control` but does send `ETag` /
 
 ### Reusable pattern
 
-Portable to the sibling apps (GateKeeper auth-gateway, WBS portals/api, MELEReviewSite, SolveSpace `solver_private`, NovaProtocol, Buddys): one `BaseHTTPMiddleware` constructed with `is_debug`, DEBUG overwriting `no-store` everywhere, production filling gaps per path class, route-level explicit headers left authoritative. Before applying it to MELEReviewSite, resolve why `melereview_web` runs with an empty `DEPLOYMENT_TYPE` — an empty value falls back to the `debug` default locally but is untested through its compose path.
+Portable to the sibling apps (GateKeeper auth-gateway, WBS portals/api, MELEReviewSite, SolveSpace `solver_private`, NovaProtocol): one `BaseHTTPMiddleware` constructed with `is_debug`, DEBUG overwriting `no-store` everywhere, production filling gaps per path class, route-level explicit headers left authoritative. Before applying it to MELEReviewSite, resolve why `melereview_web` runs with an empty `DEPLOYMENT_TYPE` — an empty value falls back to the `debug` default locally but is untested through its compose path.
 
 ## Data Layer
 
