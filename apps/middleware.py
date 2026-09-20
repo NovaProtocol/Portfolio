@@ -71,7 +71,22 @@ class RequestIDMiddleware(BaseHTTPMiddleware):
 
 
 class CacheControlMiddleware(BaseHTTPMiddleware):
-    """Set Cache-Control per deployment type: no-store in debug, lifespans otherwise."""
+    """Set Cache-Control per deployment type, without overriding a route's own.
+
+    A response that already carries a ``Cache-Control`` header keeps it. Only
+    when none is present is one filled in: ``no-store`` in debug, the path
+    class's lifespan otherwise.
+
+    The invariant that makes keeping a header safe:
+
+        A response may be ``public``-cacheable only when the path is ungated
+        (the gate resolved ``action == "none"``) **and** the upstream chose
+        that header itself.
+
+    This service is not the gate, so it cannot know whether a path was gated and
+    it does not demote. On a stack behind GateKeeper the gateway applies that
+    demotion before the response reaches a shared cache.
+    """
 
     def __init__(self, app: ASGIApp, is_debug: bool) -> None:
         super().__init__(app)
@@ -79,9 +94,11 @@ class CacheControlMiddleware(BaseHTTPMiddleware):
 
     async def dispatch(self, request: Request, call_next: RequestResponseEndpoint) -> Response:
         response = await call_next(request)
+        if "Cache-Control" in response.headers:
+            return response
         if self.is_debug:
             response.headers["Cache-Control"] = _NO_STORE
-        elif "Cache-Control" not in response.headers:
+        else:
             response.headers["Cache-Control"] = _cache_control_for(request.url.path)
         return response
 

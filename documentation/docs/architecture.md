@@ -137,10 +137,12 @@ sequenceDiagram
 
 ## Cache Headers
 
-Cache behavior is decided in the app, not in Cloudflare or the `Caddyfile`. `CacheControlMiddleware` takes one boolean (`config.DEBUG`) and sets `Cache-Control` on every response after the handler runs, so mounted `StaticFiles`, HTML routes, `/health`, and error pages are all covered by a single mechanism (a `StaticFiles` wrapper would cover only `/static`).
+Cache behavior is decided in the app, not in Cloudflare or the `Caddyfile`. `CacheControlMiddleware` takes one boolean (`config.DEBUG`) and sets `Cache-Control` on every response, so mounted `StaticFiles`, HTML routes, `/health`, and error pages are all covered by a single mechanism (a `StaticFiles` wrapper would cover only `/static`). The full policy, including the gate safety net that makes it safe, is on [Caching](caching.md).
 
-- **`DEPLOYMENT_TYPE=DEBUG`** (`config.DEBUG`, case-insensitive), overwrites `Cache-Control` on every response with exactly `no-store`. `no-cache` is weaker: it still permits a cache to store gated bytes and only forces revalidation, and `private` still permits storing on shared infrastructure. `no-store` forbids storing outright. Overwriting rather than filling gaps means no route can accidentally stay public.
-- **Any other value (production)**: fills `Cache-Control` only when the handler set none, so an explicit route header stays authoritative. Lifespans are `UPPER_SNAKE_CASE` constants at the top of `apps/middleware.py`; retuning one is a one-line edit plus a redeploy (deliberately not env vars, four integers do not justify new required config).
+The rule is: **an existing header is kept, a gap is filled.** `is_debug` decides which value gets filled in, never whether an existing value is overwritten.
+
+- **`DEPLOYMENT_TYPE=DEBUG`** (`config.DEBUG`, case-insensitive), fills `no-store` on any response that carries no `Cache-Control` of its own. A route that set one keeps it. `no-cache` is weaker: it still permits a cache to store gated bytes and only forces revalidation, and `private` still permits storing on shared infrastructure. `no-store` forbids storing outright.
+- **Any other value (production)**: fills the path class's lifespan when the handler set none, so an explicit route header stays authoritative. Lifespans are `UPPER_SNAKE_CASE` constants at the top of `apps/middleware.py`; retuning one is a one-line edit plus a redeploy (deliberately not env vars, four integers do not justify new required config).
 
 | Class | Paths | Header |
 |-------|-------|--------|
@@ -154,7 +156,9 @@ Why this matters: an origin that sends no `Cache-Control` but does send `ETag` /
 
 ### Reusable pattern
 
-Portable to the sibling apps (GateKeeper auth-gateway, WBS portals/api, MELEReviewSite, SolveSpace `solver_private`, NovaProtocol): one `BaseHTTPMiddleware` constructed with `is_debug`, DEBUG overwriting `no-store` everywhere, production filling gaps per path class, route-level explicit headers left authoritative. Before applying it to MELEReviewSite, resolve why `melereview_web` runs with an empty `DEPLOYMENT_TYPE`, an empty value falls back to the `debug` default locally but is untested through its compose path.
+Portable to the sibling apps (GateKeeper auth-gateway, WBS portals/api, MELEReviewSite, SolveSpace `solver_private`, NovaProtocol): one `BaseHTTPMiddleware` constructed with `is_debug`, an existing `Cache-Control` kept ahead of the debug branch, production filling gaps per path class, route-level explicit headers authoritative. The invariant that keeps that safe is that a response may be `public`-cacheable only when the path is ungated and the upstream chose the header itself; on a stack behind GateKeeper the gateway demotes a shared-cacheable value on every response it decided. See [Caching](caching.md).
+
+One case needs care. `melereview_web` runs with an empty `DEPLOYMENT_TYPE`, and an empty value falls back to the `debug` default if the variable is read locally. Through its compose path the variable is absent, so `is_debug_deployment()` returns `False` and the service takes the production branch, which is what gives MELE's `/static` its day-long lifespan. Adding `DEPLOYMENT_TYPE=debug` to that service would flip every static response to `no-store`, so the absence is deliberate and the env var is documented rather than "fixed".
 
 ## Data Layer
 
