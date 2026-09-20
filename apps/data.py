@@ -275,7 +275,9 @@ PROJECTS: dict[str, dict] = {
             "hardened Docker and GateKeeper setup as the rest of my stack."
         ),
         "url": "https://buddys.projectnova.download/",
-        "github": "https://github.com/NovaProtocol/BuddysFreelanceProject",
+        # No `github` key on purpose: this one is a client engagement that stays
+        # private, and a "Source Code" button leading to a 404 is worse than no
+        # button at all.
         "links": [
             {
                 "name": "Documentation",
