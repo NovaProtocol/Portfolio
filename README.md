@@ -1,5 +1,11 @@
 # Portfolio
 
+<div align="center">
+
+![Portfolio](https://github.projectnova.download/public/projects/portfolio.svg)
+
+</div>
+
 The site that shows the rest of these projects.
 
 This is where the work is presented: what each project is, what it does, and a link to see it
