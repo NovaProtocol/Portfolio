@@ -245,48 +245,6 @@ PROJECTS: dict[str, dict] = {
         ],
         "buttons": [],
     },
-    "buddys-freelance-project": {
-        "active": False,
-        "title": "Buddy's Website",
-        "subtitle": "Freelance: Buddy's Restaurant",
-        "description": [
-            "A marketing site for Buddy's, a Pahiyas festival-inspired Filipino restaurant chain founded in Lucban, Quezon, in 1985. The site brings a local food institution online: a full menu with real pricing, a directory of branches across Quezon, Metro Manila, Laguna, and Batangas, private event details, and a product page for every dish.",
-            "Prices live in a single pricing dataset, and a curated alias layer bridges naming differences between the menu and the pricing data so every dish shows the right amount. Branch pages carry addresses, operating hours, phone numbers, map links, and photo galleries. Product pages pull descriptive copy, related items, and size options automatically from the pricing data.",
-        ],
-        "tech": {
-            "web": ["FastAPI", "Granian", "Jinja2", "Docker", "Caddy", "Cloudflare Tunnel"],
-        },
-        "features": [
-            "Full menu and product pages generated from unified pricing data",
-            "Curated price-alias layer so every menu item shows the right price",
-            "Branch directory with locations, hours, phone numbers, maps, and photo galleries",
-            "Private events page with event listings",
-            "GateKeeper-protected frontend served behind a Cloudflare tunnel",
-        ],
-        "status": "operational",
-        "reason": (
-            "Above all, this was a learning playground. I used Buddy's, a real local "
-            "business, as the subject to teach myself modern frontend techniques: "
-            "animated CSS, scroll-triggered reveals, hover micro-interactions, glass "
-            "morphism, and the Pahiyas festival-inspired theming that gives the site "
-            "its character. Along the way I also turned a physical menu into a "
-            "maintainable system with content-driven pages and a single source of "
-            "truth for pricing, all served through a FastAPI site behind the same "
-            "hardened Docker and GateKeeper setup as the rest of my stack."
-        ),
-        "url": "https://buddys.projectnova.download/",
-        # No `github` key on purpose: this one is a client engagement that stays
-        # private, and a "Source Code" button leading to a 404 is worse than no
-        # button at all.
-        "links": [
-            {
-                "name": "Documentation",
-                "url": "https://buddys.projectnova.download/documentation/",
-                "icon": "fas fa-book",
-            },
-        ],
-        "buttons": [],
-    },
     # Intentionally public. SVG embeds carry no cookies because GitHub has no cookie jar and a gate would break them.
     "novaprotocol": {
         "active": True,
