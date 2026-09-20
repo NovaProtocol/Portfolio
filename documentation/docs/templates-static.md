@@ -4,7 +4,7 @@
 
 - **Shared base:** `apps/templates/base.html` where blueprinted pages extend it, so nav, footer, and layout are defined once. The standalone resume print templates (`resume/page1.html`, `page2.html`, `view.html`) are the exception, and they do not extend `base.html`.
 - **Per-route templates:** `apps/templates/<sector>/*.html` namespaced by sector (`home/index.html`, `projects/index.html`, `projects/detail.html`, `resume/view.html`, etc.). Jinja2 `templates` from `apps/templating.py` resolves the shared `apps/templates/` folder.
-- **Static:** `static/` served at `/static` via `StaticFiles` mounted in `create_app()` (`app.mount("/static", StaticFiles(...))`). Referenced in templates with `url_for('static', path='…')`. Cache lifespans come from `CacheControlMiddleware`: `public, max-age=86400` for `/static/*` in production, `no-store` everywhere while `DEPLOYMENT_TYPE=DEBUG`.
+- **Static:** `static/` served at `/static` via `StaticFiles` mounted in `create_app()` (`app.mount("/static", StaticFiles(...))`). Referenced in templates with `url_for('static', path='…')`. Cache lifespans come from `CacheControlMiddleware`: `public, max-age=86400` for `/static/*` in production, `no-store` everywhere while `DEPLOYMENT_TYPE=DEBUG` and the response sets no header of its own. See `architecture.md` → Cache Headers and [Caching](caching.md).
 
 ```
 apps/
@@ -66,7 +66,7 @@ Each demo is a self-contained JS module that renders a live config / command exa
 - Images for new projects: `static/assets/images/<slug>/preview.png` → referenced as `image: "assets/images/<slug>/preview.png"` in `PROJECTS` (the template prefixes `/static/` via `url_for`).
 - Reuse `TAG_LINKS` for tech tags. Add a new entry when a novel stack appears so the tag becomes clickable.
 - For resume or marketing visuals, keep assets under `static/assets/images/` so the `StaticFiles` mount serves them without extra Caddy config.
-- Filenames carry no content hash, so replacing an asset in place keeps the same URL. Static assets are cached for 24h in production (see `architecture.md` → Cache Headers); with `DEPLOYMENT_TYPE=DEBUG` every response is `no-store` and replacements are visible immediately.
+- Filenames carry no content hash, so replacing an asset in place keeps the same URL. Static assets are cached for 24h in production (see `architecture.md` → Cache Headers); with `DEPLOYMENT_TYPE=DEBUG` every response that sets no header of its own is `no-store` and replacements are visible immediately.
 
 ## Errors
 

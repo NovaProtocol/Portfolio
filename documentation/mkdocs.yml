@@ -63,6 +63,7 @@ nav:
   - Home: index.md
   - Getting Started: getting-started.md
   - Architecture: architecture.md
+  - Caching: caching.md
   - Blueprints:
       - Home: blueprints/home.md
       - Projects: blueprints/projects.md
