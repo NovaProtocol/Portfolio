@@ -75,7 +75,7 @@
       "name": "Water Billing System",
       "tech": "React Native, NFC, Docker, MySQL",
       "url": "https://water-billing-system.projectnova.download/",
-      "status_line": "Live demo — architecture and core modules complete",
+      "status_line": "Live demo, architecture and core modules complete",
       "highlights": [
         "Designed an end-to-end utility billing workflow that unifies meter reading, tariff computation, and bill distribution into a single process",
         "Offline-first NFC meter reading with on-device cryptographic key derivation so meter data never crosses the network",

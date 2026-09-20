@@ -155,7 +155,7 @@ docker compose exec documentation python -c "import urllib.request; print(urllib
 |----------|----------|-------|-------|
 | `DEPLOYMENT_TYPE` | yes | `app` env | `DEBUG` or `PRODUCTION` (`${VAR:?}`) |
 
-No GateKeeper vars in the app because the gate lives entirely in Caddy. `SECRET_KEY` is **declared and unused** — `apps/config.py` accepts it so a deployment that sets it is not an error, but nothing in the app reads it. See the env table above for the only variable the app actually acts on.
+No GateKeeper vars in the app because the gate lives entirely in Caddy. `SECRET_KEY` is **declared and unused**: `apps/config.py` accepts it so a deployment that sets it is not an error, but nothing in the app reads it. See the env table above for the only variable the app actually acts on.
 
 ## Day-to-Day
 
