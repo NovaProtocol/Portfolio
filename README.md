@@ -1,110 +1,38 @@
 # Portfolio
 
-Personal portfolio site built with Python 3.14 + FastAPI + Granian + Jinja2, served behind a Caddy reverse proxy that gates access through [GateKeeper](https://github.com/NovaProtocol/GateKeeper).
+The site that shows the rest of these projects.
 
-**Stack:** Python 3.14 + FastAPI + Granian + Jinja2 + Caddy 2-alpine. The FastAPI app runs under granian (ASGI, 1 worker) with Jinja2 templates and StaticFiles.
+This is where the work is presented: what each project is, what it does, and a link to see it
+running. It is also the entry point that explains the ecosystem as a whole rather than leaving a
+visitor to piece it together from separate repositories.
 
-## How it works
+## What it does
 
-```text
-Browser → GateKeeper (wildcard, apex domain)
-            └─ 200 on pass → Caddy :7011
-                                   ├─ /health          → portfolio_main:8000
-                                   ├─ /documentation/* → portfolio_documentation:8005
-                                   └─ everything else  → portfolio_main:8000
-```
+- **A page per project.** Each one gets a description written for a reader who is not already
+  familiar with it, with the live demo and the repository linked.
+- **One consistent presentation.** Projects share a layout and a visual language, so the collection
+  reads as one body of work rather than a set of unrelated pages.
+- **A resume that stays current.** The resume is rendered from the same source as the rest of the
+  site, so it cannot drift out of date the way a PDF upload inevitably does.
+- **Behind the same gate as everything else.** The portfolio is protected by GateKeeper, like the
+  projects it links to.
 
-`portfolio_main` is the FastAPI app: one template tree split across `apps/home`, `apps/projects` and `apps/resume`, a `PROJECTS` dict that drives the project list and detail pages, and a middleware stack that adds a request id, security headers and cache-control. `portfolio_documentation` is the MkDocs site in `documentation/`. Caddy is the only published port and holds no per-app auth — the gate is at the apex wildcard, so every path is decided by GateKeeper rules before Caddy sees the request.
-
-## Adding a Project
-
-Add an entry to the `PROJECTS` dict in `apps/projects/routes.py`:
-
-```python
-"my-project": {
-    "title": "My Project",
-    "subtitle": "Client or context",
-    "description": "What it does, who it's for, what it solves.",
-    "tech": {
-        "web": ["Flask", "MySQL", "Docker"],
-        "mobile": ["React Native", "Expo"],
-    },
-    "features": [
-        "Feature one",
-        "Feature two",
-    ],
-    "url": "https://my-project.example.com",
-    "github": "https://github.com/you/my-project",
-    "image": "assets/images/my-project/preview.png",
-    "links": [
-        {"name": "Admin Panel", "url": "https://my-project.example.com/admin", "icon": "fas fa-shield-alt"},
-        {"name": "API Docs", "url": "https://my-project.example.com/docs", "icon": "fas fa-book"},
-    ],
-    "buttons": [],
-}
-```
-
-| Field | Required | Description |
-|-------|----------|-------------|
-| `title` | yes | Display name |
-| `subtitle` | yes | Client, employer, or context |
-| `description` | yes | 2-3 sentence summary |
-| `tech` | yes | `web` and `mobile` lists of tech tags |
-| `features` | no | Bullet list of key features |
-| `status` | no | Operational status tag (`operational` / `in progress` / `halted`) |
-| `note` | no | Short note shown under the status tag (e.g. job update) |
-| `url` | no | Live site URL (shows online/offline status) |
-| `github` | no | Source repo link |
-| `image` | no | Path relative to `static/` (shown on detail page) |
-| `links` | no | Array of external links with icons |
-| `buttons` | no | Action buttons (for API triggers) |
-
-Place preview images in `static/assets/images/<slug>/`.
-
-## Running
+## Running it
 
 ```bash
-# Development on port 8000 with no auth to match Dockerfile EXPOSE 8000
-DEPLOYMENT_TYPE=DEBUG python run.py
-
-# Docker (app :8000 internal via Caddy :7011)
-docker compose up --build
+cp .env.example .env
+# then fill in the values it documents, and start the stack
+docker compose up -d --build
 ```
 
-The Cloudflare tunnel ingress must point at the Caddy container
-(`portfolio_caddy:7011`), not the app.
+`.env.example` lists every variable. The site is served through Caddy on the local port named there.
 
-## Environment
+## Adding a project
 
-| Variable | Required | Description |
-|----------|----------|-------------|
-| `DEPLOYMENT_TYPE` | yes | `DEBUG` or `PRODUCTION` |
+Add an entry to the `PROJECTS` dictionary in `apps/data.py`, with the description, the
+demo link, and the repository link. The layout is shared, so a new entry needs no template work.
 
-## Ports
+## Documentation
 
-| Port | Service |
-|------|---------|
-| 8000 | App (granian ASGI, internal via `portfolio_main:8000` with Caddy on :7011) |
-| 7011 | Caddy (loopback-bound for tunnel only) |
-| 8005 | Documentation (granian, internal via Caddy) |
-
-Portfolio's block is 7010; Caddy owns :7011, app is exposed internally as :8000 (Dockerfile `EXPOSE 8000`, `granian --interface asgi --port 8000 wsgi:app`, compose healthcheck `127.0.0.1:8000/health`, Caddy `reverse_proxy portfolio_main:8000`).
-
-## Auth
-
-This project is gated via the **wildcard** GateKeeper ingress. `gatekeeper_caddy:7000` on the shared `gatekeeper_dynamic` network checks `GET /api/authz/forward-auth` before Caddy proxies. The local `caddy/Caddyfile` has no per-app `forward_auth`; gating is at the apex wildcard (same as other gated apps on `gatekeeper_dynamic`). A valid `gatekeeper_token` cookie (or `?access_code=` magic link) passes; otherwise GateKeeper redirects to login. `/health` bypasses via GateKeeper rule.
-
-See `compose.yaml`: `portfolio_caddy` joins `gatekeeper_dynamic` (external `gatekeeper_dynamic`), and `caddy/Caddyfile` proxies `portfolio_main:8000`/`portfolio_documentation:8005` without a local `forward_auth`.
-
-## Errors
-
-JS: `console.error({status, request_id, stack})` + toast; Server: structlog JSON + X-Request-ID to docker logs; envelope `{error:{code,message,request_id}}`. No traceback to client.
-
-## Tests
-
-```bash
-uv run --no-project --with pytest --with-requirements requirements.txt \
-  --with-requirements requirements-dev.txt pytest -q
-```
-
-The suite is a three-case smoke check — `/health` returns `{"status": "ok"}`, `/` renders HTML, and an unknown project slug returns 404. It asserts the app constructs and serves; it does not cover every route.
+Full documentation is served by the stack at `/documentation/`, and the sources are in
+[`documentation/docs`](documentation/docs).

@@ -45,8 +45,8 @@ async def view(request: Request, page: int | None = None, theme: int = 3):
 - `contact.portfolio` holds the plain base URL for the site. It is not printed on the resume: the header carries the LinkedIn and GitHub links, which a reader can follow without a code.
 - Loaded **once at import**. A missing or malformed file is logged at `exception` level and falls back to `{}` so the app stays up (pages render empty rather than crashing).
 - Optional keys render only when present (`{% if %}` guarded), so a project or school entry that omits them looks exactly as it did before they existed:
-  - `education[].status` — a short line under the degree (for example a graduation status).
-  - `projects[].status_line` — a build-state line directly under the tech stack, above `highlights`, styled with `.demo-line`.
+  - `education[].status`, a short line under the degree (for example a graduation status).
+  - `projects[].status_line`, a build-state line directly under the tech stack, above `highlights`, styled with `.demo-line`.
 - Projects carry one shared `Live demos of selected projects are hosted on my portfolio. Source code is available on request. Repositories are private.` line (repos are private).
 - A project with a live demo carries a `url` in `resume.json`, rendering a `Live demo: <url>` line under its tech stack. Projects without one (SolveSpace, halted) omit it via the `{% if proj.url %}` guard.
 - No DB and no migrations. Edit the JSON and reload.
@@ -91,7 +91,7 @@ The print templates (`page1.html`, `page2.html`, `view.html`) are standalone doc
 
 ## Metric Note
 
-The thesis entry cites `86.96% validation accuracy`. That figure is validation accuracy on the thesis author's reference dataset — a single authored split, not a benchmark protocol or a cross-dataset comparison. It is reported as measured, and it is not comparable with published signature-verification benchmarks.
+The thesis entry cites `86.96% validation accuracy`. That figure is validation accuracy on the thesis author's reference dataset, a single authored split, not a benchmark protocol or a cross-dataset comparison. It is reported as measured, and it is not comparable with published signature-verification benchmarks.
 
 `<FILL: dataset size / split>`
 

@@ -139,8 +139,8 @@ sequenceDiagram
 
 Cache behavior is decided in the app, not in Cloudflare or the `Caddyfile`. `CacheControlMiddleware` takes one boolean (`config.DEBUG`) and sets `Cache-Control` on every response after the handler runs, so mounted `StaticFiles`, HTML routes, `/health`, and error pages are all covered by a single mechanism (a `StaticFiles` wrapper would cover only `/static`).
 
-- **`DEPLOYMENT_TYPE=DEBUG`** (`config.DEBUG`, case-insensitive) — overwrites `Cache-Control` on every response with exactly `no-store`. `no-cache` is weaker: it still permits a cache to store gated bytes and only forces revalidation, and `private` still permits storing on shared infrastructure. `no-store` forbids storing outright. Overwriting rather than filling gaps means no route can accidentally stay public.
-- **Any other value (production)** — fills `Cache-Control` only when the handler set none, so an explicit route header stays authoritative. Lifespans are `UPPER_SNAKE_CASE` constants at the top of `apps/middleware.py`; retuning one is a one-line edit plus a redeploy (deliberately not env vars — four integers do not justify new required config).
+- **`DEPLOYMENT_TYPE=DEBUG`** (`config.DEBUG`, case-insensitive), overwrites `Cache-Control` on every response with exactly `no-store`. `no-cache` is weaker: it still permits a cache to store gated bytes and only forces revalidation, and `private` still permits storing on shared infrastructure. `no-store` forbids storing outright. Overwriting rather than filling gaps means no route can accidentally stay public.
+- **Any other value (production)**: fills `Cache-Control` only when the handler set none, so an explicit route header stays authoritative. Lifespans are `UPPER_SNAKE_CASE` constants at the top of `apps/middleware.py`; retuning one is a one-line edit plus a redeploy (deliberately not env vars, four integers do not justify new required config).
 
 | Class | Paths | Header |
 |-------|-------|--------|
@@ -148,13 +148,13 @@ Cache behavior is decided in the app, not in Cloudflare or the `Caddyfile`. `Cac
 | Misc small | `/health` | `public, max-age=3600` |
 | HTML (default) | everything else | `private, max-age=300` |
 
-Why this matters: an origin that sends no `Cache-Control` but does send `ETag` / `Last-Modified` is heuristically cacheable, which is how gated images ended up stored at the edge. Sending an explicit header removes that ambiguity — either a deliberate lifespan or `no-store`.
+Why this matters: an origin that sends no `Cache-Control` but does send `ETag` / `Last-Modified` is heuristically cacheable, which is how gated images ended up stored at the edge. Sending an explicit header removes that ambiguity, either a deliberate lifespan or `no-store`.
 
 `no-store` stops *future* stores; it does not evict a copy already sitting at the edge. Existing entries expire on their own schedule and revalidation then returns the new headers.
 
 ### Reusable pattern
 
-Portable to the sibling apps (GateKeeper auth-gateway, WBS portals/api, MELEReviewSite, SolveSpace `solver_private`, NovaProtocol): one `BaseHTTPMiddleware` constructed with `is_debug`, DEBUG overwriting `no-store` everywhere, production filling gaps per path class, route-level explicit headers left authoritative. Before applying it to MELEReviewSite, resolve why `melereview_web` runs with an empty `DEPLOYMENT_TYPE` — an empty value falls back to the `debug` default locally but is untested through its compose path.
+Portable to the sibling apps (GateKeeper auth-gateway, WBS portals/api, MELEReviewSite, SolveSpace `solver_private`, NovaProtocol): one `BaseHTTPMiddleware` constructed with `is_debug`, DEBUG overwriting `no-store` everywhere, production filling gaps per path class, route-level explicit headers left authoritative. Before applying it to MELEReviewSite, resolve why `melereview_web` runs with an empty `DEPLOYMENT_TYPE`, an empty value falls back to the `debug` default locally but is untested through its compose path.
 
 ## Data Layer
 
