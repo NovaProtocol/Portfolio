@@ -2,7 +2,7 @@
 
 <div align="center">
 
-![Portfolio](https://github.projectnova.download/public/projects/portfolio.svg)
+![Portfolio](https://github.projectnova.download/public/project/portfolio.svg)
 
 </div>
 
