@@ -79,7 +79,7 @@ PROJECTS: dict[str, dict] = {
     "water-billing-system": {
         "active": True,
         "title": "Water Billing System",
-        "subtitle": "Cotta Realty & Development Corporation",
+        "subtitle": "Utility billing for a water service provider",
         "description": [
             "A Utility CIS (Customer Information System) for water billing, built for Cotta Realty & Development Corporation and used by tenants across their subdivisions in Quezon, Philippines. It runs the whole cycle in one platform: meter reading, bill generation, payments, and receipts, with dedicated portals for tenants, meter readers, and the billing office.",
             "Meter readers carry a React Native app that works offline. Each meter has an NFC tag, and readers tap the meter to open the customer record, enter the reading, and the app queues everything on the phone until connectivity returns. The tag's security key derives on-device from the chip's factory ID, so it never crosses the network, and the system catches tampered or duplicated tags.",
