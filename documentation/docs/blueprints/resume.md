@@ -47,7 +47,7 @@ async def view(request: Request, page: int | None = None, theme: int = 3):
 - Optional keys render only when present (`{% if %}` guarded), so a project or school entry that omits them looks exactly as it did before they existed:
   - `education[].status`, a short line under the degree (for example a graduation status).
   - `projects[].status_line`, a build-state line directly under the tech stack, above `highlights`, styled with `.demo-line`.
-- Projects carry one shared `Live demos of selected projects are hosted on my portfolio. Source code is available on request. Repositories are private.` line (repos are private).
+- Projects carry one shared `Live demos of selected projects are hosted on my portfolio. Source code for these projects is public on GitHub.` line.
 - A project with a live demo carries a `url` in `resume.json`, rendering a `Live demo: <url>` line under its tech stack. Projects without one (SolveSpace, halted) omit it via the `{% if proj.url %}` guard.
 - No DB and no migrations. Edit the JSON and reload.
 
