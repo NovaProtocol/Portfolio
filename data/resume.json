@@ -63,10 +63,9 @@
       "organization": "Southern Luzon State University",
       "period": "Mar 2024 - Apr 2024",
       "responsibilities": [
-        "Designed facility layouts and emergency fire exit plans in AutoCAD, applying code-compliant safety and egress standards",
-        "Performed inspections of emergency lighting and fire suppression equipment against OSH compliance standards",
-        "Conducted facility asset audits and implemented an improved tracking system for university property",
-        "<METRIC: e.g. asset records migrated / inspection items covered>"
+        "Drafted facility layouts and emergency fire exit plans in AutoCAD to code-compliant egress and fire safety standards",
+        "Inspected emergency lighting and fire suppression units against OSH compliance requirements, documenting deficiencies for the facilities office",
+        "Audited university property records and rebuilt the asset inventory into a single maintained tracking system"
       ]
     }
   ],
@@ -106,7 +105,6 @@
     {
       "name": "GateKeeper",
       "tech": "Python, SQLite, Docker",
-      "url": "https://gatekeeper.projectnova.download/",
       "highlights": [
         "Single sign-on auth gate with signed, tamper-evident cookies and forward-auth session verification",
         "Admin panel to issue and revoke access codes, with a backup code so the owner is never locked out",
@@ -118,6 +116,10 @@
     {
       "category": "Software Development",
       "value": "Python, C++, JavaScript, TypeScript, SQL, FastAPI, Flask, React Native"
+    },
+    {
+      "category": "Machine Learning",
+      "value": "PyTorch, ResNet-18, Triplet Loss, Image Preprocessing, Model Training & Validation, Inference Services"
     },
     {
       "category": "Embedded Systems & Automation",
