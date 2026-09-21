@@ -24,8 +24,13 @@ _MISC_MAX_AGE = 3600
 # bytes never rest on shared infrastructure.
 _NO_STORE = "no-store"
 
+# Directives that already forbid a shared cache from storing the response.
+# Debug keeps such a value rather than rewriting it.
+_VISITOR_SCOPED = ("private", "no-store")
+
 # Path classes. Anything unmatched falls through to the short HTML lifespan.
 _STATIC_PREFIX = "/static/"
+_API_PREFIXES = ("/api/",)
 _MISC_PATHS = frozenset({"/health"})
 
 
@@ -36,6 +41,12 @@ def _public_max_age(seconds: int) -> str:
 def _cache_control_for(path: str) -> str:
     if path.startswith(_STATIC_PREFIX):
         return _public_max_age(_STATIC_MAX_AGE)
+    if path.startswith(_API_PREFIXES):
+        # The app serves no API today, but the rule is stated anyway: an API
+        # answer is per-visitor and may be gated, so a shared cache must never
+        # hold one. Without this branch a future `/api/` route would inherit the
+        # HTML lifespan below.
+        return "private, no-store"
     if path in _MISC_PATHS:
         return _public_max_age(_MISC_MAX_AGE)
     return f"private, max-age={_HTML_MAX_AGE}"
@@ -73,9 +84,12 @@ class RequestIDMiddleware(BaseHTTPMiddleware):
 class CacheControlMiddleware(BaseHTTPMiddleware):
     """Set Cache-Control per deployment type, without overriding a route's own.
 
-    A response that already carries a ``Cache-Control`` header keeps it. Only
-    when none is present is one filled in: ``no-store`` in debug, the path
-    class's lifespan otherwise.
+    Caching is a production behaviour. With ``is_debug`` set, anything
+    shared-cacheable is replaced with ``no-store``, so a deliberately ``public``
+    value never survives into a development deployment; a value that already
+    forbids storage is kept verbatim. In production a response that already
+    carries a ``Cache-Control`` header keeps it, and only a response with none
+    is given the path class's lifespan.
 
     The invariant that makes keeping a header safe:
 
@@ -94,12 +108,20 @@ class CacheControlMiddleware(BaseHTTPMiddleware):
 
     async def dispatch(self, request: Request, call_next: RequestResponseEndpoint) -> Response:
         response = await call_next(request)
+        if self.is_debug:
+            # `DEPLOYMENT_TYPE=debug` disables caching outright: nothing this
+            # service hands out may be stored, whatever the upstream asked for.
+            # Every lifespan below is a production behaviour. A value that
+            # already forbids storage is kept verbatim so the gate's own
+            # `private, no-store` survives; anything else, including a
+            # deliberately `public` one, is replaced.
+            value = response.headers.get("Cache-Control")
+            if not value or not any(d in value for d in _VISITOR_SCOPED):
+                response.headers["Cache-Control"] = _NO_STORE
+            return response
         if "Cache-Control" in response.headers:
             return response
-        if self.is_debug:
-            response.headers["Cache-Control"] = _NO_STORE
-        else:
-            response.headers["Cache-Control"] = _cache_control_for(request.url.path)
+        response.headers["Cache-Control"] = _cache_control_for(request.url.path)
         return response
 
 
