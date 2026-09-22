@@ -18,7 +18,10 @@
       "degree": "Bachelor of Science in Mechanical Engineering",
       "years": "2021 - 2026",
       "status": "Graduated June 2026",
-      "awards": ["DOST S&T Scholarship", "Dean's Lister"]
+      "awards": [
+        "DOST S&T Scholarship",
+        "Dean's Lister"
+      ]
     }
   ],
   "coursework": [
@@ -94,9 +97,9 @@
       ]
     },
     {
-      "name": "SolveSpace",
+      "name": "PracticeForge",
       "tech": "Python, Docker, Bubblewrap",
-      "url": "https://solver.projectnova.download/",
+      "url": "https://practiceforge.projectnova.download/",
       "highlights": [
         "Isolated execution sandbox for untrusted code with hard memory, CPU, and process limits and zero network access",
         "Process isolation with read-only filesystem, 1 GB memory cap, 25s CPU limit, and 64-process ceiling via Bubblewrap",
