@@ -1,6 +1,6 @@
 {
   "name": "Khyles Gibrian Ramos",
-  "headline": "Systems & Automation Engineer | Software, Embedded Systems & Mechanical Design",
+  "headline": "Mechanical Engineer | Embedded Systems & Automation",
   "photo": "assets/images/resume_image.JPG",
   "contact": {
     "address": "Brgy. Mateuna, Tayabas, Quezon",
@@ -10,7 +10,7 @@
     "github": "https://github.com/NovaProtocol",
     "portfolio": "https://portfolio.projectnova.download"
   },
-  "summary": "Mechanical Engineering graduate who builds software end to end: embedded systems, backend services, and applied machine learning, shipped as working systems rather than prototypes. Professional experience covers AutoCAD facility design, safety inspection, and technical documentation for university facilities. Works across both sides of a problem, from mechanical design and fabrication through to the software that automates it.",
+  "summary": "Mechanical Engineering graduate with hands-on experience in AutoCAD facility design, safety inspection, and technical documentation. Differentiated by strong embedded systems and automation capability, building working hardware/software integrations (NFC, sensor interfaces, microcontrollers) beyond typical ME coursework. Brings a systems-level view to mechanical problems, informed by real programming and electronics depth.",
   "education": [
     {
       "level": "Tertiary",
@@ -118,6 +118,18 @@
   ],
   "skills": [
     {
+      "category": "Mechanical Design & Fabrication",
+      "value": "AutoCAD, Fusion 360, OnShape, SMAW, 3D Printing, Blueprint Reading, Prototyping"
+    },
+    {
+      "category": "Embedded Systems & Automation",
+      "value": "Arduino, ESP32, Raspberry Pi, NFC, Sensor Interfaces, Hardware/Software Integration"
+    },
+    {
+      "category": "Safety & Compliance",
+      "value": "DOLE BOSH SO2, OSH Standards, Safety Inspection, Fire Safety Planning"
+    },
+    {
       "category": "Software Development",
       "value": "Python, C++, JavaScript, TypeScript, SQL, FastAPI, Flask, React Native"
     },
@@ -126,20 +138,8 @@
       "value": "PyTorch, ResNet-18, Triplet Loss, Image Preprocessing, Model Training & Validation, Inference Services"
     },
     {
-      "category": "Embedded Systems & Automation",
-      "value": "Arduino, ESP32, Raspberry Pi, NFC, Sensor Interfaces, Hardware/Software Integration"
-    },
-    {
       "category": "Data & Infrastructure",
       "value": "MySQL, SQLite, Docker, Linux, Cloudflare Tunnel, Caddy, Gunicorn"
-    },
-    {
-      "category": "Safety & Compliance",
-      "value": "DOLE BOSH SO2, OSH Standards, Safety Inspection, Fire Safety Planning"
-    },
-    {
-      "category": "Mechanical Design & Fabrication",
-      "value": "AutoCAD, Fusion 360, OnShape, SMAW, 3D Printing, Blueprint Reading, Prototyping"
     }
   ]
 }
