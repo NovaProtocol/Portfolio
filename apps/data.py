@@ -207,9 +207,9 @@ PROJECTS: dict[str, dict] = {
         ],
         "buttons": [],
     },
-    "solvespace": {
+    "practiceforge": {
         "active": True,
-        "title": "SolveSpace",
+        "title": "PracticeForge",
         "subtitle": "Self-hosted Python practice sandbox",
         "description": [
             "A self-hosted platform for practicing Python programming problems. Browse a problem library with images and tags, track progress per problem, and submit solutions in the browser. Problems and submissions live in MySQL, and a separate executor container runs every submission in isolation.",
@@ -234,12 +234,12 @@ PROJECTS: dict[str, dict] = {
             "GateKeeper-protected frontend with per-problem progress tracking",
             "phpMyAdmin for database management",
         ],
-        "url": "https://solver.projectnova.download/",
-        "github": "https://github.com/NovaProtocol/SolveSpace",
+        "url": "https://practiceforge.projectnova.download/",
+        "github": "https://github.com/NovaProtocol/PracticeForge",
         "links": [
             {
                 "name": "Documentation",
-                "url": "https://solver.projectnova.download/documentation/",
+                "url": "https://practiceforge.projectnova.download/documentation/",
                 "icon": "fas fa-book",
             },
         ],
