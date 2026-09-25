@@ -4,31 +4,30 @@ PROJECTS: dict[str, dict] = {
     "gatekeeper": {
         "active": True,
         "title": "GateKeeper",
-        "subtitle": "Access code auth gate for web apps",
+        "subtitle": "Reverse-proxy gateway with per-path access rules",
         "description": [
-            "A single sign-on system that protects a family of web apps behind one shared access code. Visitors prove access once by entering a code on the login page, and GateKeeper signs them in across every subdomain of the same domain: the portfolio, staff portals, the solver, and any future app. No user accounts, no per-app passwords, no hardcoded domains anywhere in the stack.",
-            "An admin panel issues and revokes codes, with a backup code so the owner is never locked out. The access cookie is tamper-evident and every check validates it against the live database, so a code revoked in the panel is a hard kill switch across every protected app.",
+            "One reverse proxy in front of every service in the stack, deciding per host and per path what a request is allowed to do. Rules are matched most-specific-first and can allow a request, refuse it, hold it behind a shared access code, or put a per-path password in front of it. Every decision is written to an audit log with the visitor's address, country, path, status and latency, so the gateway is also the only place that sees the whole stack at once.",
+            "An admin panel manages routes, rule groups, access codes and custom pages while the gateway is running, with a backup code so the owner is never locked out. The access cookie is tamper-evident and every check validates it against the live database, so a code revoked in the panel is a hard kill switch everywhere it was used.",
         ],
         "tech": {
             "web": ["FastAPI", "Granian", "SQLAlchemy", "MySQL 8.4", "Docker", "Caddy", "PyJWT", "Cloudflare Tunnel"],
         },
         "features": [
-            "Access code authentication with signed cookies",
-            "Forward-auth session verification via Caddy",
-            "Cross-subdomain cookie for shared auth across apps",
-            "DB-driven routing and rule-group dispatch",
-            "Admin panel to create and revoke access codes",
+            "Per-host, per-path routing with four outcomes: allow, refuse, shared access code, or a per-path password",
+            "Most-specific-rule-wins dispatch across nested rule groups",
+            "Audit log of every request: address, country, path, status, latency and the rule that matched",
+            "Admin panel to manage routes, rule groups, codes and custom pages while running",
+            "Custom ASCII-art or HTML pages served per host and path",
             "Backup code fallback for emergency access",
-            "Audit logging and warning detection",
+            "Warning detection over the audit trail",
         ],
         "status": "operational",
         "reason": (
             "The moment a domain goes live, bots start crawling it, scraping "
             "whatever they can and probing for unsecured endpoints. GateKeeper is the "
-            "boundary: anyone with a proper link gets in, anyone browsing directly "
-            "gets a login page. One access code, one signed cookie, one redirect: "
-            "security through a simple, verifiable boundary instead of a sprawling "
-            "auth system."
+            "boundary: each path decides for itself whether a visitor is served, "
+            "refused, or asked for a code, and the same log that answers \"who is "
+            "this\" is the one that says whether anything went wrong overnight."
         ),
         "url": "https://gatekeeper.projectnova.download/",
         "github": "https://github.com/NovaProtocol/GateKeeper",
@@ -109,7 +108,7 @@ PROJECTS: dict[str, dict] = {
             "11 Docker containers across 6 isolated networks, API unreachable from the public internet",
             "Startup database self-heal: schema audited against the code, drift fixed automatically",
             "Strict environment validation: the system refuses to boot with missing required settings",
-            "4 authentication layers for staff, tenants, internal services, and GateKeeper SSO",
+            "4 authentication layers for staff, tenants, internal services, and per-path gateway rules",
             "Full technical documentation with API reference (MkDocs)",
         ],
         "status": "operational",
@@ -285,6 +284,43 @@ PROJECTS: dict[str, dict] = {
                 "icon": "fas fa-book",
             },
         ],
+        "buttons": [],
+    },
+    "host-dashboard": {
+        "active": True,
+        "title": "Host Dashboard",
+        "subtitle": "Live telemetry for the server this stack runs on",
+        "description": [
+            "A dashboard for the machine that hosts everything else here: processor load per core, memory and swap, disk throughput and capacity, network per interface, GPU utilisation with its VRAM, clocks and power draw, and every temperature and fan speed the board reports. It also lists what is running, grouped by environment and Compose stack, with per-container CPU, memory, uptime, network and disk.",
+            "Every reading is recorded on four cadences for a rolling 24 hours, so the dashboard answers \"what spiked overnight\" and not only \"what is happening now\". Each measurement gets a page of its own with a zoomable 24-hour chart, and the reader is told whether anything looks wrong before being shown a number: a plain sentence, then the figures that confirm it.",
+            "The stack reads the host directly. It runs on the machine it measures, so there is no agent, no exported metrics endpoint and no credentials to manage: it opens the kernel's own files and reads what the kernel already knows. Hardware identity comes the same way, including the installed memory modules from the firmware's SMBIOS table.",
+            "An assistant answers questions about the host in plain language, running as its own container against a locally served model. It is deliberately outside the dashboard process, so a slow model never blocks a page.",
+        ],
+        "tech": {
+            "web": ["FastAPI", "Granian", "SQLAlchemy", "MySQL 8.4", "Docker", "Caddy", "Cloudflare Tunnel"],
+            "hardware": ["/proc", "/sys", "SMBIOS", "amdgpu", "hwmon"],
+        },
+        "features": [
+            "Direct host reads from /proc and /sys: no agent, no exported metrics, no credentials",
+            "Per-core CPU, memory, swap, disk I/O, per-interface network, GPU and thermals",
+            "Four collection cadences with a rolling 24-hour window and automatic retention",
+            "A zoomable history page per measurement, with a plain-language verdict above the numbers",
+            "Container inventory across every Docker environment, grouped by Compose stack",
+            "Memory modules and board identity read from the firmware's own SMBIOS table",
+            "A public read-only copy that serves every page and refuses every write",
+            "Local LLM assistant in its own container for natural-language questions",
+        ],
+        "status": "operational",
+        "reason": (
+            "Everything else on this domain runs on one machine. Without a way to "
+            "see that machine, a slow page could be a busy processor, a full disk, a "
+            "thermal limit or a container spinning, and the only way to tell was to go "
+            "and look. This is the thing that looks, continuously, and keeps the last "
+            "day of what it saw."
+        ),
+        "url": "https://homelab.projectnova.download/",
+        "github": "https://github.com/NovaProtocol/ServerDashboard",
+        "links": [],
         "buttons": [],
     },
 }
