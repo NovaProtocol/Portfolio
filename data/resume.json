@@ -37,7 +37,7 @@
   "certifications": [
     {
       "title": "BOSH Safety Officer 2 (SO2)",
-      "issuer": "DOLE – Bureau of Working Conditions",
+      "issuer": "DOLE \u2013 Bureau of Working Conditions",
       "year": "2024",
       "detail": "40-Hour OSH Training"
     },
@@ -110,9 +110,21 @@
       "name": "GateKeeper",
       "tech": "Python, SQLite, Docker",
       "highlights": [
-        "Single sign-on auth gate with signed, tamper-evident cookies and forward-auth session verification",
-        "Admin panel to issue and revoke access codes, with a backup code so the owner is never locked out",
-        "Redirect-based SSO flow with signed cookie validation and session management"
+        "Reverse-proxy gateway routing every service in the stack, with per-host and per-path rules that allow, refuse, or hold a request behind a shared access code",
+        "Audit log of every request with address, country, path, status and latency, written for served and refused requests alike",
+        "Admin panel to manage routes, rule groups, codes and custom pages while the gateway is running, with signed tamper-evident cookies and a backup code for recovery"
+      ]
+    },
+    {
+      "name": "Host Dashboard",
+      "tech": "Python, FastAPI, Docker, MySQL, Cloudflare Tunnel",
+      "url": "https://homelab.projectnova.download/",
+      "status_line": "Running continuously on the host it monitors",
+      "highlights": [
+        "Reads host telemetry directly from /proc and /sys with no agent, no exported metrics endpoint and no credentials to manage",
+        "Per-core CPU, memory, swap, disk I/O, per-interface network, GPU and thermals, recorded on four cadences with a rolling 24-hour window",
+        "Names the hardware it measures, including memory modules read from the firmware's SMBIOS table and graphics and network hardware resolved from the PCI database",
+        "A public read-only instance serving every page and refusing every write, with its data volume mounted read-only and no writer process"
       ]
     }
   ],
