@@ -29,6 +29,12 @@ comes from the same asset server that serves the profile graphics.
 so it cannot drift out of date the way an uploaded PDF inevitably does. Editing the data updates both
 the on-screen view and the printable version.
 
+**Two variants of that resume, one set of content.** It is sent to mechanical engineering roles and
+to software roles, and one running order cannot lead for both. So the same file is rendered two ways:
+a mechanical-first order that leads with the licensure-review project, and a software-first order
+that leads with the largest complete build. A variant names a project order and nothing else, so the
+two cannot disagree about what a project says.
+
 **Behind the same gate as everything else.** The portfolio is protected by GateKeeper, like the
 projects it links to. The resume in particular carries personal details, so it is exactly the kind of
 page that should sit behind a login rather than being world-readable.

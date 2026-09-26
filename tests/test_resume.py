@@ -93,12 +93,78 @@ def test_the_homelab_is_a_project_and_not_a_section_of_its_own() -> None:
         assert "section-homelab" not in text, f"{name} still renders a homelab section"
 
 
-def test_the_homelab_leads_the_projects() -> None:
-    """It hosts every other project, so it is listed first."""
-    projects = resume_data()["projects"]
-    assert projects[0]["name"] == "Homelab", (
-        f"the projects lead with {projects[0]['name']!r}; the homelab hosts the rest"
-    )
+def test_each_variant_leads_with_what_it_is_for() -> None:
+    """The two variants open with different projects, on purpose.
+
+    Mechanical leads with the licensure reviewer, whose subject is mechanical.
+    Software leads with the largest complete build. If these ever come out the
+    same, one of the variants has stopped doing its job.
+    """
+    variants = resume_data()["variants"]
+    assert list(variants) == ["mechanical", "software"], "variant set changed"
+    assert variants["mechanical"]["order"][0] == "MELE Review"
+    assert variants["software"]["order"][0] == "Water Billing System"
+
+
+def test_the_mechanical_variant_drops_only_practiceforge() -> None:
+    """One exclusion, and it is the one with no subject to place.
+
+    Every other project is engineering work that a mechanical recruiter can read
+    as process. PracticeForge is the one entry with neither an engineering
+    subject nor a product purpose, and the owner's own notes record it as halted
+    for lack of productive use.
+    """
+    resume = resume_data()
+    mechanical = resume["variants"]["mechanical"]["order"]
+    software = resume["variants"]["software"]["order"]
+
+    pool = {p["name"] for p in resume["projects"]}
+    assert set(mechanical) == pool - {"PracticeForge"}
+    assert set(software) == pool
+    # Nothing is invented by a variant, and nothing else is dropped.
+    assert set(mechanical) < set(software)
+
+
+def test_every_variant_names_projects_that_exist() -> None:
+    """A rename in the pool would otherwise silently empty a variant."""
+    resume = resume_data()
+    pool = {p["name"] for p in resume["projects"]}
+    for name, spec in resume["variants"].items():
+        unknown = [x for x in spec["order"] if x not in pool]
+        assert not unknown, f"variant {name!r} names projects that do not exist: {unknown}"
+        assert len(set(spec["order"])) == len(spec["order"]), f"variant {name!r} repeats a project"
+
+
+def test_the_variant_orders_the_page_the_route_serves(client) -> None:
+    """The order asked for is the order rendered, for both variants."""
+    for variant, expected in resume_data()["variants"].items():
+        body = client.get(f"/resume/view?page=2&variant={variant}").text
+        rendered = re.findall(r'<p class="title"[^>]*>([^<]+)</p>', body)
+        assert rendered == expected["order"], f"{variant}: {rendered}"
+
+
+def test_an_unknown_variant_serves_the_default_rather_than_failing(client) -> None:
+    """A stale bookmark or a typo must not 500 a resume."""
+    default = client.get("/resume/view?page=2").text
+    for bad in ("nonsense", "", "MECHANICAL", "3"):
+        resp = client.get(f"/resume/view?page=2&variant={bad}")
+        assert resp.status_code == 200, f"variant={bad!r} returned {resp.status_code}"
+        assert resp.text == default, f"variant={bad!r} did not fall back to the default"
+
+
+def test_the_theme_parameter_is_gone_and_changes_nothing(client) -> None:
+    """One theme is published, so `theme` must not still select another.
+
+    The other two were deleted. Leaving the argument working would keep dead CSS
+    alive behind a query string that nothing links to.
+    """
+    plain = client.get("/resume/view?page=2").text
+    for theme in (1, 2, 3):
+        assert client.get(f"/resume/view?page=2&theme={theme}").text == plain
+
+    theme_css = (TEMPLATES / "_theme.html").read_text()
+    assert "{% if theme" not in theme_css, "_theme.html still branches on a theme"
+    assert "theme-btn" not in (TEMPLATES / "index.html").read_text()
 
 
 def test_the_two_pages_do_not_repeat_each_other() -> None:
@@ -142,6 +208,22 @@ def test_gatekeeper_does_not_claim_sqlite(client) -> None:
     assert "MySQL" in gatekeeper["tech"]
 
 
+def test_the_fit_tool_orders_projects_the_way_the_route_does() -> None:
+    """Two functions resolve the variant order; they must agree.
+
+    `tools/resume_fit.py` keeps its own copy so it can measure a page without the
+    app. A fill figure measured against a different project list than the one
+    served is worse than no figure, so the two are compared here.
+    """
+    from resume_fit import order_projects
+
+    data = resume_data()
+    for variant in data["variants"]:
+        tool = [p["name"] for p in order_projects(data, variant)["projects"]]
+        spec = data["variants"][variant]["order"]
+        assert tool == spec, f"{variant}: fit tool {tool} vs data {spec}"
+
+
 def test_the_resume_renders_the_homelab_once(client) -> None:
     """One Homelab entry across the two sheets, and it is a project."""
     body = client.get("/resume/view").text
@@ -152,3 +234,18 @@ def test_the_resume_renders_the_homelab_once(client) -> None:
 
     for url in ("/resume/view?page=1", "/resume/view?page=2"):
         assert "section-homelab" not in client.get(url).text
+
+
+def test_the_facilities_coordination_line_stays() -> None:
+    """Flagged missing twice; pinned so a future trim has to argue with a test.
+
+    The owner asked for this line back after it was dropped in two successive
+    revisions and called it non-negotiable.
+    """
+    resume = resume_data()
+    plant = next(
+        (j for j in resume["experience"] if "Physical Plant" in j.get("role", "")), None
+    )
+    assert plant, "the facilities entry is gone"
+    joined = " ".join(plant["responsibilities"])
+    assert "Coordinated documentation and communication across departments" in joined

@@ -37,11 +37,22 @@
         color: var(--bg-primary);
         border-color: var(--accent);
     }
-    .resume-toolbar button.theme-btn.active {
+    /* The variant selector replaced the theme selector. It reads as text, not as
+       three dots, because the choice it makes is which resume you are sending
+       rather than how it looks. */
+    .resume-toolbar .variant-btn {
+        border-radius: 999px;
+        min-width: 0;
+        padding: 0 1rem;
+        font-size: 0.9rem;
+        font-weight: 600;
+    }
+    .resume-toolbar .variant-btn.active {
         background: var(--accent);
         color: var(--bg-primary);
         border-color: var(--accent);
     }
+    .resume-toolbar .spacer { flex: 1; }
     .resume-sheet {
         width: 794px;
         display: block;
@@ -66,9 +77,13 @@
     <div class="container">
         <div class="resume-wrap">
             <div class="resume-toolbar">
-                <button type="button" class="theme-btn" data-theme="1" title="Theme 1">1</button>
-                <button type="button" class="theme-btn" data-theme="2" title="Theme 2">2</button>
-                <button type="button" class="theme-btn active" data-theme="3" title="Theme 3">3</button>
+                {% for name, spec in variants.items() %}
+                <button type="button"
+                        class="variant-btn{% if name == variant %} active{% endif %}"
+                        data-variant="{{ name }}"
+                        title="{{ spec.blurb }}">{{ spec.label }}</button>
+                {% endfor %}
+                <span class="spacer"></span>
                 <button type="button" title="Save as PDF" onclick="printResume()">
                     <i class="fas fa-download"></i>
                 </button>
@@ -78,10 +93,10 @@
             </div>
 
             <div class="resume-sheet">
-                <iframe id="frame-1" data-page="1" src="{{ url_for('resume_blueprint.view', page=1, theme=3) }}" title="Resume page 1"></iframe>
+                <iframe id="frame-1" data-page="1" src="{{ url_for('resume_blueprint.view', page=1, variant=variant) }}" title="Resume page 1"></iframe>
             </div>
             <div class="resume-sheet">
-                <iframe id="frame-2" data-page="2" src="{{ url_for('resume_blueprint.view', page=2, theme=3) }}" title="Resume page 2"></iframe>
+                <iframe id="frame-2" data-page="2" src="{{ url_for('resume_blueprint.view', page=2, variant=variant) }}" title="Resume page 2"></iframe>
             </div>
         </div>
     </div>
@@ -90,33 +105,33 @@
 <iframe id="print-frame" style="position:absolute; width:0; height:0; border:0; visibility:hidden;" title="Print"></iframe>
 
 <script>
-    let currentTheme = 3;
+    let currentVariant = {{ variant | tojson }};
 
     function iframeUrl(page) {
-        return "{{ url_for('resume_blueprint.view') }}" + '?page=' + page + '&theme=' + currentTheme;
+        return "{{ url_for('resume_blueprint.view') }}" + '?page=' + page + '&variant=' + currentVariant;
     }
 
     function printResume() {
         const printFrame = document.getElementById('print-frame');
-        printFrame.src = "{{ url_for('resume_blueprint.view') }}" + '?theme=' + currentTheme;
+        printFrame.src = "{{ url_for('resume_blueprint.view') }}" + '?variant=' + currentVariant;
         printFrame.onload = function() {
             printFrame.contentWindow.focus();
             printFrame.contentWindow.print();
         };
     }
 
-    function setTheme(theme) {
-        currentTheme = theme;
-        document.querySelectorAll('.theme-btn').forEach(function(btn) {
-            btn.classList.toggle('active', parseInt(btn.dataset.theme, 10) === theme);
+    function setVariant(variant) {
+        currentVariant = variant;
+        document.querySelectorAll('.variant-btn').forEach(function(btn) {
+            btn.classList.toggle('active', btn.dataset.variant === variant);
         });
         document.getElementById('frame-1').src = iframeUrl(1);
         document.getElementById('frame-2').src = iframeUrl(2);
     }
 
-    document.querySelectorAll('.theme-btn').forEach(function(btn) {
+    document.querySelectorAll('.variant-btn').forEach(function(btn) {
         btn.addEventListener('click', function() {
-            setTheme(parseInt(btn.dataset.theme, 10));
+            setVariant(btn.dataset.variant);
         });
     });
 </script>
