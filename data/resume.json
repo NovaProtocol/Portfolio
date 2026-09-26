@@ -1,6 +1,6 @@
 {
   "name": "Khyles Gibrian Ramos",
-  "headline": "Mechanical Engineer | Embedded Systems & Automation",
+  "headline": "Mechanical Engineer | Embedded Systems & Software Development",
   "photo": "assets/images/resume_image.JPG",
   "contact": {
     "address": "Brgy. Mateuna, Tayabas, Quezon",
@@ -10,7 +10,30 @@
     "github": "https://github.com/NovaProtocol",
     "portfolio": "https://portfolio.projectnova.download"
   },
-  "summary": "Mechanical Engineering graduate with experience in AutoCAD facility design, safety inspection, and technical documentation. Strong background in embedded systems, automation, and software development, with hands-on experience integrating microcontrollers, sensors, NFC, and backend systems. I run a self-hosted homelab that serves every project below.",
+  "variants": {
+    "mechanical": {
+      "label": "Mechanical",
+      "blurb": "Leads with the mechanical subjects. Default.",
+      "order": [
+        "MELE Review",
+        "Water Billing System",
+        "GateKeeper",
+        "Homelab"
+      ]
+    },
+    "software": {
+      "label": "Software",
+      "blurb": "Leads with the largest build and the infrastructure work.",
+      "order": [
+        "Water Billing System",
+        "GateKeeper",
+        "Homelab",
+        "PracticeForge",
+        "MELE Review"
+      ]
+    }
+  },
+  "summary": "Mechanical Engineering graduate with experience in AutoCAD facility design, safety inspection, and technical documentation. Builds working software independently: embedded systems, backend services, and applied machine learning, with several self-hosted projects deployed and running in production. Open to roles in mechanical design and automation, or software and systems development.",
   "education": [
     {
       "level": "Tertiary",
@@ -55,7 +78,8 @@
       "period": "Aug 2025 - Nov 2025",
       "responsibilities": [
         "Built a ResNet-18 model with Triplet Loss from scratch for signature verification, reaching 86.96% validation accuracy on the thesis author's reference dataset",
-        "Built preprocessing pipelines to normalize and format image datasets, and integrated the trained model into a backend service for on-demand inference",
+        "Built preprocessing pipelines to normalize and format image datasets for training",
+        "Integrated the trained model into a backend service for on-demand inference",
         "Delivered working code and documentation to support the thesis defense",
         "Worked with the thesis author to turn the verification requirement into a working model pipeline"
       ]
@@ -67,22 +91,12 @@
       "responsibilities": [
         "Drafted facility layouts and emergency fire exit plans in AutoCAD to code-compliant egress and fire safety standards",
         "Inspected emergency lighting and fire suppression units against OSH compliance requirements, documenting deficiencies for the facilities office",
-        "Conducted facility asset audits and implemented an improved tracking system for university property"
+        "Conducted facility asset audits and implemented an improved tracking system for university property",
+        "Coordinated documentation and communication across departments to support daily facility operations"
       ]
     }
   ],
   "projects": [
-    {
-      "name": "Homelab",
-      "tech": "Docker, Caddy, Cloudflare Tunnel, Linux, Python, FastAPI, MySQL",
-      "url": "https://homelab.projectnova.download/",
-      "status_line": "Self-hosted server running every project on this resume",
-      "highlights": [
-        "One machine serves every project here, each in its own Compose stack behind a single Cloudflare Tunnel with per-host routing and TLS",
-        "The dashboard that does it reads /proc and /sys directly, with no agent, no exported metrics and no credentials to manage",
-        "Per-core CPU, memory, disk, network, GPU and thermals recorded on four cadences with a rolling 24-hour window, plus container health"
-      ]
-    },
     {
       "name": "Water Billing System",
       "tech": "React Native, Expo, TypeScript, FastAPI, MySQL, Docker, NFC",
@@ -101,7 +115,8 @@
       "url": "https://melereview.projectnova.download/",
       "highlights": [
         "Built a unit-aware engineering equation solver for multi-step formulas across metric and English conventions",
-        "Developed a Mechanical Engineering Licensure Exam reviewer with a self-maintained question bank, answer feedback, flag-for-review and progress tracking"
+        "Developed a Mechanical Engineering Licensure Exam reviewer with a self-maintained question bank",
+        "Implemented answer feedback, flag-for-review, and progress tracking"
       ]
     },
     {
@@ -109,7 +124,8 @@
       "tech": "Python, Flask, MySQL, Docker, Bubblewrap, Caddy",
       "url": "https://practiceforge.projectnova.download/",
       "highlights": [
-        "Isolated execution sandbox for untrusted code with a read-only filesystem, 1 GB memory cap, 25s CPU limit, 64-process ceiling and zero network access",
+        "Isolated execution sandbox for untrusted code with hard memory, CPU, and process limits and zero network access",
+        "Process isolation with a read-only filesystem, 1 GB memory cap, 25s CPU limit, and 64-process ceiling via Bubblewrap",
         "Built a background execution queue with signal-based timeout handling and numeric-lenient test-case comparison"
       ]
     },
@@ -119,6 +135,17 @@
       "highlights": [
         "Reverse-proxy gateway routing every service in the stack, with per-host and per-path rules that allow, refuse, or hold a request behind a shared access code",
         "Signed tamper-evident sessions, an admin panel for editing routes and rule groups while the gateway runs, and an audit log of every request with address, path, status and latency"
+      ]
+    },
+    {
+      "name": "Homelab",
+      "tech": "Docker, Caddy, Cloudflare Tunnel, Linux, Python, FastAPI, MySQL",
+      "url": "https://homelab.projectnova.download/",
+      "status_line": "Self-hosted server running every project on this resume",
+      "highlights": [
+        "One machine serves every project here, each in its own Compose stack behind a single Cloudflare Tunnel with per-host routing and TLS",
+        "The dashboard that does it reads /proc and /sys directly, with no agent, no exported metrics and no credentials to manage",
+        "Per-core CPU, memory, disk, network, GPU and thermals recorded on four cadences with a rolling 24-hour window, plus container health"
       ]
     }
   ],

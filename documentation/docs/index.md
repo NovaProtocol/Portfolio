@@ -40,7 +40,7 @@ Request → `portfolio_caddy:7011` → `reverse_proxy` to `portfolio_main:8000` 
 | [Architecture](architecture.md) | App factory, config, request flow, blueprints |
 | [Home Blueprint](blueprints/home.md) | `/` and `/health` |
 | [Projects Blueprint](blueprints/projects.md) | `/projects/` listing and `/projects/info/<slug>/` |
-| [Resume Blueprint](blueprints/resume.md) | `/resume/`, `/resume/view` (themes, print), noindex (`/robots.txt` is served by GateKeeper) |
+| [Resume Blueprint](blueprints/resume.md) | `/resume/`, `/resume/view` (variants, print), noindex (`/robots.txt` is served by GateKeeper) |
 | [Templates & Static](templates-static.md) | Jinja2 inheritance and static assets |
 | [Docker & Deployment](docker.md) | Compose, Dockerfile, Caddyfile, networks |
 
@@ -57,7 +57,7 @@ Portfolio/
 │ ├── templates/base.html # shared Jinja2 base
 │ ├── home/ # blueprint "" → / and /health
 │ ├── projects/ # blueprint /projects → index + detail
-│ └── resume/ # blueprint /resume → index + /view (themes)
+│ └── resume/ # blueprint /resume → index + /view (variants)
 ├── static/ # served at /static (images, js demos)
 ├── data/resume.json # resume content
 ├── caddy/Caddyfile + Dockerfile

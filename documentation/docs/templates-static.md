@@ -12,6 +12,7 @@ apps/
 ├── home/templates/home/index.html
 ├── projects/templates/projects/{index,detail,_card}.html
 └── resume/templates/resume/{index,view,page1,page2,_theme}.html
+    resume/templates/resume/{_page1_body,_page2_body,_resume_css}.html  (partials)
 static/
 ├── assets/images/
 │ ├── resume_image.JPG
