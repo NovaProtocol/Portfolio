@@ -1,10 +1,14 @@
-{# Page 1 body: the header and everything up to and including the homelab.
+{# Page 1 body: the header through to Work Experience.
 
    Included by `page1.html` (the iframe on the resume index) and by `view.html`
    (the whole-document view, which is what the Save-as-PDF button prints). Both
    used to carry their own copy of this markup, so a content change meant editing
    the same section in three places and the PDF could silently disagree with the
    page it was printed from. One copy now.
+
+   There is no homelab section here on purpose. The homelab is a project and is
+   listed as one on page 2; a section of its own said the same thing twice under
+   two headings.
 #}
 <div class="resume-header">
     <div class="who">
@@ -96,14 +100,3 @@
     </div>
     {% endfor %}
 </section>
-
-{% if resume.homelab %}
-<section class="section-homelab">
-    <h2>Homelab</h2>
-    <ul>
-        {% for item in resume.homelab %}
-        <li>{{ item }}</li>
-        {% endfor %}
-    </ul>
-</section>
-{% endif %}

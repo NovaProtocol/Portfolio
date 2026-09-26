@@ -78,8 +78,7 @@ def fold(text: str, chars: int = 118) -> int:
 # a small error: summing page 1's blocks into page 2 made both pages report the
 # same 168%, and "both pages are equally overflowing" is worse than no figure.
 PAGE_BLOCKS = {
-    1: ("header", "summary", "education", "coursework", "certifications",
-        "experience", "homelab"),
+    1: ("header", "summary", "education", "coursework", "certifications", "experience"),
     2: ("projects", "skills"),
 }
 
@@ -140,15 +139,6 @@ def measure(page: int, resume: dict) -> dict:
                 x += fold("• " + item, 112) * 15.6
             x += 10
         detail["experience"] = x + 8
-
-        # The homelab, below the experience: it is where everything on page 2
-        # actually runs, so it closes page 1 and sets up the projects.
-        lab = resume.get("homelab") or []
-        if lab:
-            h = 14 + 15.6                       # the heading itself
-            for item in lab:
-                h += fold("• " + item, 112) * 15.6
-            detail["homelab"] = h + 8
 
     elif page == 2:
         if resume.get("projects"):

@@ -73,20 +73,48 @@ def test_the_shared_rules_are_included_once() -> None:
         assert rule in css, f"the shared sheet lost `{rule}`"
 
 
-def test_the_two_pages_do_not_repeat_each_other() -> None:
-    """Page 1 carries the homelab; page 2 carries the projects.
+def test_the_homelab_is_a_project_and_not_a_section_of_its_own() -> None:
+    """It is one thing, so it gets one entry.
 
-    The homelab section went on both pages at different points while it was being
-    placed, which is exactly the kind of duplication a shared partial makes easy
-    to reintroduce by including the wrong file.
+    The homelab was briefly both a dedicated section at the foot of page 1 and a
+    project on page 2, saying the same three facts under two headings, so a
+    reader counting projects saw six entries for five projects.
+    """
+    resume = resume_data()
+
+    assert "homelab" not in resume, "the dedicated homelab section is back"
+
+    names = [p.get("name") for p in resume["projects"]]
+    assert names.count("Homelab") == 1, f"Homelab appears {names.count('Homelab')} times"
+
+    # And no template renders one either, however the data is shaped.
+    for name in ("_page1_body.html", "_page2_body.html", "view.html"):
+        text = (TEMPLATES / name).read_text()
+        assert "section-homelab" not in text, f"{name} still renders a homelab section"
+
+
+def test_the_homelab_leads_the_projects() -> None:
+    """It hosts every other project, so it is listed first."""
+    projects = resume_data()["projects"]
+    assert projects[0]["name"] == "Homelab", (
+        f"the projects lead with {projects[0]['name']!r}; the homelab hosts the rest"
+    )
+
+
+def test_the_two_pages_do_not_repeat_each_other() -> None:
+    """Page 1 is the background, page 2 is the work.
+
+    Sections have been placed on the wrong page more than once while this was
+    being rearranged, which is exactly the kind of duplication a shared partial
+    makes easy to reintroduce by including the wrong file.
     """
     body1 = (TEMPLATES / "_page1_body.html").read_text()
     body2 = (TEMPLATES / "_page2_body.html").read_text()
 
-    assert "section-homelab" in body1
-    assert "section-homelab" not in body2
     assert "section-projects" in body2
     assert "section-projects" not in body1
+    assert "section-experience" in body1
+    assert "section-experience" not in body2
 
 
 def test_every_project_names_its_technology(client) -> None:
@@ -114,12 +142,13 @@ def test_gatekeeper_does_not_claim_sqlite(client) -> None:
     assert "MySQL" in gatekeeper["tech"]
 
 
-def test_the_resume_renders_with_the_homelab_section(client) -> None:
-    """The section is data-driven, so a rename of the key would empty it."""
-    for url, expected in (
-        ("/resume/view?page=1", "Homelab"),
-        ("/resume/view?page=2", "Technical Skills"),
-    ):
-        body = client.get(url).text
-        assert expected in body, f"{url} lost its {expected} section"
-        assert "Host Dashboard" not in body, f"{url} still shows the old name"
+def test_the_resume_renders_the_homelab_once(client) -> None:
+    """One Homelab entry across the two sheets, and it is a project."""
+    body = client.get("/resume/view").text
+    assert body.count("<h2>Homelab</h2>") == 0, "Homelab should not be its own section"
+    assert "Homelab" in body, "the Homelab project disappeared"
+    assert "Selected Personal Projects" in body
+    assert "Host Dashboard" not in body, "still shows the old name"
+
+    for url in ("/resume/view?page=1", "/resume/view?page=2"):
+        assert "section-homelab" not in client.get(url).text
