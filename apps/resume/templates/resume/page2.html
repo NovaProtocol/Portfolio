@@ -6,90 +6,12 @@
     <title>Resume Page 2</title>
     {% include "resume/_theme.html" %}
     <style>
-        * { box-sizing: border-box; }
-        html, body { margin: 0; padding: 0; height: 100%; }
-        body {
-            background: #ffffff;
-            font-size: 11px;
-            line-height: 1.42;
-        }
-        .page {
-            width: 210mm;
-            height: 297mm;
-            padding: 15mm 18mm;
-            box-sizing: border-box;
-        }
-        section { margin-bottom: 0.85rem; }
-        section h2 {
-            font-size: 0.95em;
-            font-weight: 700;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            padding: 0.15rem 0.4rem;
-            padding-bottom: 0.2rem;
-            margin-bottom: 0.4rem;
-            background: var(--section-heading-bg);
-        }
-        .entry { margin-bottom: 0.65rem; }
-        .entry:last-child { margin-bottom: 0; }
-        .entry .head {
-            display: flex;
-            justify-content: space-between;
-            align-items: baseline;
-            margin-bottom: 0.1rem;
-        }
-        .entry .title { font-weight: 700; }
-        .entry .org { font-weight: 600; font-size: 0.95em; }
-        .entry .period { font-style: italic; font-size: 0.89em; white-space: nowrap; }
-        .entry ul { margin: 0.15rem 0 0; padding-left: 1.2rem; }
-        .entry ul li { margin-bottom: 0.15rem; }
-        .tech-stack { font-size: 0.85em; margin-bottom: 0.2rem; }
-        .demo-line { font-size: 0.85em; margin-bottom: 0.2rem; color: var(--light-muted); }
-        .demo-line a { color: var(--text-color); }
-        .resume-projects-wrap { display: flex; gap: 1rem; align-items: flex-start; }
-        .resume-projects-list { flex: 1; min-width: 0; }
-        .skill-row { margin: 0 0 0.4rem; }
-        .skill-cat { font-weight: 700; }
+    {% include "resume/_resume_css.html" %}
     </style>
 </head>
 <body>
 <div class="page">
-    {% if resume.projects %}
-    <section class="section-projects">
-        <h2>Selected Personal Projects</h2>
-        <p>Live demos of selected projects are hosted on my portfolio. Source code for these projects is public on GitHub.</p>
-        <div class="resume-projects-wrap">
-            <div class="resume-projects-list">
-                {% for proj in resume.projects %}
-                <div class="entry">
-                    <p class="title" style="margin-bottom:0.15rem;">{{ proj.name }}</p>
-                    {% if proj.tech %}
-                    <p class="tech-stack">Tech Stack: {{ proj.tech }}</p>
-                    {% endif %}
-                    {% if proj.status_line %}
-                    <p class="demo-line">{{ proj.status_line }}</p>
-                    {% endif %}
-                    {% if proj.url %}
-                    <p class="demo-line"><strong>Live demo:</strong> <a href="{{ proj.url }}">{{ proj.url }}</a></p>
-                    {% endif %}
-                    <ul>
-                        {% for item in proj.highlights %}
-                        <li>{{ item }}</li>
-                        {% endfor %}
-                    </ul>
-                </div>
-                {% endfor %}
-            </div>
-        </div>
-    </section>
-    {% endif %}
-
-    <section class="section-skills">
-        <h2>Technical Skills</h2>
-        {% for skill in resume.skills %}
-        <p class="skill-row"><span class="skill-cat">{{ skill.category }}:</span> {{ skill.value }}</p>
-        {% endfor %}
-    </section>
+    {% include "resume/_page2_body.html" %}
 </div>
 </body>
 </html>

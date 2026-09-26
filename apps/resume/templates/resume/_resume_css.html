@@ -1,0 +1,81 @@
+{# Shared resume styles: everything that is not a per-theme override.
+
+   Included by `page1.html`, `page2.html` and `view.html`. This was three copies
+   of the same rules, and they drifted: `view.html` kept `margin-bottom: 0.85rem`
+   on `section` and never gained the `section:last-child` rule, so the
+   whole-document view overflowed a fixed-height, `overflow: hidden` page while
+   the iframe sitting next to it did not. The printed PDF comes from `view.html`,
+   which is the copy that was wrong.
+
+   Theme-dependent values (`--font-family`, `--header-border`, the per-theme
+   `.page` padding) stay in `_theme.html`, which all three include before this.
+#}
+* { box-sizing: border-box; }
+body {
+    background: #ffffff;
+    font-size: 11px;
+    line-height: 1.38;
+}
+.page {
+    width: 210mm;
+    height: 297mm;
+    padding: 13mm 18mm;
+    box-sizing: border-box;
+}
+.resume-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    border-bottom: var(--header-border);
+    padding-bottom: 0.8rem;
+    margin-bottom: 0.9rem;
+}
+.resume-header h1 {
+    font-size: 1.6em;
+    font-weight: 700;
+    margin: 0 0 0.3rem;
+}
+.contact-line { font-size: 0.9em; margin: 0; }
+.contact-line a { text-decoration: underline; }
+.resume-photo {
+    width: 90px;
+    height: 90px;
+    object-fit: cover;
+    border: 1px solid #ddd;
+    margin-left: 1.5rem;
+    flex-shrink: 0;
+}
+section { margin-bottom: 0.68rem; }
+/* A margin that runs past a fixed-height, `overflow: hidden` page is simply
+   lost, and the last one buys nothing. */
+section:last-child { margin-bottom: 0; }
+section h2 {
+    font-size: 0.95em;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 0.15rem 0.4rem;
+    padding-bottom: 0.2rem;
+    margin-bottom: 0.4rem;
+    background: var(--section-heading-bg);
+}
+.entry { margin-bottom: 0.65rem; }
+.entry:last-child { margin-bottom: 0; }
+.entry .head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 0.1rem;
+}
+.entry .title { font-weight: 700; }
+.entry .org { font-weight: 400; font-size: 0.95em; }
+.entry .period { font-style: italic; font-size: 0.89em; white-space: nowrap; }
+.entry ul { margin: 0.1rem 0 0; padding-left: 1.2rem; }
+.entry ul li { margin-bottom: 0.15rem; font-size: 0.95em; }
+.tech-stack { font-size: 0.85em; margin-bottom: 0.2rem; }
+.demo-line { font-size: 0.85em; margin-bottom: 0.2rem; color: var(--light-muted); }
+.demo-line a { color: var(--text-color); }
+.resume-projects-wrap { display: flex; gap: 1rem; align-items: flex-start; }
+.resume-projects-list { flex: 1; min-width: 0; }
+.skill-row { margin: 0 0 0.4rem; }
+.skill-cat { font-weight: 700; }

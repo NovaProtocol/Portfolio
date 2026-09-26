@@ -288,11 +288,16 @@ PROJECTS: dict[str, dict] = {
     },
     "host-dashboard": {
         "active": True,
-        "title": "Host Dashboard",
-        "subtitle": "Live telemetry for the server this stack runs on",
+        # The key stays `host-dashboard` so the published URL keeps working; the
+        # name the reader sees is Homelab, because what is worth showing off is
+        # the machine, and the dashboard is how you look at it.
+        "title": "Homelab",
+        "title_prefix": "",
+        "subtitle": "A self-hosted server running every project on this site",
         "description": [
-            "A dashboard for the machine that hosts everything else here: processor load per core, memory and swap, disk throughput and capacity, network per interface, GPU utilisation with its VRAM, clocks and power draw, and every temperature and fan speed the board reports. It also lists what is running, grouped by environment and Compose stack, with per-container CPU, memory, uptime, network and disk.",
-            "Every reading is recorded on four cadences for a rolling 24 hours, so the dashboard answers \"what spiked overnight\" and not only \"what is happening now\". Each measurement gets a page of its own with a zoomable 24-hour chart, and the reader is told whether anything looks wrong before being shown a number: a plain sentence, then the figures that confirm it.",
+            "One machine runs everything on this site: seven applications, each in its own Compose stack, behind a single Cloudflare Tunnel that terminates TLS and routes by hostname. Every service is containerised, and every one of them is reachable only through a reverse proxy that applies per-host and per-path rules.",
+            "A dashboard watches the machine itself: processor load per core, memory and swap, disk throughput and capacity, network per interface, GPU utilisation with its VRAM, clocks and power draw, and every temperature and fan speed the board reports. It also lists what is running, grouped by environment and Compose stack, with per-container CPU, memory, uptime, network and disk.",
+            "Every reading is recorded on four cadences for a rolling 24 hours, so it answers \"what spiked overnight\" and not only \"what is happening now\". Each measurement gets a page of its own with a zoomable 24-hour chart, and the reader is told whether anything looks wrong before being shown a number: a plain sentence, then the figures that confirm it.",
             "The stack reads the host directly. It runs on the machine it measures, so there is no agent, no exported metrics endpoint and no credentials to manage: it opens the kernel's own files and reads what the kernel already knows. Hardware identity comes the same way, including the installed memory modules from the firmware's SMBIOS table.",
             "An assistant answers questions about the host in plain language, running as its own container against a locally served model. It is deliberately outside the dashboard process, so a slow model never blocks a page.",
         ],
@@ -301,6 +306,8 @@ PROJECTS: dict[str, dict] = {
             "hardware": ["/proc", "/sys", "SMBIOS", "amdgpu", "hwmon"],
         },
         "features": [
+            "Seven applications, each containerised, on one self-hosted server behind a single Cloudflare Tunnel",
+            "Per-host and per-path access rules with signed sessions and an audit log of every request",
             "Direct host reads from /proc and /sys: no agent, no exported metrics, no credentials",
             "Per-core CPU, memory, swap, disk I/O, per-interface network, GPU and thermals",
             "Four collection cadences with a rolling 24-hour window and automatic retention",
@@ -312,11 +319,12 @@ PROJECTS: dict[str, dict] = {
         ],
         "status": "operational",
         "reason": (
-            "Everything else on this domain runs on one machine. Without a way to "
-            "see that machine, a slow page could be a busy processor, a full disk, a "
-            "thermal limit or a container spinning, and the only way to tell was to go "
-            "and look. This is the thing that looks, continuously, and keeps the last "
-            "day of what it saw."
+            "Everything else here runs on one machine, and it was a black box. A "
+            "slow page could be a busy processor, a full disk, a thermal limit or a "
+            "container spinning, and the only way to tell was to go and look. This "
+            "is the thing that looks, continuously, and keeps the last day of what "
+            "it saw. It also turned out to be the clearest way to show how the rest "
+            "of the site is put together."
         ),
         "url": "https://homelab.projectnova.download/",
         "github": "https://github.com/NovaProtocol/ServerDashboard",

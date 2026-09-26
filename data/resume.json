@@ -10,7 +10,12 @@
     "github": "https://github.com/NovaProtocol",
     "portfolio": "https://portfolio.projectnova.download"
   },
-  "summary": "Mechanical Engineering graduate with experience in AutoCAD facility design, safety inspection, and technical documentation. Strong background in embedded systems, automation, and software development, with hands-on experience integrating microcontrollers, sensors, NFC, and backend systems.",
+  "summary": "Mechanical Engineering graduate with experience in AutoCAD facility design, safety inspection, and technical documentation. Strong background in embedded systems, automation, and software development, with hands-on experience integrating microcontrollers, sensors, NFC, and backend systems. I run a self-hosted homelab that serves every project below.",
+  "homelab": [
+    "Every project on this resume runs on one self-hosted Linux server, each in its own stack behind a single Cloudflare Tunnel",
+    "A reverse-proxy gateway applies per-host and per-path access rules and writes an audit log of every request, served or refused",
+    "Telemetry comes from the kernel up: per-core CPU, memory, disk, network, GPU and thermals, plus container health"
+  ],
   "education": [
     {
       "level": "Tertiary",
@@ -55,10 +60,8 @@
       "period": "Aug 2025 - Nov 2025",
       "responsibilities": [
         "Built a ResNet-18 model with Triplet Loss from scratch for signature verification, reaching 86.96% validation accuracy on the thesis author's reference dataset",
-        "Built preprocessing pipelines to normalize and format image datasets for training",
-        "Integrated the trained model into a backend service for on-demand inference",
-        "Delivered working code and documentation to support the thesis defense",
-        "Collaborated with the thesis author to translate verification requirements into a working model pipeline"
+        "Built preprocessing pipelines to normalize and format image datasets, and integrated the trained model into a backend service for on-demand inference",
+        "Delivered working code and documentation to support the thesis defense"
       ]
     },
     {
@@ -68,90 +71,92 @@
       "responsibilities": [
         "Drafted facility layouts and emergency fire exit plans in AutoCAD to code-compliant egress and fire safety standards",
         "Inspected emergency lighting and fire suppression units against OSH compliance requirements, documenting deficiencies for the facilities office",
-        "Conducted facility asset audits and implemented an improved tracking system for university property",
-        "Coordinated documentation and communication across departments to support daily facility operations"
+        "Conducted facility asset audits and implemented an improved tracking system for university property"
       ]
     }
   ],
   "projects": [
     {
       "name": "Water Billing System",
-      "tech": "React Native, NFC, Docker, MySQL",
+      "tech": "React Native, Expo, TypeScript, FastAPI, MySQL, Docker, NFC",
       "url": "https://water-billing-system.projectnova.download/",
       "status_line": "Live demo, architecture and core modules complete",
       "highlights": [
         "Designed an end-to-end utility billing workflow that unifies meter reading, tariff computation, and bill distribution into a single process",
         "Offline-first NFC meter reading with on-device cryptographic key derivation so meter data never crosses the network",
-        "Automated 5-tier progressive tariff billing with late penalties and waterfall payment application",
-        "Customer and payment data isolated in internal networks with role-scoped access"
+        "Automated 5-tier progressive tariff billing with late penalties and waterfall payment application"
       ]
     },
     {
       "name": "MELE Review",
-      "tech": "Python, MySQL, Docker",
+      "tech": "Python, FastAPI, MySQL, Docker, MathQuill, math.js",
       "url": "https://melereview.projectnova.download/",
       "highlights": [
         "Built a unit-aware engineering equation solver for multi-step formulas across metric and English conventions",
-        "Developed a Mechanical Engineering Licensure Exam reviewer with a self-maintained question bank",
-        "Implemented answer feedback, flag-for-review, and progress tracking across supported engineering topics"
+        "Developed a Mechanical Engineering Licensure Exam reviewer with a self-maintained question bank, answer feedback, flag-for-review and progress tracking"
       ]
     },
     {
       "name": "PracticeForge",
-      "tech": "Python, Docker, Bubblewrap",
+      "tech": "Python, Flask, MySQL, Docker, Bubblewrap, Caddy",
       "url": "https://practiceforge.projectnova.download/",
       "highlights": [
-        "Isolated execution sandbox for untrusted code with hard memory, CPU, and process limits and zero network access",
-        "Process isolation with read-only filesystem, 1 GB memory cap, 25s CPU limit, and 64-process ceiling via Bubblewrap",
+        "Isolated execution sandbox for untrusted code with a read-only filesystem, 1 GB memory cap, 25s CPU limit, 64-process ceiling and zero network access",
         "Built a background execution queue with signal-based timeout handling and numeric-lenient test-case comparison"
       ]
     },
     {
       "name": "GateKeeper",
-      "tech": "Python, SQLite, Docker",
+      "tech": "Python, FastAPI, MySQL, Docker, Caddy, PyJWT",
       "highlights": [
         "Reverse-proxy gateway routing every service in the stack, with per-host and per-path rules that allow, refuse, or hold a request behind a shared access code",
-        "Audit log of every request with address, country, path, status and latency, written for served and refused requests alike",
-        "Admin panel to manage routes, rule groups, codes and custom pages while the gateway is running, with signed tamper-evident cookies and a backup code for recovery"
+        "Signed tamper-evident sessions, an admin panel for editing routes and rule groups while the gateway runs, and an audit log of every request with address, path, status and latency"
       ]
     },
     {
-      "name": "Host Dashboard",
-      "tech": "Python, FastAPI, Docker, MySQL, Cloudflare Tunnel",
+      "name": "Homelab",
+      "tech": "Docker, Caddy, Cloudflare Tunnel, Linux, Python, FastAPI, MySQL",
       "url": "https://homelab.projectnova.download/",
-      "status_line": "Running continuously on the host it monitors",
+      "status_line": "Self-hosted server running every project on this resume",
       "highlights": [
-        "Reads host telemetry directly from /proc and /sys with no agent, no exported metrics endpoint and no credentials to manage",
-        "Per-core CPU, memory, swap, disk I/O, per-interface network, GPU and thermals, recorded on four cadences with a rolling 24-hour window",
-        "Names the hardware it measures, including memory modules read from the firmware's SMBIOS table and graphics and network hardware resolved from the PCI database",
-        "A public read-only instance serving every page and refusing every write, with its data volume mounted read-only and no writer process"
+        "One machine serves every project here, each in its own Compose stack behind a single Cloudflare Tunnel with per-host routing and TLS",
+        "The dashboard that does it reads /proc and /sys directly, with no agent, no exported metrics and no credentials to manage",
+        "Per-core CPU, memory, disk, network, GPU and thermals recorded on four cadences with a rolling 24-hour window, plus container health"
       ]
     }
   ],
   "skills": [
     {
-      "category": "Mechanical Design & Fabrication",
-      "value": "AutoCAD, Fusion 360, OnShape, SMAW, 3D Printing, Blueprint Reading, Prototyping"
+      "category": "Mechanical Design",
+      "value": "AutoCAD, Fusion 360, OnShape, Technical Drawing, Blueprint Reading"
     },
     {
-      "category": "Embedded Systems & Automation",
-      "value": "Arduino, ESP32, Raspberry Pi, NFC, Sensor Interfaces, Hardware/Software Integration"
+      "category": "Manufacturing & Fabrication",
+      "value": "SMAW, 3D Printing, Prototyping, Materials Selection"
     },
     {
       "category": "Safety & Compliance",
       "value": "DOLE BOSH SO2, OSH Standards, Safety Inspection, Fire Safety Planning"
     },
     {
-      "category": "Software Development",
-      "value": "Python, C++, JavaScript, TypeScript, SQL, FastAPI, Flask, React Native"
+      "category": "Embedded Systems",
+      "value": "Arduino, ESP32, Raspberry Pi, NFC, Sensor Interfaces, Hardware/Software Integration"
+    },
+    {
+      "category": "Programming Languages",
+      "value": "Python, C++, JavaScript, TypeScript, SQL"
+    },
+    {
+      "category": "Backend & APIs",
+      "value": "FastAPI, Flask, SQLAlchemy, REST APIs, Granian"
+    },
+    {
+      "category": "Data & Infrastructure",
+      "value": "MySQL, SQLite, Docker, Linux, Caddy, Cloudflare Tunnel, Gunicorn"
     },
     {
       "category": "Machine Learning",
       "value": "PyTorch, ResNet-18, Triplet Loss, Image Preprocessing, Model Training & Validation, Inference Services"
-    },
-    {
-      "category": "Data & Infrastructure",
-      "value": "MySQL, SQLite, Docker, Linux, Cloudflare Tunnel, Caddy, Gunicorn"
     }
   ]
 }
