@@ -1,0 +1,42 @@
+{# Page 2 body: the projects and the technical skills.
+
+   Included by `page2.html` (the iframe on the resume index) and by `view.html`
+   (the whole-document view, which is what the Save-as-PDF button prints). See
+   `_page1_body.html` for why this is a partial rather than two copies.
+#}
+{% if resume.projects %}
+<section class="section-projects">
+    <h2>Selected Personal Projects</h2>
+    <p>Live demos of selected projects are hosted on my portfolio. Source code for these projects is public on GitHub.</p>
+    <div class="resume-projects-wrap">
+        <div class="resume-projects-list">
+            {% for proj in resume.projects %}
+            <div class="entry">
+                <p class="title" style="margin-bottom:0.15rem;">{{ proj.name }}</p>
+                {% if proj.tech %}
+                <p class="tech-stack">Tech Stack: {{ proj.tech }}</p>
+                {% endif %}
+                {% if proj.status_line %}
+                <p class="demo-line">{{ proj.status_line }}</p>
+                {% endif %}
+                {% if proj.url %}
+                <p class="demo-line"><strong>Live demo:</strong> <a href="{{ proj.url }}">{{ proj.url }}</a></p>
+                {% endif %}
+                <ul>
+                    {% for item in proj.highlights %}
+                    <li>{{ item }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<section class="section-skills">
+    <h2>Technical Skills</h2>
+    {% for skill in resume.skills %}
+    <p class="skill-row"><span class="skill-cat">{{ skill.category }}:</span> {{ skill.value }}</p>
+    {% endfor %}
+</section>

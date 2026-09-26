@@ -1,0 +1,109 @@
+{# Page 1 body: the header and everything up to and including the homelab.
+
+   Included by `page1.html` (the iframe on the resume index) and by `view.html`
+   (the whole-document view, which is what the Save-as-PDF button prints). Both
+   used to carry their own copy of this markup, so a content change meant editing
+   the same section in three places and the PDF could silently disagree with the
+   page it was printed from. One copy now.
+#}
+<div class="resume-header">
+    <div class="who">
+        <h1>{{ resume.name }}</h1>
+        {% if resume.headline %}
+        <p class="contact-line" style="font-weight:700;">{{ resume.headline }}</p>
+        {% endif %}
+        <p class="contact-line">{{ resume.contact.address }}</p>
+        <p class="contact-line">Contact No: {{ resume.contact.phone }}</p>
+        <p class="contact-line">E-mail: {{ resume.contact.email }}</p>
+        {% if resume.contact.linkedin %}
+        <p class="contact-line"><a href="{{ resume.contact.linkedin }}">LinkedIn: {{ resume.contact.linkedin }}</a></p>
+        {% endif %}
+        {% if resume.contact.github %}
+        <p class="contact-line"><a href="{{ resume.contact.github }}">GitHub: {{ resume.contact.github }}</a></p>
+        {% endif %}
+        {% if resume.contact.portfolio %}
+        <p class="contact-line"><a href="{{ resume.contact.portfolio }}">Portfolio: {{ resume.contact.portfolio }}</a></p>
+        {% endif %}
+    </div>
+    {% if resume.photo %}
+    <img class="resume-photo" src="{{ url_for('static', filename=resume.photo) }}" alt="Profile photo">
+    {% endif %}
+</div>
+
+<section class="section-summary">
+    <h2>Professional Summary</h2>
+    <p>{{ resume.summary }}</p>
+</section>
+
+<section class="section-education">
+    <h2>Education</h2>
+    {% for edu in resume.education %}
+    <div class="entry">
+        <div class="head">
+            <span class="title">{{ edu.school }}</span>
+            <span class="period">{{ edu.years }}</span>
+        </div>
+        <p class="org" style="margin-bottom:0;">{{ edu.degree }}</p>
+        {% if edu.status %}
+        <p class="org" style="margin-bottom:0;">{{ edu.status }}</p>
+        {% endif %}
+        {% if edu.awards %}
+        <ul style="margin-top:0.2rem;">
+            {% for award in edu.awards %}
+            <li>{{ award }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+    </div>
+    {% endfor %}
+</section>
+
+{% if resume.coursework %}
+<section class="section-coursework">
+    <h2>Relevant Coursework</h2>
+    <p style="margin-bottom:0;">{{ resume.coursework | join(' · ') }}</p>
+</section>
+{% endif %}
+
+<section class="section-certification">
+    <h2>Certification</h2>
+    {% for cert in resume.certifications %}
+    <div class="entry">
+        <div class="head">
+            <span class="title">{{ cert.title }}</span>
+            <span class="period">{{ cert.year }}</span>
+        </div>
+        <p style="margin-bottom:0;">{{ cert.issuer }}</p>
+        {% if cert.detail %}<p style="margin-bottom:0; color:#333;">{{ cert.detail }}</p>{% endif %}
+    </div>
+    {% endfor %}
+</section>
+
+<section class="section-experience">
+    <h2>Work Experience</h2>
+    {% for job in resume.experience %}
+    <div class="entry">
+        <div class="head">
+            <span class="title">{{ job.organization }}</span>
+            <span class="period">{{ job.period }}</span>
+        </div>
+        <p class="org" style="margin-bottom:0.3rem;">{{ job.role }}</p>
+        <ul>
+            {% for item in job.responsibilities %}
+            <li>{{ item }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endfor %}
+</section>
+
+{% if resume.homelab %}
+<section class="section-homelab">
+    <h2>Homelab</h2>
+    <ul>
+        {% for item in resume.homelab %}
+        <li>{{ item }}</li>
+        {% endfor %}
+    </ul>
+</section>
+{% endif %}
