@@ -18,7 +18,24 @@
    gave every sheet a vertical and a horizontal scrollbar. `view.html` sets
    `body { margin: 0 }` itself and did not show the fault, which is why only the
    embedded pages looked wrong. */
-html, body { margin: 0; padding: 0; }
+/* The sheet is exactly as wide as the iframe on the resume page, so anything that
+   takes width inside that frame pushes the document wider and grows a scrollbar.
+
+   A classic scrollbar does exactly that. Headless Chromium uses overlay
+   scrollbars and reports nothing wrong, but Windows and macOS set to always show
+   scrollbars give the frame about 15px less, so the 794px sheet overflowed
+   horizontally; the horizontal bar then took height and produced a vertical one
+   too. Two bars where there should be none, on a sheet whose content never needed
+   to move.
+
+   Clipping that overflow is safe, and measured rather than assumed: across every
+   resume the widest element ends at 726px, which is inside the 18mm padding, so
+   what is cut is padding and never a glyph. The sheet is a fixed-size preview
+   either way; hiding the bar does not hide content.
+
+   The print rules in `view.html` put `overflow` back to visible. A print layout
+   must never hide a page that overruns. */
+html, body { margin: 0; padding: 0; overflow: hidden; }
 body {
     background: #ffffff;
     font-size: 11px;
@@ -29,6 +46,8 @@ body {
     height: 297mm;
     padding: 13mm 18mm;
     box-sizing: border-box;
+    /* A sheet is a fixed-size preview, so it does not scroll internally. */
+    overflow: hidden;
 }
 .resume-header {
     display: flex;
