@@ -6,14 +6,17 @@
     <title>Resume - Khyles Gibrian Ramos</title>
     {% include "resume/_theme.html" %}
     <style>
-        {# The body and the two page sheets, then the shared rules. This file is
-           what the Save-as-PDF button prints, so its print rules have to agree
-           with the shared padding: when they disagreed the page overflowed and
-           the browser quietly cut the last section off the sheet. #}
+        {# The shared rules first, then the rules this file adds. Order matters:
+           at equal specificity the later declaration wins, and this file's
+           `@media print` block has to beat the shared sheet's `overflow: hidden`
+           on `html, body` and `.page`. With the include at the end it did not,
+           and the print stylesheet silently clipped an overrunning page instead
+           of flowing it onto the next sheet. #}
+        {% include "resume/_resume_css.html" %}
+
         body { margin: 0; }
         .resume { margin: 0 auto; }
         .page {
-            overflow: hidden;
             margin: 0 auto;
             background: #ffffff;
             box-shadow: 0 2px 16px rgba(0, 0, 0, 0.18);
@@ -35,12 +38,15 @@
             }
             .page:last-child { break-after: auto; }
             .page + .page { margin-top: 0; }
+            /* The screen rule hides overflow so an iframe cannot grow a
+               scrollbar. A print layout must never hide a page that overruns:
+               an extra sheet is better than content the reader never sees. */
+            html, body { overflow: visible; }
+            .page { overflow: visible; }
             /* Sections must not be split across a page break, which matters
                because these sheets are already exactly one page each. */
             section, .entry { page-break-inside: avoid; }
         }
-
-        {% include "resume/_resume_css.html" %}
     </style>
 </head>
 <body>

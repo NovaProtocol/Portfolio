@@ -111,11 +111,20 @@ def test_the_page_reset_lives_in_the_shared_sheet() -> None:
         "the reset should zero padding as well as margin"
     )
 
-    for name in ("page1.html", "page2.html", "view.html"):
+    for name in ("page1.html", "page2.html"):
         text = (TEMPLATES / name).read_text()
         assert "html, body" not in text, (
             f"{name} restates the reset; it belongs in the shared sheet so the "
             f"three cannot drift again"
+        )
+
+    # `view.html` is allowed an `html, body` rule of its own, but only to undo the
+    # clipping in print. If it ever restates the reset instead, the shared sheet
+    # has stopped being the single source and the drift can start again.
+    view = (TEMPLATES / "view.html").read_text()
+    for rule in re.findall(r"html,\s*body\s*\{([^}]*)\}", view):
+        assert "margin" not in rule, (
+            "view.html restates the body margin reset instead of inheriting it"
         )
 
 
@@ -357,6 +366,63 @@ def test_every_resume_in_the_list_has_a_label_and_a_hint() -> None:
     for item in _RESUME_LIST:
         assert item["label"].strip(), f"{item['name']} has no label"
         assert item["blurb"].strip(), f"{item['name']} has no hint for the selector"
+
+
+def test_the_embedded_sheets_cannot_scroll() -> None:
+    """The sheet is exactly as wide as the iframe, so it must never overrun.
+
+    On screen the sheet is 794px inside a 794px frame. A classic scrollbar, as on
+    Windows and on macOS set to always show one, takes ~15px of that frame, which
+    pushed the sheet over and produced a horizontal bar; the horizontal bar then
+    took height and produced a vertical one too. Headless Chromium uses overlay
+    scrollbars and shows nothing wrong, which is why this went unnoticed and why
+    the fix is asserted here rather than left to the eye.
+
+    Two things have to hold: the screen rules clip, so a narrower frame cannot
+    grow a bar, and the print rules do not, so a page that overruns is flowed onto
+    the next sheet instead of being silently cut.
+    """
+    css = (TEMPLATES / "_resume_css.html").read_text()
+    assert re.search(r"html,\s*body\s*\{[^}]*overflow:\s*hidden", css), (
+        "the shared sheet no longer clips overflow; the embedded sheets will "
+        "scroll whenever the frame loses width to a scrollbar"
+    )
+    assert re.search(r"\.page\s*\{[^}]*overflow:\s*hidden", css), (
+        "a fixed-size sheet should not scroll internally"
+    )
+
+    view = (TEMPLATES / "view.html").read_text()
+    print_block = view[view.index("@media print"):]
+    # Both selectors the screen rules clip have to be undone. Asserting only that
+    # the phrase "overflow: visible" appears passes while one of the two is still
+    # hidden, which is exactly the half-fix this test exists to catch.
+    assert re.search(r"html,\s*body\s*\{[^}]*overflow:\s*visible", print_block), (
+        "print leaves `html, body` clipped, so an overrunning page is silently "
+        "cut instead of flowing onto the next sheet"
+    )
+    assert re.search(r"\.page\s*\{[^}]*overflow:\s*visible", print_block), (
+        "print leaves the sheet clipped"
+    )
+
+
+def test_the_print_rules_come_after_the_shared_sheet() -> None:
+    """Source order, because specificity alone does not settle it.
+
+    `view.html` re-sets `overflow` inside `@media print` to override the shared
+    sheet. With the include at the end of the style block those rules came first
+    and lost, so the print stylesheet kept clipping while every on-screen check
+    still passed.
+    """
+    view = (TEMPLATES / "view.html").read_text()
+    # Look at the code, not the prose: the doc comment above the include names
+    # the file too, and matching that would find the wrong position.
+    code = re.sub(r"\{#.*?#\}", "", view, flags=re.S)
+    include_at = code.index('{% include "resume/_resume_css.html" %}')
+    print_at = code.index("@media print")
+    assert include_at < print_at, (
+        "the shared sheet is included after the print block, so its `overflow: "
+        "hidden` wins and the print rules do nothing"
+    )
 
 
 def test_the_resume_files_reach_the_image() -> None:
