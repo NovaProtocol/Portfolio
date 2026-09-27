@@ -2,8 +2,8 @@
   {
     "resume_name": "Mechanical Engineering",
     "overwrites": {
-      "headline": "Mechanical Engineer | Design, safety, and documentation",
-      "summary": "Mechanical Engineering graduate with hands-on experience in AutoCAD facility design, safety inspection, and technical documentation. Drafted facility layouts and emergency egress plans to code, inspected life-safety equipment against OSH requirements, and audited university property. Also builds software, including a unit-aware equation solver used for licensure exam review. Seeking a mechanical design, facilities, or safety engineering role.",
+      "headline": "Mechanical Engineer | Embedded Systems & Automation",
+      "summary": "Mechanical Engineering graduate with hands-on experience in AutoCAD facility design, safety inspection, and technical documentation. Differentiated by hands-on embedded systems experience: integrating microcontrollers, sensors, and NFC into working hardware and software systems. Also builds backend services and applied machine learning independently. Seeking a mechanical design, facilities, safety, or automation-adjacent engineering role.",
       "projects": [
         "MELE Review",
         "Water Billing System",
@@ -25,6 +25,16 @@
         "Homelab",
         "PracticeForge",
         "MELE Review"
+      ],
+      "skill_order": [
+        "Programming Languages",
+        "Backend & APIs",
+        "Data & Infrastructure",
+        "Machine Learning",
+        "Embedded Systems",
+        "Mechanical Design",
+        "Manufacturing & Fabrication",
+        "Safety & Compliance"
       ]
     },
     "label": "Software",

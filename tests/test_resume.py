@@ -425,6 +425,123 @@ def test_the_print_rules_come_after_the_shared_sheet() -> None:
     )
 
 
+def test_a_skill_order_reorders_without_losing_a_category() -> None:
+    """An order selects, it does not replace.
+
+    The software resume leads with its own categories. If an order dropped
+    everything it did not name, that resume would silently lose the mechanical
+    skills, and a category added to the default later would vanish from every
+    resume that named an order before it existed.
+    """
+    default = default_resume()
+    soft = served("Software")
+
+    default_names = [s["category"] for s in default["skills"]]
+    soft_names = [s["category"] for s in soft["skills"]]
+
+    assert soft_names[0] == "Programming Languages", soft_names
+    assert sorted(soft_names) == sorted(default_names), "a category was lost or invented"
+
+    # The values are untouched, only the sequence moved.
+    default_values = {s["category"]: s["value"] for s in default["skills"]}
+    for skill in soft["skills"]:
+        assert skill["value"] == default_values[skill["category"]]
+
+    # And Generic is unaffected, because it names no order.
+    assert [s["category"] for s in default["skills"]] == default_names
+
+
+def test_a_partial_skill_order_still_keeps_every_category() -> None:
+    """The case the software resume does not exercise, because it names all eight.
+
+    A resume that names only the categories it cares about must still carry the
+    rest. Without this, an order could stop selecting and start replacing and the
+    suite would not notice: every order in the data today happens to be
+    exhaustive.
+    """
+    from apps.routes.resume import _order_skills
+
+    base = {
+        "skills": [
+            {"category": "A", "value": "a"},
+            {"category": "B", "value": "b"},
+            {"category": "C", "value": "c"},
+        ],
+        "skill_order": ["C"],
+    }
+    out = _order_skills(base)
+
+    assert [s["category"] for s in out["skills"]] == ["C", "A", "B"], out["skills"]
+    assert base["skills"][0]["category"] == "A", "the input was mutated"
+    # No order at all leaves the list alone.
+    assert _order_skills({"skills": base["skills"]})["skills"] == base["skills"]
+
+
+def test_every_named_skill_category_exists() -> None:
+    """A rename in the default would otherwise silently drop a row."""
+    pool = {s["category"] for s in default_resume()["skills"]}
+    for entry in overrides():
+        order = (entry.get("overwrites") or {}).get("skill_order") or []
+        unknown = [c for c in order if c not in pool]
+        assert not unknown, f"{entry['resume_name']} names unknown skill categories: {unknown}"
+        assert len(set(order)) == len(order), f"{entry['resume_name']} repeats a category"
+
+
+def test_the_mechanical_resume_excludes_practiceforge_on_purpose() -> None:
+    """The exclusion is deliberate, not a dropped row.
+
+    Every other project is engineering work a mechanical reader can follow.
+    PracticeForge is a Python practice sandbox, recorded elsewhere as halted for
+    lack of productive use, so it has nothing to say to that reader. Pinned so a
+    future edit has to argue with a test rather than quietly re-add it or drop
+    something else.
+    """
+    pool = {p["name"] for p in default_resume()["projects"]}
+    mech = {p["name"] for p in served("Mechanical Engineering")["projects"]}
+
+    assert "PracticeForge" not in mech
+    assert mech == pool - {"PracticeForge"}
+
+
+def test_the_mechanical_resume_leads_with_the_electronics_differentiator() -> None:
+    """The headline claims the embedded work, which is what sets it apart.
+
+    Content edit requested by the owner: the mechanical variant sells the
+    electronics experience rather than resting on the degree.
+    """
+    mech = served("Mechanical Engineering")
+
+    assert "Embedded" in mech["headline"], mech["headline"]
+    assert "embedded" in mech["summary"].lower()
+    # No machine words, and no claim that the degree is electronic.
+    assert "Computer" not in mech["headline"]
+
+
+def test_no_resume_uses_an_em_dash() -> None:
+    """Standing house rule for published Portfolio copy.
+
+    The resume is the surface most likely to accumulate one, because a summary is
+    where a writer reaches for a dash. En dashes are allowed; em dashes are not.
+
+    Both forms are checked. The files are written with `ensure_ascii`, so a real
+    em dash arrives as the six characters `\\u2014` and never as U+2014, and a
+    check for the character alone passes while the file is full of them. The same
+    file carries an en dash as `\\u2013`, which is what makes this easy to get
+    wrong.
+    """
+    for path in ("default_resume.json", "overwrite_resume.json"):
+        text = (REPO / "data" / path).read_text(encoding="utf-8")
+        assert "\u2014" not in text, f"{path} contains a literal em dash"
+        assert "\\u2014" not in text.lower(), f"{path} contains an escaped em dash"
+
+    # The en dash stays allowed, and it is written as an escape too, so the check
+    # above has to name U+2014 rather than reject escapes generally.
+    assert "\\u2013" in (REPO / "data" / "default_resume.json").read_text(), (
+        "the en dash escape has gone from the data, so this test no longer proves "
+        "the em dash check is specific"
+    )
+
+
 def test_the_resume_files_reach_the_image() -> None:
     """The data must not be excluded by `.dockerignore`.
 
