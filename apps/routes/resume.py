@@ -83,6 +83,37 @@ def _expand_projects(resume: dict) -> dict:
     return {**resume, "projects": chosen}
 
 
+def _order_skills(resume: dict) -> dict:
+    """Put `skills` in a named order, keeping the content where it is written.
+
+    A named resume lists skill categories by name, the same way it names projects,
+    because the alternative is restating every skill value in the override file
+    and having two copies to keep in step.
+
+    Unlike `projects`, an order here selects rather than replaces: any category the
+    order does not name is appended in its default position. A resume that leads
+    with software skills should not silently lose the mechanical ones, and a
+    category added to the default later should still appear everywhere rather than
+    vanishing from every resume that named an order before it existed.
+    """
+    order = resume.get("skill_order")
+    if not isinstance(order, list) or not order:
+        return resume
+
+    skills = resume.get("skills") or []
+    by_name = {s.get("category"): s for s in skills}
+
+    arranged = [copy.deepcopy(by_name[name]) for name in order if name in by_name]
+    missing = [name for name in order if name not in by_name]
+    if missing:
+        logger.warning("skill_order names unknown categories: %s", missing)
+
+    named = set(order)
+    arranged.extend(copy.deepcopy(s) for s in skills if s.get("category") not in named)
+
+    return {**resume, "skills": arranged}
+
+
 def _load_resumes() -> tuple[dict[str, dict], list[dict]]:
     """Every resume keyed by name, and the list of names to offer.
 
@@ -109,7 +140,9 @@ def _load_resumes() -> tuple[dict[str, dict], list[dict]]:
     resumes: dict[str, dict] = {}
     listing: list[dict] = []
 
-    resumes[DEFAULT_RESUME] = _expand_projects({**default, "project_pool": pool})
+    resumes[DEFAULT_RESUME] = _order_skills(
+        _expand_projects({**default, "project_pool": pool})
+    )
     generic = described.get(DEFAULT_RESUME) or {}
     listing.append({
         "name": DEFAULT_RESUME,
@@ -128,7 +161,7 @@ def _load_resumes() -> tuple[dict[str, dict], list[dict]]:
         merged = _deep_merge(
             {**default, "project_pool": pool}, entry.get("overwrites") or {}
         )
-        resumes[name] = _expand_projects(merged)
+        resumes[name] = _order_skills(_expand_projects(merged))
         # A label and blurb can live on the override itself, which is where a
         # reader adding a resume will look for them, or in the default's
         # `resumes` list for a name the default already knew about.
