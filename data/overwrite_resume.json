@@ -13,5 +13,21 @@
     },
     "label": "Mechanical Engineering",
     "blurb": "Leads with the mechanical subjects. Facilities, design, and safety roles."
+  },
+  {
+    "resume_name": "Software",
+    "overwrites": {
+      "headline": "Software developer | Backend services, infrastructure, and embedded systems",
+      "summary": "Self-taught developer with a Mechanical Engineering degree and five applications built, deployed, and running on a self-hosted server. Writes Python and TypeScript, designs MySQL schemas, and owns each project end to end: architecture, implementation, tests, and the deployment it runs on. Comfortable with Linux, Docker, and the parts of a system that are not the interesting feature. Looking for a software or systems development role, and willing to learn whatever the codebase is written in.",
+      "projects": [
+        "Water Billing System",
+        "GateKeeper",
+        "Homelab",
+        "PracticeForge",
+        "MELE Review"
+      ]
+    },
+    "label": "Software",
+    "blurb": "Leads with the largest build and the infrastructure work. Software and systems roles."
   }
 ]

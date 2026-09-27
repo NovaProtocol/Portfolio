@@ -129,16 +129,24 @@ The markup and the styles are **partials** rather than copies. They used to be t
 
 ## Resumes
 
-| Resume | Leads with | Projects |
+| Resume | Headline leads with | Projects |
 |---|---|---|
-| Generic (default) | Water Billing System, the largest complete build | all five |
-| Mechanical Engineering | MELE Review, whose subject is mechanical | all but PracticeForge |
+| Generic (default) | the degree, then what the software work is | all five |
+| Mechanical Engineering | the degree and the mechanical work | all but PracticeForge |
+| Software | the software work, degree mentioned second | all five, largest build first |
 
 - A named resume is a **projection** of the default, never a second data file.
 - The mechanical resume drops PracticeForge. Every other entry is engineering
   work a mechanical reader can follow; PracticeForge is a Python practice sandbox
   with neither an engineering subject nor a product purpose.
-- Nothing else differs between them. Same experience, education, skills.
+- The software resume lists every project, including the mechanical one, because
+  the solver and the reviewer are still things this person built and shipped.
+- **The headline is the part that matters most between them.** A reader who sees
+  "Mechanical Engineering graduate" first has filed the application before
+  reaching the deployed projects, so the software resume does not lead with the
+  degree. It still cannot imply a Computer Science degree: the education entry is
+  inherited unchanged, and a test asserts no resume claims one.
+- Nothing else differs. Same experience, education, skills.
 
 ## URLs
 
