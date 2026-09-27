@@ -129,11 +129,14 @@ def _load_resumes() -> tuple[dict[str, dict], list[dict]]:
             {**default, "project_pool": pool}, entry.get("overwrites") or {}
         )
         resumes[name] = _expand_projects(merged)
+        # A label and blurb can live on the override itself, which is where a
+        # reader adding a resume will look for them, or in the default's
+        # `resumes` list for a name the default already knew about.
         note = described.get(name) or {}
         listing.append({
             "name": name,
-            "label": note.get("label") or name,
-            "blurb": note.get("blurb") or "",
+            "label": entry.get("label") or note.get("label") or name,
+            "blurb": entry.get("blurb") or note.get("blurb") or "",
         })
 
     return resumes, listing

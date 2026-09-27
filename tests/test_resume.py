@@ -265,6 +265,19 @@ def test_gatekeeper_does_not_claim_sqlite(client) -> None:
     assert "MySQL" in gatekeeper["tech"]
 
 
+def test_every_resume_in_the_list_has_a_label_and_a_hint() -> None:
+    """The selector shows both, so an empty one is a visible gap.
+
+    The blurb is the button's tooltip: it is how a reader knows which resume to
+    send without opening both.
+    """
+    from apps.routes.resume import _RESUME_LIST
+
+    for item in _RESUME_LIST:
+        assert item["label"].strip(), f"{item['name']} has no label"
+        assert item["blurb"].strip(), f"{item['name']} has no hint for the selector"
+
+
 def test_the_resume_files_reach_the_image() -> None:
     """The data must not be excluded by `.dockerignore`.
 
