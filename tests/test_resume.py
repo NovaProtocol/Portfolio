@@ -15,6 +15,7 @@ template's own copy of the rules had quietly fallen behind the other two.
 from __future__ import annotations
 
 import json
+import fnmatch
 import re
 import sys
 from pathlib import Path
@@ -262,6 +263,54 @@ def test_gatekeeper_does_not_claim_sqlite(client) -> None:
     assert gatekeeper, "GateKeeper is no longer on the resume"
     assert "SQLite" not in gatekeeper["tech"]
     assert "MySQL" in gatekeeper["tech"]
+
+
+def test_the_resume_files_reach_the_image() -> None:
+    """The data must not be excluded by `.dockerignore`.
+
+    `data/` holds runtime state a local run writes, so it is ignored, with an
+    exception for the JSON content. That exception used to name one file, and
+    renaming the file silently dropped the resume from the image: the app still
+    started, the build still reported success, and every page rendered empty. The
+    tests all passed because they read the working tree, not the image.
+    """
+    ignore = (REPO / ".dockerignore").read_text()
+    patterns = [
+        line.strip() for line in ignore.splitlines()
+        if line.strip() and not line.startswith("#")
+    ]
+
+    for name in ("default_resume.json", "overwrite_resume.json"):
+        path = f"data/{name}"
+        assert (REPO / path).is_file(), f"{path} is missing from the repo"
+
+        # Docker evaluates patterns in order and the last match wins, so the file
+        # has to be re-included after the `data/` exclusion. Matching is done with
+        # `fnmatch` against the real path: an earlier version of this test checked
+        # whether the filename appeared in the pattern text, which is true of any
+        # pattern and therefore proved nothing.
+        def matches(pattern: str, target: str) -> bool:
+            return fnmatch.fnmatch(target, pattern) or target.startswith(
+                pattern.rstrip("/") + "/"
+            )
+
+        re_included = [
+            i for i, p in enumerate(patterns)
+            if p.startswith("!") and matches(p[1:], path)
+        ]
+        excluded = [i for i, p in enumerate(patterns) if matches(p, path)]
+
+        assert re_included, (
+            f"nothing in .dockerignore re-includes {path}; the image will not "
+            f"carry the resume"
+        )
+        last_exclude = max(
+            (i for i in excluded if not patterns[i].startswith("!")), default=-1
+        )
+        assert max(re_included) > last_exclude, (
+            f"{path} is re-included before the `data/` exclusion; last match wins, "
+            f"so the exclusion stands and the resume never reaches the image"
+        )
 
 
 def test_the_fit_tool_measures_the_document_the_site_serves() -> None:
