@@ -170,47 +170,42 @@ def measure(page: int, resume: dict) -> dict:
             "fill": round(px / USABLE_H * 100, 1), "blocks": detail}
 
 
-def order_projects(resume: dict, variant: str | None) -> dict:
-    """`resume` with `projects` in the order that variant asks for.
+def load_resume(name: str | None = None) -> dict:
+    """One resolved resume, by name, through the app's own loader.
 
-    Mirrors `apps/routes/resume.py`, which resolves the same way before the
-    template sees it. Kept here rather than imported so this tool does not need
-    the app or a database to measure a page; `test_resume.py` asserts the two
-    agree, because a figure measured against a different project list than the
-    one served is worse than no figure.
+    Deliberately not reimplemented here. The merge and the project expansion live
+    in `apps/routes/resume.py`, and a second copy of that logic is how this tool
+    ends up reporting the fill of a document nobody is served. `make_env()`
+    already imports from `apps.templating`, so there is nothing to avoid.
     """
-    if not variant:
-        return resume
-    spec = (resume.get("variants") or {}).get(variant) or {}
-    order = spec.get("order")
-    if not order:
-        return resume
-    by_name = {p.get("name"): p for p in resume.get("projects") or []}
-    return {**resume, "projects": [by_name[n] for n in order if n in by_name]}
+    from apps.routes.resume import resume_names as names
+    from apps.routes.resume import load_resume as load
+
+    chosen = name if name in names() else None
+    return load(chosen)
 
 
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--json", action="store_true")
     ap.add_argument("--page", type=int, choices=[1, 2])
-    ap.add_argument("--variant", default=None,
-                    help="a variant name, or 'all' to measure every variant")
+    ap.add_argument("--resume", default=None,
+                    help="a resume name, or 'all' to measure every one")
     args = ap.parse_args()
 
-    data = json.loads((ROOT / "data" / "resume.json").read_text())
+    from apps.routes.resume import resume_names
+
     env = make_env()
 
-    if args.variant == "all":
-        names = list((data.get("variants") or {}).keys())
-    elif args.variant:
-        names = [args.variant]
+    if args.resume == "all":
+        names: list[str | None] = list(resume_names())
     else:
-        names = [None]
+        names = [args.resume]
 
     pages = [1, 2] if not args.page else [args.page]
     everything: dict[str, dict] = {}
-    for variant in names:
-        resume = order_projects(data, variant)
+    for name in names:
+        resume = load_resume(name)
         out = {}
         for n in pages:
             # Rendered as a smoke test rather than as the thing measured: a
@@ -220,22 +215,22 @@ def main() -> int:
             if not html.strip():
                 raise SystemExit(f"page{n}.html rendered nothing")
             out[f"page{n}"] = measure(n, resume)
-        everything[variant or "default"] = out
+        everything[name or "Generic"] = out
 
     if args.json:
         print(json.dumps(everything, indent=2))
         return 0
 
-    for variant, out in everything.items():
+    for name, out in everything.items():
         if len(everything) > 1:
-            print(f"  [{variant}] {len(order_projects(data, variant)['projects'])} projects")
+            print(f"  [{name}] {len(load_resume(name)['projects'])} projects")
         for n in pages:
             r = out[f"page{n}"]
             print(f"  page {n}  {r['height_px']:.0f} / {r['usable_px']:.0f} px"
                   f"  = {r['fill']:.0f}% full")
             if n == 2:
-                for name, h in r["blocks"].items():
-                    print(f"            {name:<16} {h:>7.0f} px")
+                for block, h in r["blocks"].items():
+                    print(f"            {block:<16} {h:>7.0f} px")
         for n in pages:
             fill = out[f"page{n}"]["fill"]
             verdict = "overflowing" if fill > 100 else ("tight" if fill > 94 else "fits")

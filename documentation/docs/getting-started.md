@@ -131,4 +131,6 @@ Add an entry to `PROJECTS` in `apps/projects/routes.py` (see README for the full
 DEPLOYMENT_TYPE=DEBUG python run.py # verify /projects/ and /projects/info/<slug>/
 ```
 
-No database and no migrations. Content lives in code and `data/resume.json`.
+No database and no migrations. Content lives in code, `data/default_resume.json`
+(the resume), and `data/overwrite_resume.json` (the named resumes, each carrying
+only what it changes).

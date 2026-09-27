@@ -59,7 +59,7 @@ Portfolio/
 │ ├── projects/ # blueprint /projects → index + detail
 │ └── resume/ # blueprint /resume → index + /view (variants)
 ├── static/ # served at /static (images, js demos)
-├── data/resume.json # resume content
+├── data/ # default_resume.json + overwrite_resume.json
 ├── caddy/Caddyfile + Dockerfile
 ├── documentation/ # MkDocs site (this site) on :8005
 ├── compose.yaml # app + caddy + documentation

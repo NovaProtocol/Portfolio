@@ -2,67 +2,109 @@
 
 **Module:** `apps/routes/resume.py` using `APIRouter(prefix="/resume")`
 
-Renders the resume from `data/resume.json`. One visual theme, two printable pages, a
-combined view, and **two variants**: a mechanical-first running order and a
-software-first one, over the same content.
+Renders the resume from two data files. One visual theme, two printable pages,
+a combined view, and a **list of named resumes**: the generic one, plus a named
+entry for each application that needs different emphasis.
+
+The resume itself lives in `data/default_resume.json`. `data/overwrite_resume.json`
+holds the named resumes, each carrying only the parts it changes.
 
 ## Routes
 
 | Route | Handler | Query params | Description |
 |-------|---------|--------------|-------------|
-| `GET /resume/` | `apps.routes.resume.index` | `variant=mechanical,software` (default `mechanical`) | Resume hub rendering `resume/index.html`, with the variant selector |
-| `GET /resume/view` | `apps.routes.resume.view` | `variant=mechanical,software`, `page=1,2` (optional) | Single or combined page using `resume/view.html` (both pages) or `resume/page1.html` / `page2.html` for print |
+| `GET /resume/` | `apps.routes.resume.index` | `resume=<name>` (default `Generic`) | Resume hub rendering `resume/index.html`, with the resume selector |
+| `GET /resume/view` | `apps.routes.resume.view` | `resume=<name>`, `page=1,2` (optional) | Single or combined page using `resume/view.html` (both pages) or `resume/page1.html` / `page2.html` for print |
+
+`?variant=` and `?theme=` were both real parameters once. They are accepted and
+ignored rather than rejected, so a link made before either rename still renders.
 
 ```python
 # apps/routes/resume.py (trimmed)
-from fastapi import APIRouter, HTTPException, Request
-from fastapi.responses import HTMLResponse
-from apps.templating import templates
+_DATA = Path(__file__).resolve().parent.parent.parent / "data"
+_DEFAULT_PATH = _DATA / "default_resume.json"
+_OVERWRITE_PATH = _DATA / "overwrite_resume.json"
 
-router = APIRouter(prefix="/resume")
+DEFAULT_RESUME = "Generic"
 
-_RESUME = _load_resume()
-DEFAULT_VARIANT = "mechanical"
+def _deep_merge(base: dict, override: dict) -> dict:
+    """`override` over `base`, recursively. Lists are replaced, not merged."""
+    out = copy.deepcopy(base)
+    for key, value in override.items():
+        if key in out and isinstance(out[key], dict) and isinstance(value, dict):
+            out[key] = _deep_merge(out[key], value)
+        else:
+            out[key] = copy.deepcopy(value)
+    return out
 
-def _order_projects(resume: dict, variant: str) -> dict:
-    """The resume with `projects` in the order that variant asks for."""
-    spec = (resume.get("variants") or {}).get(variant) or {}
-    order = spec.get("order")
-    if not order:
+def _expand_projects(resume: dict) -> dict:
+    """Replace each project named in a list with the project itself."""
+    projects = resume.get("projects")
+    if not isinstance(projects, list) or not all(isinstance(p, str) for p in projects):
         return resume
-    by_name = {p.get("name"): p for p in resume.get("projects") or []}
-    chosen = [by_name[name] for name in order if name in by_name]
-    return {**resume, "projects": chosen}
-
-@router.get("/", response_class=HTMLResponse)
-async def index(request: Request, variant: str = DEFAULT_VARIANT):
-    return templates.TemplateResponse(
-        request, "resume/index.html", _resume_context(_normalise_variant(variant)))
+    by_name = {p.get("name"): p for p in resume.get("project_pool") or []}
+    return {**resume, "projects": [by_name[n] for n in projects if n in by_name]}
 
 @router.get("/view", response_class=HTMLResponse)
-async def view(request: Request, page: int | None = None, variant: str = DEFAULT_VARIANT):
-    resolved = _normalise_variant(variant)
-    if page is not None:
-        mapping = {1: "resume/page1.html", 2: "resume/page2.html"}
-        template = mapping.get(page)
-        if not template:
-            raise HTTPException(status_code=404, detail="Not found")
-        return templates.TemplateResponse(request, template, _resume_context(resolved))
-    return templates.TemplateResponse(request, "resume/view.html", _resume_context(resolved))
+async def view(request: Request, page: int | None = None, resume: str = DEFAULT_RESUME):
+    resolved = _normalise_resume(resume)
+    ...
 ```
 
-## Data in `data/resume.json`
 
-- Single source of truth for name, contact, experience, education, skills, etc.
-- `contact.portfolio` holds the plain base URL for the site. It is not printed on the resume: the header carries the LinkedIn and GitHub links, which a reader can follow without a code.
-- Loaded **once at import**. A missing or malformed file is logged at `exception` level and falls back to `{}` so the app stays up (pages render empty rather than crashing).
-- Optional keys render only when present (`{% if %}` guarded), so a project or school entry that omits them looks exactly as it did before they existed:
+## Data
+
+Two files, and the split is the point.
+
+**`data/default_resume.json`** is the resume. It is served as **Generic**, the
+general-purpose one for a job fair where you do not know who is reading, and it
+is the base every named resume is built from.
+
+**`data/overwrite_resume.json`** is a list of named resumes. Each names itself
+and carries only what it changes:
+
+```json
+[
+  {
+    "resume_name": "Mechanical Engineering",
+    "overwrites": {
+      "headline": "Mechanical Engineer | Design, safety, and documentation",
+      "summary": "Mechanical Engineering graduate with hands-on experience ...",
+      "projects": ["MELE Review", "Water Billing System", "Homelab", "GateKeeper"]
+    }
+  }
+]
+```
+
+- The merge is **deep**. An override that sets `education` as an object changes
+  only the keys it names and inherits the rest of that entry.
+- **Lists are replaced, not concatenated.** A shorter `projects` list is a
+  deliberate choice about what to show; merging would produce a resume nobody
+  wrote.
+- `projects` in an override names projects rather than restating them. The
+  content of every project lives in the default, once, so the two files cannot
+  drift and a project is edited in one place no matter how many resumes show it.
+- The served list is **Generic plus every override**, in file order. An unknown
+  or missing name falls back to Generic rather than erroring, so a stale bookmark
+  still renders a resume.
+- Loaded once at import. A missing or malformed file is logged at `exception`
+  level and falls back, so the rest of the site stays up.
+- `contact.portfolio` holds the plain base URL for the site. It is not printed on
+  the resume: the header carries the LinkedIn and GitHub links, which a reader can
+  follow without a code.
+- Optional keys render only when present (`{% if %}` guarded), so a project or
+  school entry that omits them looks exactly as it did before they existed:
   - `education[].status`, a short line under the degree (for example a graduation status).
   - `projects[].status_line`, a build-state line directly under the tech stack, above `highlights`, styled with `.demo-line`.
 - Projects carry one shared `Live demos of selected projects are hosted on my portfolio. Source code for these projects is public on GitHub.` line.
-- `variants` names the project order per variant. See Variants below.
-- A project with a live demo carries a `url` in `resume.json`, rendering a `Live demo: <url>` line under its tech stack. Projects without one (GateKeeper, halted) omit it via the `{% if proj.url %}` guard.
-- No DB and no migrations. Edit the JSON and reload.
+- A project with a live demo carries a `url`, rendering a `Live demo: <url>` line under its tech stack. Projects without one omit it via the `{% if proj.url %}` guard.
+- No DB and no migrations. Edit the JSON and restart.
+
+### Adding a resume
+
+Add one entry to `data/overwrite_resume.json` with a `resume_name` and an
+`overwrites` object holding just what differs. It appears in the selector with no
+code change. `tools/resume_fit.py --resume all` measures every one.
 
 ## Route Registration
 
@@ -85,48 +127,31 @@ The print templates (`page1.html`, `page2.html`, `view.html`) are standalone doc
 
 The markup and the styles are **partials** rather than copies. They used to be three copies of the same document and they drifted, which is how the printed PDF came to cut the last section off page 1 while the iframe beside it looked correct. A change to the resume is now a change in one file.
 
-## Variants
+## Resumes
 
-The resume serves two audiences, and one running order cannot lead for both.
-
-| Variant | Leads with | Projects |
+| Resume | Leads with | Projects |
 |---|---|---|
-| `mechanical` (default) | MELE Review, whose subject is mechanical | MELE Review, Water Billing System, GateKeeper, Homelab |
-| `software` | Water Billing System, the largest complete build | Water Billing System, GateKeeper, Homelab, PracticeForge, MELE Review |
+| Generic (default) | Water Billing System, the largest complete build | all five |
+| Mechanical Engineering | MELE Review, whose subject is mechanical | all but PracticeForge |
 
-- The variant is a **projection**, never a second data file: it names a project
-  order, and the text of each project lives once in `projects`. The two variants
-  cannot disagree about what a project says, and adding a third is a data change.
-- `mechanical` drops one project. Every other entry is engineering work a
-  mechanical recruiter can read as process; PracticeForge is the one with neither
-  an engineering subject nor a product purpose, and it is recorded as halted for
-  lack of productive use.
-- An unknown or missing variant falls back to `mechanical` rather than erroring,
-  so a stale bookmark renders a resume instead of a 500.
-- Nothing else differs between the variants. Same summary, experience, skills,
-  education.
-
-## Themes
-
-There is one. There were three behind a selector on `/resume/`; the selector is
-gone and the other two were deleted rather than left reachable by hand-editing
-the query string. `?theme=N` is accepted and ignored, so an old link still
-renders.
-
-Print: use the combined `view.html` (no `page` param) and the browser's print
-dialog, which produces exactly two A4 pages in either variant.
+- A named resume is a **projection** of the default, never a second data file.
+- The mechanical resume drops PracticeForge. Every other entry is engineering
+  work a mechanical reader can follow; PracticeForge is a Python practice sandbox
+  with neither an engineering subject nor a product purpose.
+- Nothing else differs between them. Same experience, education, skills.
 
 ## URLs
 
 ```
-/resume/                          → hub, mechanical (default)
-/resume/?variant=software         → hub, software
-/resume/view                      → combined, mechanical
-/resume/view?variant=software     → combined, software
-/resume/view?page=1               → page 1 only
-/resume/view?page=2&variant=software → page 2 only, software
-/resume/view?page=3               → 404 (only 1 and 2 exist)
-/resume/view?theme=2              → ignored, renders the one theme
+/resume/                                    → hub, Generic (default)
+/resume/?resume=Mechanical%20Engineering    → hub, mechanical
+/resume/view                                → combined, Generic
+/resume/view?resume=Mechanical%20Engineering → combined, mechanical
+/resume/view?page=1                         → page 1 only
+/resume/view?page=2&resume=Mechanical%20Engineering → page 2 only
+/resume/view?page=3                         → 404 (only 1 and 2 exist)
+/resume/view?variant=mechanical             → ignored, serves Generic
+/resume/view?theme=2                        → ignored, renders the one theme
 ```
 
 ## Static Assets
