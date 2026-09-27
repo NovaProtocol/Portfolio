@@ -200,7 +200,6 @@ def test_the_mechanical_resume_drops_only_practiceforge() -> None:
     mech = [p["name"] for p in served("Mechanical Engineering")["projects"]]
 
     assert set(mech) == set(base) - {"PracticeForge"}
-    assert mech[0] == "MELE Review", "the mechanical resume should lead with its subject"
     assert base[0] == "Water Billing System", "the generic resume leads with the largest build"
 
 
@@ -501,6 +500,47 @@ def test_the_mechanical_resume_excludes_practiceforge_on_purpose() -> None:
 
     assert "PracticeForge" not in mech
     assert mech == pool - {"PracticeForge"}
+
+
+def test_the_mechanical_resume_leads_with_the_hardware_project() -> None:
+    """The lead project has to evidence the headline's claim.
+
+    This resume sells embedded systems as the differentiator. Water Billing
+    System is the only project on it with real hardware integration: a reader taps
+    a phone against an NFC tag on the meter and the reading is recorded, with a
+    dedicated NFC route and on-device key derivation. MELE Review is stronger on
+    mechanical subject matter, being a licensure reviewer, but it is pure software
+    underneath and evidences nothing about hardware.
+
+    So Water Billing leads, and MELE follows it. Pinned with the reason because
+    this order was reversed once already, on the argument that MELE is the more
+    mechanical subject; that argument is about subject matter, and the page is
+    making a claim about hardware.
+    """
+    mech = [p["name"] for p in served("Mechanical Engineering")["projects"]]
+
+    assert mech[0] == "Water Billing System", (
+        f"the mechanical resume leads with {mech[0]!r}, which does not evidence the "
+        f"embedded-systems claim in its headline"
+    )
+    assert mech[1] == "MELE Review", "MELE should still be second, not dropped"
+
+
+def test_the_headline_claim_is_what_the_page_leads_with() -> None:
+    """Checked across resumes, not only the one that prompted the fix."""
+    expectations = {
+        "Mechanical Engineering": ("Water Billing System", "Embedded"),
+        "Software": ("Water Billing System", "developer"),
+    }
+    for name, (first, headline_word) in expectations.items():
+        resume = served(name)
+        assert headline_word in resume["headline"], (
+            f"{name}: the headline no longer claims {headline_word!r}, so this "
+            f"expectation is stale"
+        )
+        assert resume["projects"][0]["name"] == first, (
+            f"{name}: leads with {resume['projects'][0]['name']!r}, not {first!r}"
+        )
 
 
 def test_the_mechanical_resume_leads_with_the_electronics_differentiator() -> None:
