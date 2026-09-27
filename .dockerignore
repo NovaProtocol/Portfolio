@@ -15,5 +15,10 @@ documentation/site/
 
 # Runtime state (local SQLite database, logs) written by a local run. The image
 # must not carry a copy of it, and the deployed stacks mount their own volume.
+#
+# The resume JSON is content, not state, so it is let back in. Matched as a glob
+# rather than by filename: this used to name `data/resume.json`, and renaming that
+# file to `default_resume.json` silently excluded the resume from the image while
+# the build still reported success.
 data/
-!data/resume.json
+!data/*.json
