@@ -92,6 +92,33 @@ def test_the_shared_rules_are_included_once() -> None:
         assert rule in css, f"the shared sheet lost `{rule}`"
 
 
+def test_the_page_reset_lives_in_the_shared_sheet() -> None:
+    """The body margin reset must be shared, not restated per template.
+
+    It used to be a separate rule in `page1.html` and `page2.html`. Extracting the
+    shared sheet left it behind, and the pages silently gained the browser's
+    default 8px body margin: each document became 1139px tall inside its 1123px
+    iframe, so every embedded sheet grew a vertical and a horizontal scrollbar.
+    `view.html` sets its own `body { margin: 0 }` and looked fine, which is why
+    nothing caught it.
+    """
+    css = (TEMPLATES / "_resume_css.html").read_text()
+    assert re.search(r"html,\s*body\s*\{[^}]*margin:\s*0", css), (
+        "the shared sheet no longer zeroes the body margin; the embedded pages "
+        "will scroll"
+    )
+    assert re.search(r"padding:\s*0", css.split("html, body")[1].split("}")[0]), (
+        "the reset should zero padding as well as margin"
+    )
+
+    for name in ("page1.html", "page2.html", "view.html"):
+        text = (TEMPLATES / name).read_text()
+        assert "html, body" not in text, (
+            f"{name} restates the reset; it belongs in the shared sheet so the "
+            f"three cannot drift again"
+        )
+
+
 def test_the_homelab_is_a_project_and_not_a_section_of_its_own() -> None:
     """It is one thing, so it gets one entry.
 
@@ -202,6 +229,60 @@ def test_each_resume_renders_its_own_projects(client) -> None:
         rendered = re.findall(r'<p class="title"[^>]*>([^<]+)</p>', body)
         expected = [p["name"] for p in served(name)["projects"]]
         assert rendered == expected, f"{name}: {rendered}"
+
+
+def test_the_software_resume_reads_for_software() -> None:
+    """It must not lead with the mechanical degree.
+
+    The generic headline does, which is right for a job fair and wrong for a
+    software application: a reader who sees "Mechanical Engineering graduate"
+    first has already filed it before reaching the deployed applications.
+    """
+    soft = served("Software")
+
+    assert not soft["headline"].startswith("Mechanical"), (
+        f"the software headline leads with the degree: {soft['headline']!r}"
+    )
+    assert "Software" in soft["headline"] or "developer" in soft["headline"]
+
+    # And it leads with the largest build, not the mechanical-subject project.
+    assert [p["name"] for p in soft["projects"]][0] == "Water Billing System"
+    assert [p["name"] for p in soft["projects"]][-1] == "MELE Review"
+
+    # It lists every project, so no software work is hidden from a software reader.
+    assert len(soft["projects"]) == len(default_resume()["projects"])
+
+
+def test_no_resume_claims_a_degree_it_does_not_have() -> None:
+    """The degree is mechanical, and every resume says so or says nothing.
+
+    A software resume still cannot imply a Computer Science degree, because the
+    education entry is inherited unchanged from the default and printed in full.
+    Checked here because it is the one claim a reader would verify first.
+    """
+    for name in ("Generic", "Mechanical Engineering", "Software"):
+        resume = served(name)
+        degrees = " ".join(e.get("degree", "") for e in resume["education"])
+        assert "Mechanical" in degrees, f"{name} lost the degree"
+        assert "Computer Science" not in degrees
+        assert "Computer Science" not in resume["headline"]
+        assert "Computer Science" not in resume["summary"]
+
+
+def test_the_software_summary_does_not_overclaim_experience() -> None:
+    """"Self-taught" and the degree, not a title or years that were not earned.
+
+    The honest framing is what was built and where it runs. Anything that reads
+    as a job title or a length of employment is a claim the record does not
+    support.
+    """
+    soft = served("Software")
+    text = f"{soft['headline']} {soft['summary']}".lower()
+
+    assert "self-taught" in text
+    for overclaim in ("senior", "years of experience", "degree in computer",
+                      "computer science graduate", "expert"):
+        assert overclaim not in text, f"the software resume overclaims: {overclaim!r}"
 
 
 def test_an_unknown_resume_serves_the_generic_one(client) -> None:

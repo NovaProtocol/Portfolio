@@ -11,6 +11,14 @@
    `.page` padding) stay in `_theme.html`, which all three include before this.
 #}
 * { box-sizing: border-box; }
+/* The reset belongs here rather than in each page template. It lived in
+   `page1.html` and `page2.html` as a separate rule, so when the shared sheet was
+   extracted it was left behind: the pages then kept the browser's default 8px
+   body margin, which made each document 1139px tall inside its 1123px iframe and
+   gave every sheet a vertical and a horizontal scrollbar. `view.html` sets
+   `body { margin: 0 }` itself and did not show the fault, which is why only the
+   embedded pages looked wrong. */
+html, body { margin: 0; padding: 0; }
 body {
     background: #ffffff;
     font-size: 11px;
