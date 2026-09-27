@@ -9,7 +9,7 @@
 | Config | `apps/config.py` using `Settings(BaseSettings)` via `pydantic-settings` with `get_config()` cached |
 | Templates | Jinja2 via `apps/templating.py` with `apps/templates/base.html` shared and per-route `templates/<sector>/` |
 | Static | `static/` served at `/static` via `StaticFiles` mounted in `create_app()`; cache lifespans applied by `CacheControlMiddleware` |
-| Data | `data/resume.json` (JSON, no DB) + `apps/data.py:PROJECTS` dict |
+| Data | `data/default_resume.json` + `data/overwrite_resume.json` (JSON, no DB) + `apps/data.py:PROJECTS` dict |
 | Proxy | `caddy:2-alpine` on `:7011` with loopback-only `127.0.0.1:7011:7011` joining `gatekeeper`. Gate is `gatekeeper_caddy:7000 → gatekeeper_auth:8001` |
 | Docs | MkDocs Material on `:8005` (`portfolio_documentation`), FastAPI + granian, via Caddy `/documentation/*` |
 | Auth | GateKeeper at the edge (`gatekeeper`); the FastAPI app holds zero auth code |
@@ -39,7 +39,9 @@ Portfolio/
 ├── static/
 │ ├── assets/images/{resume_image,water-billing-system}/
 │ └── js/code-demo/ # engine + registrar + demos/{caddy,docker,...}.js
-├── data/resume.json
+├── data/
+│   ├── default_resume.json    # the resume everything is built from
+│   └── overwrite_resume.json  # named resumes: what each one changes
 ├── caddy/Caddyfile + Dockerfile
 ├── documentation/ # MkDocs site with FastAPI on :8005
 ├── Dockerfile # python:3.14-slim → granian wsgi:app on :8000
@@ -165,7 +167,7 @@ One case needs care. `melereview_web` runs with an empty `DEPLOYMENT_TYPE`, and 
 No database. The only persistent content is:
 
 - `apps/data.py:PROJECTS` holds the dict of project metadata (titles, descriptions, tech stacks, links). `ordered_projects()` in `apps/routes/projects.py` returns active entries.
-- `data/resume.json` loads once at import in `apps/routes/resume.py:_load_resume()`. Missing or malformed JSON logs and returns `{}`.
+- `data/default_resume.json` loads once at import in `apps/routes/resume.py:_load_resumes()`. Each entry of `data/overwrite_resume.json` is then deep-merged over it to produce a named resume. Missing or malformed JSON logs an exception and falls back, so the rest of the site stays up.
 
 This keeps the portfolio a **single deployable** with no volumes or migrations.
 

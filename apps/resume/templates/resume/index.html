@@ -37,17 +37,17 @@
         color: var(--bg-primary);
         border-color: var(--accent);
     }
-    /* The variant selector replaced the theme selector. It reads as text, not as
-       three dots, because the choice it makes is which resume you are sending
-       rather than how it looks. */
-    .resume-toolbar .variant-btn {
+    /* The resume selector. It replaced a theme selector and then a variant
+       selector, and it reads as text either way: the choice it makes is which
+       resume you are sending, not how it looks. */
+    .resume-toolbar .resume-btn {
         border-radius: 999px;
         min-width: 0;
         padding: 0 1rem;
         font-size: 0.9rem;
         font-weight: 600;
     }
-    .resume-toolbar .variant-btn.active {
+    .resume-toolbar .resume-btn.active {
         background: var(--accent);
         color: var(--bg-primary);
         border-color: var(--accent);
@@ -77,11 +77,11 @@
     <div class="container">
         <div class="resume-wrap">
             <div class="resume-toolbar">
-                {% for name, spec in variants.items() %}
+                {% for item in resumes %}
                 <button type="button"
-                        class="variant-btn{% if name == variant %} active{% endif %}"
-                        data-variant="{{ name }}"
-                        title="{{ spec.blurb }}">{{ spec.label }}</button>
+                        class="resume-btn{% if item.name == resume_name %} active{% endif %}"
+                        data-resume="{{ item.name }}"
+                        title="{{ item.blurb }}">{{ item.label }}</button>
                 {% endfor %}
                 <span class="spacer"></span>
                 <button type="button" title="Save as PDF" onclick="printResume()">
@@ -93,10 +93,10 @@
             </div>
 
             <div class="resume-sheet">
-                <iframe id="frame-1" data-page="1" src="{{ url_for('resume_blueprint.view', page=1, variant=variant) }}" title="Resume page 1"></iframe>
+                <iframe id="frame-1" data-page="1" src="{{ url_for('resume_blueprint.view', page=1, resume=resume_name) }}" title="Resume page 1"></iframe>
             </div>
             <div class="resume-sheet">
-                <iframe id="frame-2" data-page="2" src="{{ url_for('resume_blueprint.view', page=2, variant=variant) }}" title="Resume page 2"></iframe>
+                <iframe id="frame-2" data-page="2" src="{{ url_for('resume_blueprint.view', page=2, resume=resume_name) }}" title="Resume page 2"></iframe>
             </div>
         </div>
     </div>
@@ -105,33 +105,33 @@
 <iframe id="print-frame" style="position:absolute; width:0; height:0; border:0; visibility:hidden;" title="Print"></iframe>
 
 <script>
-    let currentVariant = {{ variant | tojson }};
+    let currentResume = {{ resume_name | tojson }};
 
     function iframeUrl(page) {
-        return "{{ url_for('resume_blueprint.view') }}" + '?page=' + page + '&variant=' + currentVariant;
+        return "{{ url_for('resume_blueprint.view') }}" + '?page=' + page + '&resume=' + encodeURIComponent(currentResume);
     }
 
     function printResume() {
         const printFrame = document.getElementById('print-frame');
-        printFrame.src = "{{ url_for('resume_blueprint.view') }}" + '?variant=' + currentVariant;
+        printFrame.src = "{{ url_for('resume_blueprint.view') }}" + '?resume=' + encodeURIComponent(currentResume);
         printFrame.onload = function() {
             printFrame.contentWindow.focus();
             printFrame.contentWindow.print();
         };
     }
 
-    function setVariant(variant) {
-        currentVariant = variant;
-        document.querySelectorAll('.variant-btn').forEach(function(btn) {
-            btn.classList.toggle('active', btn.dataset.variant === variant);
+    function setResume(name) {
+        currentResume = name;
+        document.querySelectorAll('.resume-btn').forEach(function(btn) {
+            btn.classList.toggle('active', btn.dataset.resume === name);
         });
         document.getElementById('frame-1').src = iframeUrl(1);
         document.getElementById('frame-2').src = iframeUrl(2);
     }
 
-    document.querySelectorAll('.variant-btn').forEach(function(btn) {
+    document.querySelectorAll('.resume-btn').forEach(function(btn) {
         btn.addEventListener('click', function() {
-            setVariant(btn.dataset.variant);
+            setResume(btn.dataset.resume);
         });
     });
 </script>

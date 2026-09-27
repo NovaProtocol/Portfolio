@@ -27,8 +27,26 @@ TEMPLATES = REPO / "apps" / "resume" / "templates" / "resume"
 sys.path.insert(0, str(REPO / "tools"))
 
 
+def default_resume() -> dict:
+    """The resume everything is built from."""
+    return json.loads((REPO / "data" / "default_resume.json").read_text())
+
+
+def overrides() -> list[dict]:
+    """The named resumes, as written in the data file."""
+    return json.loads((REPO / "data" / "overwrite_resume.json").read_text())
+
+
+def served(name: str | None = None) -> dict:
+    """A resume as the app resolves it: default, with the override merged in."""
+    from apps.routes.resume import load_resume
+
+    return load_resume(name)
+
+
 def resume_data() -> dict:
-    return json.loads((REPO / "data" / "resume.json").read_text())
+    """Back-compat: the generic resume, resolved."""
+    return served()
 
 
 @pytest.fixture()
@@ -80,7 +98,7 @@ def test_the_homelab_is_a_project_and_not_a_section_of_its_own() -> None:
     project on page 2, saying the same three facts under two headings, so a
     reader counting projects saw six entries for five projects.
     """
-    resume = resume_data()
+    resume = default_resume()
 
     assert "homelab" not in resume, "the dedicated homelab section is back"
 
@@ -93,79 +111,117 @@ def test_the_homelab_is_a_project_and_not_a_section_of_its_own() -> None:
         assert "section-homelab" not in text, f"{name} still renders a homelab section"
 
 
-def test_each_variant_leads_with_what_it_is_for() -> None:
-    """The two variants open with different projects, on purpose.
+def test_the_resume_list_is_generic_plus_the_overrides() -> None:
+    """Generic first and always present, then each named resume in file order."""
+    from apps.routes.resume import resume_names
 
-    Mechanical leads with the licensure reviewer, whose subject is mechanical.
-    Software leads with the largest complete build. If these ever come out the
-    same, one of the variants has stopped doing its job.
+    names = resume_names()
+    written = [entry["resume_name"] for entry in overrides()]
+
+    assert names[0] == "Generic", f"the list starts with {names[0]!r}"
+    assert names == ["Generic", *written], f"{names} vs {written}"
+    assert "Mechanical Engineering" in names
+
+
+def test_an_override_changes_only_what_it_names() -> None:
+    """Everything the override does not mention is inherited from the default.
+
+    This is the whole point of the split, and a shallow merge would break it: an
+    override that sets only `summary` would drop nested keys elsewhere, and the
+    resume would quietly lose content.
     """
-    variants = resume_data()["variants"]
-    assert list(variants) == ["mechanical", "software"], "variant set changed"
-    assert variants["mechanical"]["order"][0] == "MELE Review"
-    assert variants["software"]["order"][0] == "Water Billing System"
+    base = default_resume()
+    mech = served("Mechanical Engineering")
+
+    assert mech["summary"] != base["summary"]
+    assert mech["headline"] != base["headline"]
+
+    unchanged = [k for k in base if k not in ("summary", "headline", "projects")]
+    for key in unchanged:
+        assert mech[key] == base[key], f"{key} should have been inherited unchanged"
 
 
-def test_the_mechanical_variant_drops_only_practiceforge() -> None:
-    """One exclusion, and it is the one with no subject to place.
+def test_the_merge_is_deep() -> None:
+    """A nested override must not take its siblings with it."""
+    from apps.routes.resume import _deep_merge
 
-    Every other project is engineering work that a mechanical recruiter can read
-    as process. PracticeForge is the one entry with neither an engineering
-    subject nor a product purpose, and the owner's own notes record it as halted
-    for lack of productive use.
+    base = {"a": {"keep": 1, "change": 2}, "b": 3}
+    out = _deep_merge(base, {"a": {"change": 99}})
+
+    assert out == {"a": {"keep": 1, "change": 99}, "b": 3}
+    assert base == {"a": {"keep": 1, "change": 2}, "b": 3}, "the base was mutated"
+
+
+def test_the_mechanical_resume_drops_only_practiceforge() -> None:
+    """One project is left out, and it is the one with no subject to place.
+
+    Every other entry is engineering work a mechanical reader can follow.
+    PracticeForge is a Python practice sandbox, recorded elsewhere as halted for
+    lack of productive use, so it has nothing to say to that reader.
     """
-    resume = resume_data()
-    mechanical = resume["variants"]["mechanical"]["order"]
-    software = resume["variants"]["software"]["order"]
+    base = [p["name"] for p in default_resume()["projects"]]
+    mech = [p["name"] for p in served("Mechanical Engineering")["projects"]]
 
-    pool = {p["name"] for p in resume["projects"]}
-    assert set(mechanical) == pool - {"PracticeForge"}
-    assert set(software) == pool
-    # Nothing is invented by a variant, and nothing else is dropped.
-    assert set(mechanical) < set(software)
+    assert set(mech) == set(base) - {"PracticeForge"}
+    assert mech[0] == "MELE Review", "the mechanical resume should lead with its subject"
+    assert base[0] == "Water Billing System", "the generic resume leads with the largest build"
 
 
-def test_every_variant_names_projects_that_exist() -> None:
-    """A rename in the pool would otherwise silently empty a variant."""
-    resume = resume_data()
-    pool = {p["name"] for p in resume["projects"]}
-    for name, spec in resume["variants"].items():
-        unknown = [x for x in spec["order"] if x not in pool]
-        assert not unknown, f"variant {name!r} names projects that do not exist: {unknown}"
-        assert len(set(spec["order"])) == len(spec["order"]), f"variant {name!r} repeats a project"
+def test_a_named_resume_repeats_no_project_text() -> None:
+    """Project content lives in the default, once.
+
+    An override names projects; it must not restate them, or the two files drift
+    and the site shows one version while the fit tool measures another.
+    """
+    for entry in overrides():
+        projects = (entry.get("overwrites") or {}).get("projects")
+        if projects is None:
+            continue
+        assert all(isinstance(p, str) for p in projects), (
+            f"{entry['resume_name']} inlines project content; name them instead"
+        )
 
 
-def test_the_variant_orders_the_page_the_route_serves(client) -> None:
-    """The order asked for is the order rendered, for both variants."""
-    for variant, expected in resume_data()["variants"].items():
-        body = client.get(f"/resume/view?page=2&variant={variant}").text
+def test_a_named_resume_only_names_projects_that_exist() -> None:
+    """A rename in the default would otherwise silently empty a resume."""
+    pool = {p["name"] for p in default_resume()["projects"]}
+    for entry in overrides():
+        projects = (entry.get("overwrites") or {}).get("projects") or []
+        unknown = [p for p in projects if p not in pool]
+        assert not unknown, f"{entry['resume_name']} names projects that do not exist: {unknown}"
+        assert len(set(projects)) == len(projects), f"{entry['resume_name']} repeats a project"
+
+
+def test_each_resume_renders_its_own_projects(client) -> None:
+    """The order asked for is the order rendered, per resume."""
+    from apps.routes.resume import resume_names
+
+    for name in resume_names():
+        body = client.get(f"/resume/view?page=2&resume={name}").text
         rendered = re.findall(r'<p class="title"[^>]*>([^<]+)</p>', body)
-        assert rendered == expected["order"], f"{variant}: {rendered}"
+        expected = [p["name"] for p in served(name)["projects"]]
+        assert rendered == expected, f"{name}: {rendered}"
 
 
-def test_an_unknown_variant_serves_the_default_rather_than_failing(client) -> None:
+def test_an_unknown_resume_serves_the_generic_one(client) -> None:
     """A stale bookmark or a typo must not 500 a resume."""
-    default = client.get("/resume/view?page=2").text
-    for bad in ("nonsense", "", "MECHANICAL", "3"):
-        resp = client.get(f"/resume/view?page=2&variant={bad}")
-        assert resp.status_code == 200, f"variant={bad!r} returned {resp.status_code}"
-        assert resp.text == default, f"variant={bad!r} did not fall back to the default"
+    generic = client.get("/resume/view?page=2").text
+    for bad in ("nonsense", "", "mechanical", "3"):
+        resp = client.get(f"/resume/view?page=2&resume={bad}")
+        assert resp.status_code == 200, f"resume={bad!r} returned {resp.status_code}"
+        assert resp.text == generic, f"resume={bad!r} did not fall back to Generic"
 
 
-def test_the_theme_parameter_is_gone_and_changes_nothing(client) -> None:
-    """One theme is published, so `theme` must not still select another.
+def test_the_old_parameters_are_ignored_rather_than_rejected(client) -> None:
+    """`variant` and `theme` were both real once. Links to them must still work."""
+    generic = client.get("/resume/view?page=2").text
+    for old in ("variant=mechanical", "variant=software", "theme=1", "theme=3"):
+        assert client.get(f"/resume/view?page=2&{old}").text == generic, old
 
-    The other two were deleted. Leaving the argument working would keep dead CSS
-    alive behind a query string that nothing links to.
-    """
-    plain = client.get("/resume/view?page=2").text
-    for theme in (1, 2, 3):
-        assert client.get(f"/resume/view?page=2&theme={theme}").text == plain
-
-    theme_css = (TEMPLATES / "_theme.html").read_text()
-    assert "{% if theme" not in theme_css, "_theme.html still branches on a theme"
-    assert "theme-btn" not in (TEMPLATES / "index.html").read_text()
-
+    hub = (TEMPLATES / "index.html").read_text()
+    assert "variant-btn" not in hub
+    assert "theme-btn" not in hub
+    assert "resume-btn" in hub
 
 def test_the_two_pages_do_not_repeat_each_other() -> None:
     """Page 1 is the background, page 2 is the work.
@@ -185,7 +241,7 @@ def test_the_two_pages_do_not_repeat_each_other() -> None:
 
 def test_every_project_names_its_technology(client) -> None:
     """A project entry with no tech stack is a heading and a claim."""
-    resume = resume_data()
+    resume = default_resume()
     assert resume["projects"], "no projects to check"
     for project in resume["projects"]:
         assert project.get("tech"), f"{project.get('name')} has no tech line"
@@ -199,7 +255,7 @@ def test_gatekeeper_does_not_claim_sqlite(client) -> None:
     SQLite for two revisions. Pinned because "SQLite" reads as a smaller build
     than the one that actually runs.
     """
-    resume = resume_data()
+    resume = default_resume()
     gatekeeper = next(
         (p for p in resume["projects"] if "GateKeeper" in p.get("name", "")), None
     )
@@ -208,20 +264,16 @@ def test_gatekeeper_does_not_claim_sqlite(client) -> None:
     assert "MySQL" in gatekeeper["tech"]
 
 
-def test_the_fit_tool_orders_projects_the_way_the_route_does() -> None:
-    """Two functions resolve the variant order; they must agree.
+def test_the_fit_tool_measures_the_document_the_site_serves() -> None:
+    """The tool loads through the app, not through a copy of its logic.
 
-    `tools/resume_fit.py` keeps its own copy so it can measure a page without the
-    app. A fill figure measured against a different project list than the one
-    served is worse than no figure, so the two are compared here.
+    It used to reimplement the resolution, which is how a fill figure ends up
+    describing a document nobody is served.
     """
-    from resume_fit import order_projects
+    from resume_fit import load_resume as tool_load
 
-    data = resume_data()
-    for variant in data["variants"]:
-        tool = [p["name"] for p in order_projects(data, variant)["projects"]]
-        spec = data["variants"][variant]["order"]
-        assert tool == spec, f"{variant}: fit tool {tool} vs data {spec}"
+    for name in ("Generic", "Mechanical Engineering", None):
+        assert tool_load(name) == served(name), f"the tool disagrees for {name!r}"
 
 
 def test_the_resume_renders_the_homelab_once(client) -> None:
@@ -242,7 +294,7 @@ def test_the_facilities_coordination_line_stays() -> None:
     The owner asked for this line back after it was dropped in two successive
     revisions and called it non-negotiable.
     """
-    resume = resume_data()
+    resume = default_resume()
     plant = next(
         (j for j in resume["experience"] if "Physical Plant" in j.get("role", "")), None
     )
