@@ -130,7 +130,7 @@ CMD ["granian", "--interface", "asgi", "--host", "0.0.0.0", "--port", "8005", "-
 - Built from `caddy:2-alpine` (`caddy/Dockerfile: FROM caddy:2-alpine / COPY Caddyfile`).
 - Exactly one `Caddyfile` (no `.dev`/`.prod` variants because production is the only config).
 - Site address `:7011` matches compose publish `127.0.0.1:7011:7011`.
-- Proxy targets use **`container_name`** (`portfolio_main:8000`, `portfolio_documentation:8005`), never the service name `app`, to avoid the shared-network DNS collision on `cloudflared-tunnel` / `gatekeeper`.
+- Proxy targets use **`container_name`** (`portfolio_main:8000`, `portfolio_documentation:8005`), never the service name `app`, to avoid the shared-network DNS collision on the shared `gatekeeper` network.
 - Gate is at the **wildcard** (`gatekeeper`). Local `Caddyfile` has zero per-app `forward_auth`; see `caddy/Caddyfile` live (3 handles: `/health`, `/documentation/*`, catch-all). `handle_path` strips `/documentation` before proxying.
 - `X-Forwarded-*` headers are forwarded unchanged for GateKeeper's redirect reconstruction.
 

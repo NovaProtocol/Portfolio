@@ -21,8 +21,8 @@ Personal portfolio site built with **Python 3.14 + FastAPI + Granian + Jinja2**,
 
 ```mermaid
 graph TB
- TUN["Cloudflare Tunnel<br/>cloudflared-tunnel"] --> CADDY
- GK["GateKeeper wildcard<br/>gatekeeper_caddy:7000 → gatekeeper_auth:8001<br/>gatekeeper"] --- CADDY
+ TUN["Cloudflare Tunnel"] --> GK
+ GK["GateKeeper wildcard<br/>gatekeeper_caddy:7000 → gatekeeper_auth:8001<br/>gatekeeper"] --> CADDY
  CADDY["Caddy<br/>:7011<br/>portfolio_caddy"] --> APP["portfolio_main:8000<br/>FastAPI + Granian"]
  CADDY --> DOCS["portfolio_documentation:8005<br/>FastAPI + Granian<br/>MkDocs site"]
  CADDY -->|"/health"| APP
