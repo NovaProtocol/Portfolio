@@ -69,6 +69,21 @@
         border: 0;
         display: block;
     }
+    /* The sheet is a fixed A4 width, so on a phone it is wider than the page.
+       Let it scroll inside its own wrapper rather than widening the document,
+       and let the toolbar wrap instead of overflowing. */
+    @media (max-width: 860px) {
+        .resume-wrap {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            padding-bottom: 0.5rem;
+        }
+        .resume-toolbar {
+            flex-wrap: wrap;
+            justify-content: flex-start;
+        }
+        .resume-toolbar .spacer { flex: 1 1 100%; }
+    }
 </style>
 {% endblock %}
 
