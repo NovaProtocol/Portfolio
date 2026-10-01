@@ -1,6 +1,62 @@
 from __future__ import annotations
 
 PROJECTS: dict[str, dict] = {
+    "lawn-mower-control-panel": {
+        "active": True,
+        "title": "Automated Lawn Mower Control Panel",
+        "subtitle": "Mission planning and telemetry for an autonomous mower",
+        "description": [
+            "The software half of an undergraduate mechanical engineering thesis: the "
+            "design and virtualised performance evaluation of a fully automated lawn "
+            "mower with mission planning and a solar-powered docking station.",
+            "It plans a cutting route across a surveyed field, measures what that route "
+            "actually covers, and reports the machine's state while it works — the two "
+            "devices, their batteries, the loads drawing on them, and the route being "
+            "followed across a map. Field boundaries can be traced on the map and become "
+            "fields the machine can be sent to.",
+            "The telemetry is simulated and the panel says so on every page. The machine "
+            "and its energy model are computed, not measured.",
+        ],
+        "tech": {
+            "web": ["FastAPI", "Granian", "Docker", "Caddy", "Leaflet", "Bootstrap 4.6.2", "Cloudflare Tunnel"],
+            "domain": [
+                "Coverage path planning",
+                "Six-wheel independent steering",
+                "Rocker-bogie suspension",
+                "LiFePO4 energy modelling",
+            ],
+        },
+        "features": [
+            "Five coverage strategies — linear sweep, contour spiral, inverse spiral, triangulation fill and strip partition — planned from a boundary and a cutting width",
+            "Coverage measured by sweeping the cut corridor against the field: covered, missed, excess and overlap, with distance, rotation and mission time",
+            "Routes kept on the field: every transition is checked, and re-routed along the boundary if it would cross ground that is not being cut",
+            "A surveyed field, or one traced on the map, is planned and joined to the work rotation",
+            "Two LiFePO4 packs: the array charges the station pack, and the station pack charges the machine when it is home",
+            "Load built from the motors actually commanded on, so the pack drains by exactly what is drawing on it",
+            "Runs in real time, so a machine moving at 1 m/s covers 1 m per second on the map",
+        ],
+        "status": "demonstration",
+        "note": "Telemetry is simulated. Written for a thesis, not for a customer.",
+        "reason": (
+            "The thesis designed the machine; this is the part that shows whether the "
+            "design works before anything is built. The interesting problem was the "
+            "planning: covering a field without missing patches and without driving over "
+            "the same ground twice, on shapes that are not rectangles. Measuring it "
+            "rather than asserting it is what makes the comparison between the five "
+            "strategies worth reading."
+        ),
+        "url": "https://turfops.projectnova.download/",
+        "github": "https://github.com/NovaProtocol/TurfOps",
+        "image": "",
+        "links": [
+            {
+                "name": "Documentation",
+                "url": "https://turfops.projectnova.download/documentation/",
+                "icon": "fas fa-book",
+            },
+        ],
+        "buttons": [],
+    },
     "gatekeeper": {
         "active": True,
         "title": "GateKeeper",
