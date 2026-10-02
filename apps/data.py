@@ -45,13 +45,13 @@ PROJECTS: dict[str, dict] = {
             "rather than asserting it is what makes the comparison between the five "
             "strategies worth reading."
         ),
-        "url": "https://turfops.projectnova.download/",
+        "url": "https://mower.projectnova.download/",
         "github": "https://github.com/NovaProtocol/MowerPanel",
         "image": "",
         "links": [
             {
                 "name": "Documentation",
-                "url": "https://turfops.projectnova.download/documentation/",
+                "url": "https://mower.projectnova.download/documentation/",
                 "icon": "fas fa-book",
             },
         ],

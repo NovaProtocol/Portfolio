@@ -84,7 +84,7 @@
     {
       "name": "Automated Lawn Mower Control Panel",
       "tech": "FastAPI, Granian, Docker, Caddy, Leaflet, Bootstrap",
-      "url": "https://turfops.projectnova.download/",
+      "url": "https://mower.projectnova.download/",
       "status_line": "Working demonstration; telemetry is simulated",
       "highlights": [
         "Built the mission-planning and telemetry software for the autonomous mower designed in my undergraduate thesis",
