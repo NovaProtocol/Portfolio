@@ -46,7 +46,7 @@ PROJECTS: dict[str, dict] = {
             "strategies worth reading."
         ),
         "url": "https://turfops.projectnova.download/",
-        "github": "https://github.com/NovaProtocol/TurfOps",
+        "github": "https://github.com/NovaProtocol/MowerPanel",
         "image": "",
         "links": [
             {
