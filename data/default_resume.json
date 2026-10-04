@@ -88,7 +88,7 @@
       "status_line": "Working demonstration; telemetry is simulated",
       "highlights": [
         "Built the mission-planning and telemetry software for the autonomous mower designed in my undergraduate thesis",
-        "Implemented five coverage strategies \u2014 linear sweep, contour spiral, inverse spiral, triangulation fill and strip partition \u2014 planned from a field boundary and a cutting width",
+        "Implemented five coverage strategies (linear sweep, contour spiral, inverse spiral, triangulation fill and strip partition) planned from a field boundary and a cutting width",
         "Measured coverage by sweeping the cut corridor against the field: covered, missed, excess and overlap, with distance, rotation and mission time",
         "Kept routes on the field: every transition is checked and re-routed along the boundary if it would cross ground that is not being cut",
         "Modelled the machine's energy with two LiFePO4 packs and a 400 W array, drawing load from the motors actually commanded on"
