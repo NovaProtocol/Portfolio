@@ -200,7 +200,9 @@ def test_the_mechanical_resume_drops_only_practiceforge() -> None:
     mech = [p["name"] for p in served("Mechanical Engineering")["projects"]]
 
     assert set(mech) == set(base) - {"PracticeForge"}
-    assert base[0] == "Water Billing System", "the generic resume leads with the largest build"
+    assert base[0] == "Automated Lawn Mower Control Panel", (
+        "the generic resume leads with the undergraduate thesis build"
+    )
 
 
 def test_a_named_resume_repeats_no_project_text() -> None:
@@ -253,12 +255,19 @@ def test_the_software_resume_reads_for_software() -> None:
     )
     assert "Software" in soft["headline"] or "developer" in soft["headline"]
 
-    # And it leads with the largest build, not the mechanical-subject project.
+    # And it leads with the largest software build, not the mechanical-subject
+    # project.
     assert [p["name"] for p in soft["projects"]][0] == "Water Billing System"
     assert [p["name"] for p in soft["projects"]][-1] == "MELE Review"
 
-    # It lists every project, so no software work is hidden from a software reader.
-    assert len(soft["projects"]) == len(default_resume()["projects"])
+    # It drops the thesis build, the way the mechanical resume drops PracticeForge,
+    # and keeps every other project. Pinned as an exclusion rather than a count, so
+    # a project added to the default has to be placed here deliberately instead of
+    # appearing by arithmetic.
+    pool = {p["name"] for p in default_resume()["projects"]}
+    assert {p["name"] for p in soft["projects"]} == pool - {
+        "Automated Lawn Mower Control Panel"
+    }
 
 
 def test_no_resume_claims_a_degree_it_does_not_have() -> None:
@@ -505,31 +514,36 @@ def test_the_mechanical_resume_excludes_practiceforge_on_purpose() -> None:
 def test_the_mechanical_resume_leads_with_the_hardware_project() -> None:
     """The lead project has to evidence the headline's claim.
 
-    This resume sells embedded systems as the differentiator. Water Billing
-    System is the only project on it with real hardware integration: a reader taps
-    a phone against an NFC tag on the meter and the reading is recorded, with a
-    dedicated NFC route and on-device key derivation. MELE Review is stronger on
-    mechanical subject matter, being a licensure reviewer, but it is pure software
-    underneath and evidences nothing about hardware.
+    This resume sells embedded systems as the differentiator, so it leads with the
+    mower: the undergraduate thesis, and the only entry that is a machine — two
+    LiFePO4 packs, a 400 W array, and a panel that commands the drives.
 
-    So Water Billing leads, and MELE follows it. Pinned with the reason because
-    this order was reversed once already, on the argument that MELE is the more
-    mechanical subject; that argument is about subject matter, and the page is
-    making a claim about hardware.
+    Water Billing System follows, and is the second piece of hardware evidence: a
+    reader taps a phone against an NFC tag on the meter and the reading is
+    recorded, with a dedicated NFC route and on-device key derivation. MELE Review
+    is stronger on mechanical subject matter, being a licensure reviewer, but it is
+    pure software underneath and evidences nothing about hardware, so it stays
+    behind both. Pinned with the reason because this order was argued over once
+    already, on the argument that MELE is the more mechanical subject; that
+    argument is about subject matter, and the page is making a claim about
+    hardware.
     """
     mech = [p["name"] for p in served("Mechanical Engineering")["projects"]]
 
-    assert mech[0] == "Water Billing System", (
+    assert mech[0] == "Automated Lawn Mower Control Panel", (
         f"the mechanical resume leads with {mech[0]!r}, which does not evidence the "
         f"embedded-systems claim in its headline"
     )
-    assert mech[1] == "MELE Review", "MELE should still be second, not dropped"
+    assert mech[1] == "Water Billing System", (
+        "Water Billing is still the second piece of hardware evidence, not dropped"
+    )
+    assert mech[2] == "MELE Review", "MELE should still be third, not dropped"
 
 
 def test_the_headline_claim_is_what_the_page_leads_with() -> None:
     """Checked across resumes, not only the one that prompted the fix."""
     expectations = {
-        "Mechanical Engineering": ("Water Billing System", "Embedded"),
+        "Mechanical Engineering": ("Automated Lawn Mower Control Panel", "Embedded"),
         "Software": ("Water Billing System", "developer"),
     }
     for name, (first, headline_word) in expectations.items():
