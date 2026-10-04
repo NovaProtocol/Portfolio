@@ -131,16 +131,22 @@ The markup and the styles are **partials** rather than copies. They used to be t
 
 | Resume | Headline leads with | Projects |
 |---|---|---|
-| Generic (default) | the degree, then what the software work is | all five |
-| Mechanical Engineering | the degree and the mechanical work | all but PracticeForge |
-| Software | the software work, degree mentioned second | all five, largest build first |
+| Generic (default) | the degree, then what the software work is | all six, thesis build first |
+| Mechanical Engineering | the degree and the mechanical work | all but PracticeForge, thesis build first |
+| Software | the software work, degree mentioned second | all but the mower, largest software build first |
 
 - A named resume is a **projection** of the default, never a second data file.
 - The mechanical resume drops PracticeForge. Every other entry is engineering
   work a mechanical reader can follow; PracticeForge is a Python practice sandbox
   with neither an engineering subject nor a product purpose.
-- The software resume lists every project, including the mechanical one, because
-  the solver and the reviewer are still things this person built and shipped.
+- The software resume drops the mower, the way the mechanical resume drops
+  PracticeForge, and keeps every other entry. The solver and the reviewer stay,
+  because they are still things this person built and shipped. Both exclusions are
+  asserted as set differences against the default, so a project added later has to
+  be placed on each resume deliberately rather than appearing by arithmetic.
+- The mower leads Generic and Mechanical. It is the undergraduate thesis and the
+  only entry that is a machine rather than a service — two LiFePO4 packs, a 400 W
+  array, and a panel that commands the drives.
 - **The headline is the part that matters most between them.** A reader who sees
   "Mechanical Engineering graduate" first has filed the application before
   reaching the deployed projects, so the software resume does not lead with the
