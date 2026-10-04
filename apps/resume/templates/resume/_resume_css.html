@@ -83,11 +83,29 @@ section h2 {
     text-transform: uppercase;
     padding: 0.15rem 0.4rem;
     padding-bottom: 0.2rem;
+    /* The user-agent `margin-top` on `h2` collapses out of a section that has no
+       padding or border. Between two sections that is invisible, because the
+       previous section's `margin-bottom` is larger and wins the collapse; the
+       first section on page 2 has no previous sibling, so it pushed the whole
+       page down by the full 8.7px. Reset here for the same reason `.skill-row`
+       resets it. */
+    margin-top: 0;
     margin-bottom: 0.4rem;
     background: var(--section-heading-bg);
 }
 .entry { margin-bottom: 0.65rem; }
 .entry:last-child { margin-bottom: 0; }
+/* The user-agent `p { margin: 1em 0 }` is the rest of the page-2 overflow. Each
+   of these carries a designed `margin-bottom` and nothing below it turns the top
+   margin back off, so every one of them was also paying a full em (~9.3px at
+   0.85em) above. On page 2 that is 14 paragraphs, ~130px of it, against a page
+   that was 108px over. `.skill-row` below already resets its top margin, which
+   is the convention these three were missing.
+
+   Scoped to page 2 in effect: page 1's `.title` is a `<span>` (no user-agent
+   margin to begin with) and `.tech-stack`/`.demo-line` appear nowhere but here.
+   Verified by measuring page 1 before and after: every section identical. */
+.entry .title { font-weight: 700; margin-top: 0; }
 .entry .head {
     display: flex;
     justify-content: space-between;
@@ -99,10 +117,15 @@ section h2 {
 .entry .period { font-style: italic; font-size: 0.89em; white-space: nowrap; }
 .entry ul { margin: 0.1rem 0 0; padding-left: 1.2rem; }
 .entry ul li { margin-bottom: 0.15rem; font-size: 0.95em; }
-.tech-stack { font-size: 0.85em; margin-bottom: 0.2rem; }
-.demo-line { font-size: 0.85em; margin-bottom: 0.2rem; color: var(--light-muted); }
+.tech-stack { font-size: 0.85em; margin: 0 0 0.2rem; }
+.demo-line { font-size: 0.85em; margin: 0 0 0.2rem; color: var(--light-muted); }
 .demo-line a { color: var(--text-color); }
 .resume-projects-wrap { display: flex; gap: 1rem; align-items: flex-start; }
 .resume-projects-list { flex: 1; min-width: 0; }
 .skill-row { margin: 0 0 0.4rem; }
+/* Same reason as `.entry:last-child`: the final row's margin is not a gap, it is
+   dead space at the foot of the page. It cannot collapse away either, because
+   the section has no padding for it to collapse through and the page's bottom
+   padding stops it there, so it was spending 6.4px of the page doing nothing. */
+.skill-row:last-child { margin-bottom: 0; }
 .skill-cat { font-weight: 700; }
