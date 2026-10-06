@@ -57,8 +57,8 @@
   ],
   "experience": [
     {
-      "role": "Independent technical contributor",
-      "organization": "ResNet-18 Signature Verification (undergraduate thesis support)",
+      "role": "ResNet-18 Signature Verification (undergraduate thesis support)",
+      "organization": "Independent technical contributor",
       "period": "Aug 2025 - Nov 2025",
       "responsibilities": [
         "Built a ResNet-18 model with Triplet Loss from scratch for signature verification, reaching 86.96% validation accuracy on the thesis author's reference dataset",
