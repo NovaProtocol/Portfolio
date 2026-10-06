@@ -200,7 +200,7 @@ def test_the_mechanical_resume_drops_only_practiceforge() -> None:
     mech = [p["name"] for p in served("Mechanical Engineering")["projects"]]
 
     assert set(mech) == set(base) - {"PracticeForge"}
-    assert base[0] == "Automated Lawn Mower Control Panel", (
+    assert base[0] == "Automated Lawn Mower", (
         "the generic resume leads with the undergraduate thesis build"
     )
 
@@ -266,7 +266,7 @@ def test_the_software_resume_reads_for_software() -> None:
     # appearing by arithmetic.
     pool = {p["name"] for p in default_resume()["projects"]}
     assert {p["name"] for p in soft["projects"]} == pool - {
-        "Automated Lawn Mower Control Panel"
+        "Automated Lawn Mower"
     }
 
 
@@ -530,7 +530,7 @@ def test_the_mechanical_resume_leads_with_the_hardware_project() -> None:
     """
     mech = [p["name"] for p in served("Mechanical Engineering")["projects"]]
 
-    assert mech[0] == "Automated Lawn Mower Control Panel", (
+    assert mech[0] == "Automated Lawn Mower", (
         f"the mechanical resume leads with {mech[0]!r}, which does not evidence the "
         f"embedded-systems claim in its headline"
     )
@@ -543,7 +543,7 @@ def test_the_mechanical_resume_leads_with_the_hardware_project() -> None:
 def test_the_headline_claim_is_what_the_page_leads_with() -> None:
     """Checked across resumes, not only the one that prompted the fix."""
     expectations = {
-        "Mechanical Engineering": ("Automated Lawn Mower Control Panel", "Embedded"),
+        "Mechanical Engineering": ("Automated Lawn Mower", "Embedded"),
         "Software": ("Water Billing System", "developer"),
     }
     for name, (first, headline_word) in expectations.items():

@@ -3,12 +3,14 @@ from __future__ import annotations
 PROJECTS: dict[str, dict] = {
     "lawn-mower-control-panel": {
         "active": True,
-        "title": "Automated Lawn Mower Control Panel",
+        "title": "Automated Lawn Mower",
         "subtitle": "Mission planning and telemetry for an autonomous mower",
         "description": [
             "The software half of an undergraduate mechanical engineering thesis: the "
             "design and virtualised performance evaluation of a fully automated lawn "
             "mower with mission planning and a solar-powered docking station.",
+            "For now the deliverable is the control panel: the machine itself is "
+            "designed and its performance evaluated, but nothing has been built yet.",
             "It plans a cutting route across a surveyed field, measures what that route "
             "actually covers, and reports the machine's state while it works — the two "
             "devices, their batteries, the loads drawing on them, and the route being "
@@ -35,7 +37,7 @@ PROJECTS: dict[str, dict] = {
             "Load built from the motors actually commanded on, so the pack drains by exactly what is drawing on it",
             "Runs in real time, so a machine moving at 1 m/s covers 1 m per second on the map",
         ],
-        "status": "demonstration",
+        "status": "operational",
         "note": "Telemetry is simulated. Written for a thesis, not for a customer.",
         "reason": (
             "The thesis designed the machine; this is the part that shows whether the "

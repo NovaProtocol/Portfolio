@@ -82,10 +82,10 @@
   ],
   "projects": [
     {
-      "name": "Automated Lawn Mower Control Panel",
+      "name": "Automated Lawn Mower",
       "tech": "FastAPI, Granian, Docker, Caddy, Leaflet, Bootstrap",
       "url": "https://mower.projectnova.download/",
-      "status_line": "Working demonstration; telemetry is simulated",
+      "status_line": "Operational; for now the panel is the deliverable",
       "highlights": [
         "Built the mission-planning and telemetry software for the autonomous mower designed in my undergraduate thesis",
         "Implemented five coverage strategies (linear sweep, contour spiral, inverse spiral, triangulation fill and strip partition) planned from a field boundary and a cutting width",
