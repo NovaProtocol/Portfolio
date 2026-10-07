@@ -5,7 +5,7 @@
 {% block head_extra %}
 <style>
     .resume-page {
-        background: #e9ecef;
+        background: var(--ui-surface-variant);
         padding: 2rem 0 4rem;
     }
     .resume-wrap {
@@ -24,18 +24,19 @@
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        border: 1px solid rgba(10, 10, 15, 0.15);
+        border: 1px solid var(--ui-outline);
         border-radius: 50%;
-        background: #ffffff;
-        color: var(--bg-primary);
+        background: var(--ui-surface);
+        color: var(--ui-on-surface);
         font-size: 1rem;
         cursor: pointer;
-        transition: background 0.2s, color 0.2s;
+        transition: background var(--ui-duration) var(--ui-ease), color var(--ui-duration) var(--ui-ease),
+            border-color var(--ui-duration) var(--ui-ease);
     }
     .resume-toolbar button:hover {
-        background: var(--accent);
-        color: var(--bg-primary);
-        border-color: var(--accent);
+        background: var(--ui-primary);
+        color: var(--ui-on-primary);
+        border-color: var(--ui-primary);
     }
     /* The resume selector. It replaced a theme selector and then a variant
        selector, and it reads as text either way: the choice it makes is which
@@ -48,18 +49,21 @@
         font-weight: 600;
     }
     .resume-toolbar .resume-btn.active {
-        background: var(--accent);
-        color: var(--bg-primary);
-        border-color: var(--accent);
+        background: var(--ui-primary);
+        color: var(--ui-on-primary);
+        border-color: var(--ui-primary);
     }
     .resume-toolbar .spacer { flex: 1; }
+    /* The sheet is the paper: always white with black text, whatever the theme.
+       Only the chrome around it (this page's background, the toolbar) follows
+       the switch. */
     .resume-sheet {
         width: 794px;
         display: block;
         margin: 0 auto 1.5rem;
-        border: 1px solid #ddd;
+        border: 1px solid rgba(0, 0, 0, 0.15);
         border-radius: 4px;
-        box-shadow: 0 2px 16px rgba(0, 0, 0, 0.18);
+        box-shadow: 0 2px 16px rgba(0, 0, 0, 0.28);
         background: #ffffff;
     }
     .resume-sheet:last-child { margin-bottom: 0; }
