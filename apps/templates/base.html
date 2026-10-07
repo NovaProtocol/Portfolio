@@ -6,19 +6,15 @@
     <meta name="robots" content="noindex, nofollow">
     <title>{% block title %}Nova | Portfolio{% endblock %}</title>
     <link rel="preconnect" href="https://cdn.projectnova.download" crossorigin>
-    <link rel="stylesheet" href="https://cdn.projectnova.download/flat/dark/theme.css?v=1">
+    <link rel="stylesheet" href="https://cdn.projectnova.download/flat/dark/theme.css?v=2">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha384-nRgPTkuX86pH8yjPJUAFuASXQSSl2/bBUiNV47vSYpKFxHJhbcrGnmlYpYJMeD7a" crossorigin="anonymous">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/tailwind.css') }}?v=2">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/tailwind.css') }}?v=3">
     <style>
         body { background: var(--ui-surface); color: var(--ui-on-surface); font-family: var(--ui-font-body); margin: 0; }
-        .navbar { background: color-mix(in srgb, var(--ui-surface) 88%, transparent); backdrop-filter: blur(12px); border-bottom: 1px solid var(--ui-outline); }
-        .navbar-brand { font-family: var(--ui-font-mono); font-weight: 700; color: var(--ui-on-surface); }
-        .navbar-brand span { color: var(--ui-primary); }
         .section-title { font-size: 1.75rem; font-weight: 700; margin-bottom: 0.5rem; }
         .section-subtitle { color: var(--ui-on-surface-variant); font-size: 0.95rem; margin-bottom: 2.5rem; }
-        .footer { border-top: 1px solid var(--ui-outline); padding: 2rem 0; color: var(--ui-on-surface-variant); font-size: 0.85rem; }
         .tag { display: inline-block; background: color-mix(in srgb, var(--ui-primary) 12%, transparent); color: var(--ui-primary); font-size: 0.75rem; font-weight: 500; padding: 0.2rem 0.65rem; border-radius: 4px; margin: 0 0.4rem 0.4rem 0; font-family: var(--ui-font-mono); }
         a.tag { text-decoration: none; }
         a.tag:hover { text-decoration: underline; }
@@ -28,33 +24,26 @@
 </head>
 <body>
 
-<nav class="navbar fixed top-0 inset-x-0 z-50 w-full">
-    <div class="container mx-auto px-4 flex items-center justify-between py-3">
-        <a class="navbar-brand" href="{{ url_for('home_blueprint.index') }}">~/<span>nova</span></a>
-        <button class="lg:hidden text-xl" aria-label="Menu"
-                onclick="document.getElementById('navbarNav').classList.toggle('hidden')"
-                style="color: var(--ui-on-surface-variant)">
-            <i class="fas fa-bars"></i>
-        </button>
-        <ul id="navbarNav" class="hidden lg:flex items-center gap-1">
-            <li><a class="ui-btn ui-btn--ghost" href="{{ url_for('home_blueprint.index') }}">Home</a></li>
-            <li><a class="ui-btn ui-btn--ghost" href="{{ url_for('projects_blueprint.index') }}">Projects</a></li>
-            <li><a class="ui-btn ui-btn--ghost" href="{{ url_for('resume_blueprint.index') }}">Resume</a></li>
-            <li><a class="ui-btn ui-btn--primary" href="mailto:khyles.gibrian.ramos19@gmail.com"><i class="far fa-envelope mr-1"></i> Contact</a></li>
+<nav class="ui-navbar">
+    <div class="ui-navbar__inner">
+        <a class="ui-navbar__brand" href="{{ url_for('home_blueprint.index') }}">~/<span>nova</span></a>
+        <ul class="ui-navbar__links">
+            <li><a class="ui-navbar__link" href="{{ url_for('home_blueprint.index') }}">Home</a></li>
+            <li><a class="ui-navbar__link" href="{{ url_for('projects_blueprint.index') }}">Projects</a></li>
+            <li><a class="ui-navbar__link" href="{{ url_for('resume_blueprint.index') }}">Resume</a></li>
+            <li><a class="ui-navbar__link" href="mailto:khyles.gibrian.ramos19@gmail.com">Contact</a></li>
         </ul>
     </div>
 </nav>
 
-<main style="padding-top: 70px;">
+<main>
     {% block content %}{% endblock %}
 </main>
 
-<footer class="footer">
-    <div class="container mx-auto px-4">
-        <div class="flex flex-wrap items-center justify-between gap-2">
-            <div>&copy; {{ now().year if now is defined else "2026" }} Nova. Built with FastAPI &amp; Granian.</div>
-            <div><a href="https://github.com/NovaProtocol" target="_blank" rel="noopener noreferrer" style="color: var(--ui-on-surface-variant);"><i class="fab fa-github"></i></a></div>
-        </div>
+<footer class="ui-footer">
+    <div class="ui-footer__inner">
+        <div>&copy; {{ now().year if now is defined else "2026" }} Nova. Built with FastAPI &amp; Granian.</div>
+        <div><a href="https://github.com/NovaProtocol" target="_blank" rel="noopener noreferrer"><i class="fab fa-github"></i></a></div>
     </div>
 </footer>
 
