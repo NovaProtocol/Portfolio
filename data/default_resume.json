@@ -83,7 +83,7 @@
   "projects": [
     {
       "name": "Automated Lawn Mower",
-      "tech": "FastAPI, Granian, Docker, Caddy, Leaflet, Bootstrap",
+      "tech": "FastAPI, Granian, Docker, Caddy, Leaflet",
       "url": "https://mower.projectnova.download/",
       "status_line": "Operational; for now the panel is the deliverable",
       "highlights": [
