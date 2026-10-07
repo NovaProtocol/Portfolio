@@ -389,4 +389,45 @@ PROJECTS: dict[str, dict] = {
         "links": [],
         "buttons": [],
     },
+    "cdnserver": {
+        "active": True,
+        "title": "CDNServer",
+        "subtitle": "Shared design-language asset server",
+        "description": [
+            "One source of truth for front-end CSS across the whole stack: theme-neutral component kits served per design language and theme, rehosted third-party assets, and one shared shell (navbar/footer/type scale) so every site looks like it belongs to the same family.",
+            "It replaces the same tokens and components being re-implemented in every project, and removes the external-CDN dependency for fonts, icons and frameworks.",
+        ],
+        "tech": {"web": ["FastAPI", "Granian", "MySQL 8.4", "Caddy", "Cloudflare Tunnel"]},
+        "features": [
+            "Design-language kits (material, flat, brutalism, glassmorphism, neomorphism) x light/dark with enforced class parity",
+            "A canonical shell — identical navbar/footer position, size and type on every site",
+            "Rehosted third-party assets on version-pinned, immutable-cached paths",
+            "Public kit + asset landing page; GateKeeper-gated /manage dashboard with a parity checker",
+        ],
+        "status": "operational",
+        "reason": (
+            "Every project was re-implementing the same tokens and components, and they drifted. "
+            "Centralising them makes the fleet consistent by construction — one shell, one source, so a "
+            "theme change is one file instead of nine."
+        ),
+        "url": "https://cdn.projectnova.download/",
+        "github": "https://github.com/NovaProtocol/CDNServer",
+        "links": [],
+        "buttons": [],
+    },
+}
+
+# Invisible ordering weight for the projects page: higher = nearer the top.
+# Not rendered — the route sorts by it so cheap/infra projects sink and the
+# flagship work leads.
+PROJECT_PRIORITY: dict[str, int] = {
+    "water-billing-system": 100,
+    "gatekeeper": 95,
+    "host-dashboard": 90,
+    "lawn-mower-control-panel": 85,
+    "mle-review": 70,
+    "practiceforge": 60,
+    "novaprotocol": 50,
+    "portfolio": 40,
+    "cdnserver": 10,
 }
