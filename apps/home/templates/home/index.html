@@ -4,11 +4,11 @@
 
 {% block content %}
 <section style="min-height: calc(100vh - 70px); display: flex; align-items: center; padding: 4rem 0;">
-    <div class="container">
-        <div class="row align-items-center">
-            <div class="col-lg-6">
+    <div class="container mx-auto px-4">
+        <div class="grid lg:grid-cols-2 gap-8 items-center">
+            <div class="min-w-0">
                 <p style="color: var(--accent); font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; margin-bottom: 0.75rem;">
-                    <i class="fas fa-terminal me-2"></i>Hi, my name is
+                    <i class="fas fa-terminal mr-2"></i>Hi, my name is
                 </p>
                 <h1 style="font-size: 3.5rem; font-weight: 800; line-height: 1.1; margin-bottom: 0.5rem;">
                     Nova
@@ -21,16 +21,16 @@
                     and configures networks. I work across the stack, from FastAPI backends
                     and React Native mobile apps to Docker networking and Cloudflare Tunnel.
                 </p>
-                <div class="d-flex flex-wrap gap-2" style="gap: 0.75rem;">
-                    <a href="{{ url_for('projects_blueprint.index') }}" class="btn btn-accent">
-                        <i class="fas fa-folder-open me-2"></i>See Projects
+                <div class="flex flex-wrap gap-2" style="gap: 0.75rem;">
+                    <a href="{{ url_for('projects_blueprint.index') }}" class="ui-btn ui-btn--primary">
+                        <i class="fas fa-folder-open mr-2"></i>See Projects
                     </a>
-                    <a href="#contact" class="btn btn-outline-accent">
-                        <i class="far fa-envelope me-2"></i>Contact
+                    <a href="#contact" class="ui-btn ui-btn--outline">
+                        <i class="far fa-envelope mr-2"></i>Contact
                     </a>
                 </div>
             </div>
-            <div class="col-lg-6 d-none d-lg-block">
+            <div class="hidden lg:block">
                 <div id="code-window" style="border: 1px solid var(--border); border-radius: 12px; overflow: hidden; background: var(--bg-secondary);">
                     <div style="display: flex; align-items: center; padding: 0.65rem 1rem; border-bottom: 1px solid var(--border);">
                         <div style="display: flex; gap: 6px; margin-right: 1rem;">
@@ -79,9 +79,9 @@
 </section>
 
 <section id="bio" style="padding: 5rem 0; border-top: 1px solid var(--border);">
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-lg-8">
+    <div class="container mx-auto px-4">
+        <div class="flex justify-center">
+            <div class="w-full max-w-3xl">
                 <h2 class="section-title" style="text-align: center;">About Me</h2>
                 <p class="section-subtitle" style="text-align: center;">A bit about who I am</p>
                 <p style="color: var(--text-secondary); font-size: 1.05rem; line-height: 1.8; text-align: center;">
@@ -97,13 +97,13 @@
 </section>
 
 <section id="skills" style="padding: 5rem 0; border-top: 1px solid var(--border); background: var(--bg-secondary);">
-    <div class="container">
+    <div class="container mx-auto px-4">
         <h2 class="section-title" style="text-align: center;">Skills</h2>
         <p class="section-subtitle" style="text-align: center;">Technologies I work with</p>
         <div style="max-width: 700px; margin: 0 auto;">
             <div style="margin-bottom: 2rem;">
                 <h6 style="font-weight: 700; font-size: 0.85rem; margin-bottom: 0.75rem; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.5px;">
-                    <i class="fas fa-cog me-1"></i> Mechanical Design
+                    <i class="fas fa-cog mr-1"></i> Mechanical Design
                 </h6>
                 <div>
                     {{ tech_tag('AutoCAD') }}
@@ -114,7 +114,7 @@
             </div>
             <div style="margin-bottom: 2rem;">
                 <h6 style="font-weight: 700; font-size: 0.85rem; margin-bottom: 0.75rem; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.5px;">
-                    <i class="fas fa-code me-1"></i> Programming Languages
+                    <i class="fas fa-code mr-1"></i> Programming Languages
                 </h6>
                 <div>
                     {{ tech_tag('Python') }}
@@ -126,7 +126,7 @@
             </div>
             <div style="margin-bottom: 2rem;">
                 <h6 style="font-weight: 700; font-size: 0.85rem; margin-bottom: 0.75rem; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.5px;">
-                    <i class="fas fa-layer-group me-1"></i> Backend Development
+                    <i class="fas fa-layer-group mr-1"></i> Backend Development
                 </h6>
                 <div>
                     {{ tech_tag('FastAPI') }}
@@ -138,7 +138,7 @@
             </div>
             <div style="margin-bottom: 2rem;">
                 <h6 style="font-weight: 700; font-size: 0.85rem; margin-bottom: 0.75rem; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.5px;">
-                    <i class="fas fa-server me-1"></i> Engineering & Automation
+                    <i class="fas fa-server mr-1"></i> Engineering & Automation
                 </h6>
                 <div>
                     {{ tech_tag('Arduino') }}
@@ -149,7 +149,7 @@
             </div>
             <div style="margin-bottom: 2rem;">
                 <h6 style="font-weight: 700; font-size: 0.85rem; margin-bottom: 0.75rem; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.5px;">
-                    <i class="fas fa-server me-1"></i> Deployment & Infrastructure
+                    <i class="fas fa-server mr-1"></i> Deployment & Infrastructure
                 </h6>
                 <div>
                     {{ tech_tag('Docker') }}
@@ -160,7 +160,7 @@
             </div>
             <div style="margin-bottom: 2rem;">
                 <h6 style="font-weight: 700; font-size: 0.85rem; margin-bottom: 0.75rem; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.5px;">
-                    <i class="fas fa-microchip me-1"></i> Electronics & Hardware
+                    <i class="fas fa-microchip mr-1"></i> Electronics & Hardware
                 </h6>
                 <div>
                     {{ tech_tag('Arduino') }}
@@ -171,7 +171,7 @@
             </div>
             <div style="margin-bottom: 2rem;">
                 <h6 style="font-weight: 700; font-size: 0.85rem; margin-bottom: 0.75rem; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.5px;">
-                    <i class="fas fa-mobile-alt me-1"></i> Mobile
+                    <i class="fas fa-mobile-alt mr-1"></i> Mobile
                 </h6>
                 <div>
                     {{ tech_tag('React Native') }}
@@ -183,7 +183,7 @@
 </section>
 
 <section id="education" style="padding: 5rem 0; border-top: 1px solid var(--border);">
-    <div class="container">
+    <div class="container mx-auto px-4">
         <h2 class="section-title" style="text-align: center;">Education</h2>
         <p class="section-subtitle" style="text-align: center;">My academic background</p>
 
@@ -207,7 +207,7 @@
 </section>
 
 <section id="experience" style="padding: 5rem 0; border-top: 1px solid var(--border);">
-    <div class="container">
+    <div class="container mx-auto px-4">
         <h2 class="section-title" style="text-align: center;">Experience</h2>
         <p class="section-subtitle" style="text-align: center;">Where I've worked</p>
 
@@ -275,7 +275,7 @@
 </section>
 
 <section id="awards" style="padding: 5rem 0; border-top: 1px solid var(--border); background: var(--bg-secondary);">
-    <div class="container">
+    <div class="container mx-auto px-4">
         <h2 class="section-title" style="text-align: center;">Awards & Certifications</h2>
         <p class="section-subtitle" style="text-align: center;">Recognition and credentials</p>
         <div style="max-width: 600px; margin: 0 auto;">
@@ -306,17 +306,17 @@
 </section>
 
 <section id="contact" style="padding: 5rem 0; border-top: 1px solid var(--border);">
-    <div class="container">
+    <div class="container mx-auto px-4">
         <h2 class="section-title" style="text-align: center;">Contact</h2>
         <p class="section-subtitle" style="text-align: center;">Get in touch</p>
         <div style="display: flex; justify-content: center; gap: 1.5rem; flex-wrap: wrap;">
-            <a href="mailto:khyles.gibrian.ramos19@gmail.com" class="btn btn-accent" style="display: inline-flex; align-items: center; gap: 0.5rem;">
+            <a href="mailto:khyles.gibrian.ramos19@gmail.com" class="ui-btn ui-btn--primary" style="display: inline-flex; align-items: center; gap: 0.5rem;">
                 <i class="far fa-envelope"></i> Email
             </a>
-            <a href="https://github.com/NovaProtocol" target="_blank" class="btn btn-outline-accent" style="display: inline-flex; align-items: center; gap: 0.5rem;">
+            <a href="https://github.com/NovaProtocol" target="_blank" class="ui-btn ui-btn--outline" style="display: inline-flex; align-items: center; gap: 0.5rem;">
                 <i class="fab fa-github"></i> GitHub
             </a>
-            <a href="https://www.linkedin.com/in/khyles-gibrian-ramos/" target="_blank" class="btn btn-outline-accent" style="display: inline-flex; align-items: center; gap: 0.5rem;">
+            <a href="https://www.linkedin.com/in/khyles-gibrian-ramos/" target="_blank" class="ui-btn ui-btn--outline" style="display: inline-flex; align-items: center; gap: 0.5rem;">
                 <i class="fab fa-linkedin-in"></i> LinkedIn
             </a>
         </div>

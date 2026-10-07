@@ -130,10 +130,10 @@ class SecurityHeadersMiddleware(BaseHTTPMiddleware):
         response = await call_next(request)
         response.headers["Content-Security-Policy"] = (
             "default-src 'self'; "
-            "script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://stackpath.bootstrapcdn.com https://cdnjs.cloudflare.com; "
-            "style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://stackpath.bootstrapcdn.com https://fonts.googleapis.com https://cdnjs.cloudflare.com; "
-            "font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; "
-            "img-src 'self' data:; connect-src 'self'; "
+            "script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://cdn.projectnova.download; "
+            "style-src 'self' 'unsafe-inline' https://cdn.projectnova.download https://fonts.googleapis.com https://cdnjs.cloudflare.com; "
+            "font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com https://cdn.projectnova.download; "
+            "img-src 'self' data: https://cdn.projectnova.download; connect-src 'self'; "
             "frame-src 'self' https://*.projectnova.download; "
             "frame-ancestors 'self' https://*.projectnova.download"
         )

@@ -1,0 +1,29 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Portfolio keeps ITS OWN palette — the kit supplies the component CSS, but the
+   tokens below drive it, so the migration preserves the site's near-black/mint
+   look instead of the kit's colours. */
+:root {
+  --ui-surface: #0a0a0f;
+  --ui-on-surface: #e8e8f0;
+  --ui-surface-variant: #1a1a28;
+  --ui-on-surface-variant: #8888a0;
+  --ui-outline: #2a2a3e;
+  --ui-primary: #64ffda;
+  --ui-on-primary: #0a0a0f;
+  --ui-error: #f87171;
+  --ui-success: #4ade80;
+  --ui-warning: #fbbf24;
+
+  /* Legacy names the templates' inline styles still use. */
+  --bg-primary: var(--ui-surface);
+  --bg-secondary: #12121a;
+  --bg-card: var(--ui-surface-variant);
+  --border: var(--ui-outline);
+  --text-primary: var(--ui-on-surface);
+  --text-secondary: var(--ui-on-surface-variant);
+  --accent: var(--ui-primary);
+  --accent-dim: rgba(100, 255, 218, 0.1);
+}
