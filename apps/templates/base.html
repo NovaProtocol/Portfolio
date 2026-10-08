@@ -1,57 +1,32 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="utf-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="robots" content="noindex, nofollow">
-    <title>{% block title %}Nova | Portfolio{% endblock %}</title>
-    <link rel="preconnect" href="https://cdn.projectnova.download" crossorigin>
-    <link rel="stylesheet" href="https://cdn.projectnova.download/flat/dark/theme.css?v=7">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha384-nRgPTkuX86pH8yjPJUAFuASXQSSl2/bBUiNV47vSYpKFxHJhbcrGnmlYpYJMeD7a" crossorigin="anonymous">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/tailwind.css') }}?v=3">
-    <style>
-        body { background: var(--ui-surface); color: var(--ui-on-surface); font-family: var(--ui-font-body); margin: 0; }
-        .section-title { font-size: 1.75rem; font-weight: 700; margin-bottom: 0.5rem; }
-        .section-subtitle { color: var(--ui-on-surface-variant); font-size: 0.95rem; margin-bottom: 2.5rem; }
-        .tag { display: inline-block; background: color-mix(in srgb, var(--ui-primary) 12%, transparent); color: var(--ui-primary); font-size: 0.75rem; font-weight: 500; padding: 0.2rem 0.65rem; border-radius: 4px; margin: 0 0.4rem 0.4rem 0; font-family: var(--ui-font-mono); }
-        a.tag { text-decoration: none; }
-        a.tag:hover { text-decoration: underline; }
-        code { font-family: var(--ui-font-mono); }
-    </style>
-    {% block head_extra %}{% endblock %}
-    <script src="https://cdn.projectnova.download/shell.js"></script>
-</head>
-<body>
+{% extends "_shell/base.html" %}
 
-<nav class="ui-navbar">
-  <div class="ui-navbar__inner">
-    <span class="ui-navbar__lead" aria-hidden="true"></span>
-    <a class="ui-navbar__brand" href="{{ url_for('home_blueprint.index') }}">~/<span>nova</span></a>
-    <div class="ui-navbar__right">
-      <ul class="ui-navbar__links">
-            <li><a class="ui-navbar__link" href="{{ url_for('home_blueprint.index') }}">Home</a></li>
-            <li><a class="ui-navbar__link" href="{{ url_for('projects_blueprint.index') }}">Projects</a></li>
-            <li><a class="ui-navbar__link" href="{{ url_for('resume_blueprint.index') }}">Resume</a></li>
-            <li><a class="ui-navbar__link" href="mailto:khyles.gibrian.ramos19@gmail.com">Contact</a></li>
-        </ul>
-      <button class="ui-theme-toggle" aria-label="Toggle light/dark"></button>
-    </div>
-  </div>
-</nav>
+{% block title %}Nova | Portfolio{% endblock %}
 
-<main>
-    {% block content %}{% endblock %}
-</main>
+{% block head_assets %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha384-nRgPTkuX86pH8yjPJUAFuASXQSSl2/bBUiNV47vSYpKFxHJhbcrGnmlYpYJMeD7a" crossorigin="anonymous">
+<style>
+    body { background: var(--ui-surface); color: var(--ui-on-surface); font-family: var(--ui-font-body); margin: 0; }
+    .section-title { font-size: 1.75rem; font-weight: 700; margin-bottom: 0.5rem; }
+    .section-subtitle { color: var(--ui-on-surface-variant); font-size: 0.95rem; margin-bottom: 2.5rem; }
+    .tag { display: inline-block; background: color-mix(in srgb, var(--ui-primary) 12%, transparent); color: var(--ui-primary); font-size: 0.75rem; font-weight: 500; padding: 0.2rem 0.65rem; border-radius: 4px; margin: 0 0.4rem 0.4rem 0; font-family: var(--ui-font-mono); }
+    a.tag { text-decoration: none; }
+    a.tag:hover { text-decoration: underline; }
+    code { font-family: var(--ui-font-mono); }
+</style>
+{% endblock %}
 
-<footer class="ui-footer">
-    <div class="ui-footer__inner">
-        <div>&copy; {{ now().year if now is defined else "2026" }} Nova. Built with FastAPI &amp; Granian.</div>
-        <div><a href="https://github.com/NovaProtocol" target="_blank" rel="noopener noreferrer"><i class="fab fa-github"></i></a></div>
-    </div>
-</footer>
+{% block brand_href %}{{ url_for('home_blueprint.index') }}{% endblock %}
+{% block brand_name %}nova{% endblock %}
 
-<script src="{{ url_for('static', filename='js/error.js') }}"></script>
-</body>
-</html>
+{% block nav_links %}
+<li><a class="ui-navbar__link" href="{{ url_for('home_blueprint.index') }}">Home</a></li>
+<li><a class="ui-navbar__link" href="{{ url_for('projects_blueprint.index') }}">Projects</a></li>
+<li><a class="ui-navbar__link" href="{{ url_for('resume_blueprint.index') }}">Resume</a></li>
+<li><a class="ui-navbar__link" href="mailto:khyles.gibrian.ramos19@gmail.com">Contact</a></li>
+{% endblock %}
+
+{% block footer_text %}&copy; {{ now().year if now is defined else "2026" }} Nova. Built with FastAPI &amp; Granian.{% endblock %}
+
+{% block content %}{% endblock %}
+
+{% block scripts %}<script src="/static/js/error.js"></script>{% endblock %}
