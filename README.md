@@ -32,7 +32,7 @@ the on-screen view and the printable version.
 **Named resumes over one source.** `data/default_resume.json` is the resume, and
 it is the generic one: the version to bring to a job fair where you do not know
 who is reading. `data/overwrite_resume.json` lists named resumes, each carrying
-only what it changes — a headline, a summary, and the projects worth leading
+only what it changes: a headline, a summary, and the projects worth leading
 with. Everything else is inherited, so the two cannot disagree and a project is
 written once no matter how many resumes show it.
 
@@ -43,7 +43,7 @@ page that should sit behind a login rather than being world-readable.
 ## Running it
 
 ```bash
-# env comes from the shell — there is no .env file (see .env.example for the list)
+# env comes from the shell, there is no .env file (see .env.example for the list)
 export DEPLOYMENT_TYPE=DEBUG
 docker compose up -d --build
 ```
