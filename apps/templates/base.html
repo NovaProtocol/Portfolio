@@ -2,6 +2,12 @@
 
 {% block title %}Nova | Portfolio{% endblock %}
 
+{# The compiled Tailwind was stale, so the arbitrary grid class the project
+   detail row uses did not exist and the row silently stayed one column. The
+   build is refreshed and the link versioned here so browsers drop the day-old
+   cached copy. #}
+{% block tailwind %}<link rel="stylesheet" href="/static/css/tailwind.css?v=3">{% endblock %}
+
 {% block head_assets %}
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha384-nRgPTkuX86pH8yjPJUAFuASXQSSl2/bBUiNV47vSYpKFxHJhbcrGnmlYpYJMeD7a" crossorigin="anonymous">
 <style>

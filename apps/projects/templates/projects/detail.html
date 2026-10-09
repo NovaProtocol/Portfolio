@@ -36,7 +36,7 @@
         </div>
         {% endif %}
 
-        <div class="grid grid-cols-1 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)] gap-6">
+        <div class="grid grid-cols-1 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)] gap-6 mx-auto lg:w-8/12">
             <div class="w-full min-w-0">
                 <div class="flex items-center" style="gap: 0.75rem; flex-wrap: wrap; margin-bottom: 0.25rem;">
                     <h1 style="font-size: 2.2rem; font-weight: 800; margin: 0;">{% if project.title_prefix %}<span style="display: block; font-size: 0.40em; font-weight: 400; color: var(--text-secondary);">{{ project.title_prefix }}</span>{% endif %}{{ project.title }}</h1>
