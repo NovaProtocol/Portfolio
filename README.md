@@ -59,3 +59,7 @@ the repository link. The layout is shared, so a new entry needs no template work
 
 Full documentation is served by the stack at `/documentation/`, and the sources are in
 [`documentation/docs`](documentation/docs).
+
+## License
+
+All rights reserved. See [LICENSE](LICENSE).
