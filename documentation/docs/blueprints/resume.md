@@ -145,7 +145,7 @@ The markup and the styles are **partials** rather than copies. They used to be t
   asserted as set differences against the default, so a project added later has to
   be placed on each resume deliberately rather than appearing by arithmetic.
 - The mower leads Generic and Mechanical. It is the undergraduate thesis and the
-  only entry that is a machine rather than a service — two LiFePO4 packs, a 400 W
+  only entry that is a machine rather than a service: two LiFePO4 packs, a 400 W
   array, and a panel that commands the drives.
 - **The headline is the part that matters most between them.** A reader who sees
   "Mechanical Engineering graduate" first has filed the application before
