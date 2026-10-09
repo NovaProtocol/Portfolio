@@ -43,7 +43,7 @@ Add a new project by inserting an entry into `PROJECTS` (see README and Getting 
 |-------|----------|-------------|
 | `title` | yes | Display name |
 | `subtitle` | yes | Client / context |
-| `description` | yes | 2–3 sentence summary (list of paragraphs) |
+| `description` | yes | 2-3 sentence summary (list of paragraphs) |
 | `tech` | yes | `{web: [...], mobile: [...]}` tag lists |
 | `features` | no | Bullet list of key features |
 | `status` | no | `operational` / `in progress` / `halted` |

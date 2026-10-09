@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Portfolio keeps ITS OWN palette — the kit supplies the component CSS, but the
+/* Portfolio keeps ITS OWN palette, the kit supplies the component CSS, but the
    tokens below drive it, so the migration preserves the site's near-black/mint
    look instead of the kit's colours. */
 :root {

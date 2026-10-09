@@ -14,7 +14,7 @@ all three resumes and both pages and agrees to within 3px of a 1024px page.
 
 That agreement is the whole value, and it is not self-maintaining: a change to
 `_resume_css.html` that this file does not mirror makes the figure quietly
-optimistic, which is worse than not having it — the version before this one
+optimistic, which is worse than not having it, the version before this one
 reported 105% where the browser measured 110%, and called a page with no slack
 at all "94% full". Re-measure a real browser after touching the stylesheet.
 `dashboard/check-pages.mjs` in ServerDashboard is where that is already done.
@@ -48,13 +48,13 @@ USABLE_H = PAGE_H_PX - PAD_V_PX      # ~1024 px
 # Every figure below is the CSS declaration it comes from, written as arithmetic
 # so a change to the stylesheet is a change to one of these lines rather than a
 # silent drift. Three of them were wrong before this was rewritten, and each was
-# wrong in the optimistic direction — the tool reported 105% where the browser
+# wrong in the optimistic direction, the tool reported 105% where the browser
 # said 110%, and "94% full" for a page that was exactly 100% with no slack at
 # all. A fill figure that reads low is worse than no figure, because it is the
 # one that gets trusted.
 #
 # `rem` resolves against the *root* font size, which the sheet never sets and so
-# is the browser default 16px — not the 11px the page itself inherits. Treating
+# is the browser default 16px, not the 11px the page itself inherits. Treating
 # them as the same is how `0.68rem` and `0.65rem` collapse into one number.
 REM = 16.0
 FS = 11.0                            # body { font-size }
@@ -93,7 +93,7 @@ PHOTO_H = 90                         # .resume-photo
 P_MB = FS
 
 #: Characters to a wrapped line, per font size. These are the only fitted values
-#: here — everything above is arithmetic — so they are the ones to revisit if the
+#: here, everything above is arithmetic, so they are the ones to revisit if the
 #: fill starts drifting. Calibrated against the real browser by reading back the
 #: rendered height of every `<li>` and every summary: at these widths the tool
 #: reproduces the line count the browser chose for each one, which is what the
@@ -163,7 +163,7 @@ def _ul(items: list) -> float:
     """A `<ul>`'s content height: the wrapped items and the gaps between them.
 
     The list's own `margin-top` is not counted. It collapses with the margin of
-    whatever precedes it, and that margin is always the larger of the two — so
+    whatever precedes it, and that margin is always the larger of the two, so
     the gap is already paid for by the paragraph above.
     """
     if not items:
@@ -275,7 +275,7 @@ def _page2(resume: dict) -> dict:
     skills = resume.get("skills") or []
     if skills:
         # `.skill-row:last-child` carries no margin, so the last row adds no
-        # trailing gap — the row itself and the gaps between are all there is.
+        # trailing gap, the row itself and the gaps between are all there is.
         detail["skills"] = (
             H2_H + H2_MB + len(skills) * LINE + (len(skills) - 1) * SKILL_MB
         )

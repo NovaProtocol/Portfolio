@@ -12,7 +12,7 @@ PROJECTS: dict[str, dict] = {
             "For now the deliverable is the control panel: the machine itself is "
             "designed and its performance evaluated, but nothing has been built yet.",
             "It plans a cutting route across a surveyed field, measures what that route "
-            "actually covers, and reports the machine's state while it works — the two "
+            "actually covers, and reports the machine's state while it works, the two "
             "devices, their batteries, the loads drawing on them, and the route being "
             "followed across a map. Field boundaries can be traced on the map and become "
             "fields the machine can be sent to.",
@@ -29,7 +29,7 @@ PROJECTS: dict[str, dict] = {
             ],
         },
         "features": [
-            "Five coverage strategies — linear sweep, contour spiral, inverse spiral, triangulation fill and strip partition — planned from a boundary and a cutting width",
+            "Five coverage strategies, linear sweep, contour spiral, inverse spiral, triangulation fill and strip partition, planned from a boundary and a cutting width",
             "Coverage measured by sweeping the cut corridor against the field: covered, missed, excess and overlap, with distance, rotation and mission time",
             "Routes kept on the field: every transition is checked, and re-routed along the boundary if it would cross ground that is not being cut",
             "A surveyed field, or one traced on the map, is planned and joined to the work rotation",
@@ -400,14 +400,14 @@ PROJECTS: dict[str, dict] = {
         "tech": {"web": ["FastAPI", "Granian", "MySQL 8.4", "Caddy", "Cloudflare Tunnel"]},
         "features": [
             "Design-language kits (material, flat, brutalism, glassmorphism, neomorphism) x light/dark with enforced class parity",
-            "A canonical shell — identical navbar/footer position, size and type on every site",
+            "A canonical shell, identical navbar/footer position, size and type on every site",
             "Rehosted third-party assets on version-pinned, immutable-cached paths",
             "Public kit + asset landing page; GateKeeper-gated /manage dashboard with a parity checker",
         ],
         "status": "operational",
         "reason": (
             "Every project was re-implementing the same tokens and components, and they drifted. "
-            "Centralising them makes the fleet consistent by construction — one shell, one source, so a "
+            "Centralising them makes the fleet consistent by construction, one shell, one source, so a "
             "theme change is one file instead of nine."
         ),
         "url": "https://cdn.projectnova.download/",
@@ -418,7 +418,7 @@ PROJECTS: dict[str, dict] = {
 }
 
 # Invisible ordering weight for the projects page: higher = nearer the top.
-# Not rendered — the route sorts by it so cheap/infra projects sink and the
+# Not rendered, the route sorts by it so cheap/infra projects sink and the
 # flagship work leads.
 PROJECT_PRIORITY: dict[str, int] = {
     "water-billing-system": 100,

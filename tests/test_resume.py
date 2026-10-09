@@ -515,7 +515,7 @@ def test_the_mechanical_resume_leads_with_the_hardware_project() -> None:
     """The lead project has to evidence the headline's claim.
 
     This resume sells embedded systems as the differentiator, so it leads with the
-    mower: the undergraduate thesis, and the only entry that is a machine — two
+    mower: the undergraduate thesis, and the only entry that is a machine, two
     LiFePO4 packs, a 400 W array, and a panel that commands the drives.
 
     Water Billing System follows, and is the second piece of hardware evidence: a
