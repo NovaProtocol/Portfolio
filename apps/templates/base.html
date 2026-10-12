@@ -18,6 +18,22 @@
     a.tag { text-decoration: none; }
     a.tag:hover { text-decoration: underline; }
     code { font-family: var(--ui-font-mono); }
+    /* The header's contact panel. Plain CSS rather than Tailwind utilities: the
+       compiled Tailwind is a build artifact and a class that is not in it is a
+       silent no-op, which this page has already been bitten by. */
+    .ui-navbar__contact { position: relative; }
+    .ui-contact-panel { position: absolute; right: 0; top: calc(100% + 0.6rem); z-index: 80;
+        min-width: 17.5rem; padding: 0.9rem 1rem; border: 1px solid var(--ui-outline);
+        border-radius: 10px; background: var(--ui-surface); color: var(--ui-on-surface);
+        box-shadow: 0 14px 34px rgba(0, 0, 0, 0.35); text-align: left; }
+    .ui-contact-panel[hidden] { display: none; }
+    .ui-contact-panel__label { margin: 0; font-size: 0.68rem; letter-spacing: 0.06em;
+        text-transform: uppercase; color: var(--ui-on-surface-variant); }
+    .ui-contact-panel__address { margin: 0.2rem 0 0.75rem; font-family: var(--ui-font-mono);
+        font-size: 0.82rem; overflow-wrap: anywhere; }
+    .ui-contact-panel__actions { display: flex; flex-direction: column; gap: 0.4rem; }
+    .ui-contact-panel__actions .ui-btn { justify-content: center; }
+    .ui-contact-panel__status { margin: 0.55rem 0 0; min-height: 1em; font-size: 0.75rem; color: var(--ui-primary); }
 </style>
 {% endblock %}
 
@@ -28,11 +44,31 @@
 <li><a class="ui-navbar__link" href="{{ url_for('home_blueprint.index') }}">Home</a></li>
 <li><a class="ui-navbar__link" href="{{ url_for('projects_blueprint.index') }}">Projects</a></li>
 <li><a class="ui-navbar__link" href="{{ url_for('resume_blueprint.index') }}">Resume</a></li>
-<li><a class="ui-navbar__link" href="mailto:khyles.gibrian.ramos19@gmail.com">Contact</a></li>
+{# An anchor rather than a button: with no JavaScript this is the mailto it always
+   was, and with it the panel is what answers the click. A `<button>` here would
+   be dead without the script, which is worse than the problem it solves. #}
+<li class="ui-navbar__contact">
+    <a class="ui-navbar__link" id="ui-contact-trigger" href="mailto:{{ contact_email }}"
+       aria-expanded="false" aria-controls="ui-contact-panel" aria-haspopup="dialog"
+       title="Email {{ contact_email }}" aria-label="Email {{ contact_email }}">Contact</a>
+    <div class="ui-contact-panel" id="ui-contact-panel" role="dialog" aria-label="Contact" hidden>
+        <p class="ui-contact-panel__label">Email</p>
+        <p class="ui-contact-panel__address">{{ contact_email }}</p>
+        <div class="ui-contact-panel__actions">
+            <button type="button" class="ui-btn ui-btn--primary" data-contact-copy data-copy-value="{{ contact_email }}"
+                    title="Copy the address to the clipboard" aria-label="Copy the address to the clipboard">Copy address</button>
+            <a class="ui-btn ui-btn--outline" href="mailto:{{ contact_email }}"
+               title="Hand the address to your mail app" aria-label="Open in your mail app">Open mail app</a>
+            <a class="ui-btn ui-btn--outline" href="https://mail.google.com/mail/?view=cm&amp;fs=1&amp;to={{ contact_email|urlencode }}"
+               target="_blank" rel="noopener" title="Compose to this address in Gmail, in a new tab" aria-label="Compose in Gmail">Compose in Gmail</a>
+        </div>
+        <p class="ui-contact-panel__status" data-contact-status role="status" aria-live="polite"></p>
+    </div>
+</li>
 {% endblock %}
 
 {% block footer_text %}&copy; {{ now().year if now is defined else "2026" }} Nova. Built with FastAPI &amp; Granian.{% endblock %}
 
 {% block content %}{% endblock %}
 
-{% block scripts %}<script src="/static/js/error.js"></script>{% endblock %}
+{% block scripts %}<script src="/static/js/error.js"></script><script src="/static/js/contact.js?v=1"></script>{% endblock %}

@@ -76,3 +76,14 @@ JS: `console.error({status, request_id, stack})` + toast. Server: `structlog` JS
 ## No Build Step
 
 No Vite/Webpack/Tailwind build. CSS and JS are plain static files served directly. This keeps the image small and the Dockerfile a single `COPY . .`.
+
+## The contact control
+
+The header's **Contact** is an `<a href="mailto:...">` that opens a panel when `static/js/contact.js` is running, rather than a `<button>`. A button with no script behind it is dead, which is worse than the problem it solves, so the mailto stays underneath as the no-JavaScript fallback.
+
+The panel exists because a `mailto:` is a correct link that does nothing at all on a machine with no mail handler - the click lands, no window opens, and the control reads as broken. It therefore offers the address in text, a copy control, the mailto for a reader who does have a mail app, and a web-compose link that needs neither. The home page's contact section carries the same address and the same copy control for the same reason.
+
+- The address is **one value**: `CONTACT_EMAIL` in `apps/config.py`, exposed to templates as the `contact_email` global in `apps/templating.py`. Nothing types it into a template, so the header and the section cannot drift apart, and the environment can override it.
+- A copy control is `<button data-contact-copy data-copy-value="<address>">`, with a `[data-contact-status]` element as its `role="status"` live region somewhere above it in the tree, because a copy that announces nothing announces nothing. `contact.js` walks up to find the nearest.
+- The panel's styles are plain CSS in `base.html`'s `head_assets` block, not Tailwind utilities: the compiled stylesheet is a build artifact and a class that is not in it is a silent no-op.
+- Changing the script means bumping its `?v=` in `base.html`; static assets are cached for 24h in production and the filename carries no content hash.

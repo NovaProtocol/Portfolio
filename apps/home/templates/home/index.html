@@ -310,16 +310,24 @@
         <h2 class="section-title" style="text-align: center;">Contact</h2>
         <p class="section-subtitle" style="text-align: center;">Get in touch</p>
         <div style="display: flex; justify-content: center; gap: 1.5rem; flex-wrap: wrap;">
-            <a href="mailto:khyles.gibrian.ramos19@gmail.com" class="ui-btn ui-btn--primary" style="display: inline-flex; align-items: center; gap: 0.5rem;">
+            <a href="mailto:{{ contact_email }}" class="ui-btn ui-btn--primary" style="display: inline-flex; align-items: center; gap: 0.5rem;">
                 <i class="far fa-envelope"></i> Email
             </a>
-            <a href="https://github.com/NovaProtocol" target="_blank" class="ui-btn ui-btn--outline" style="display: inline-flex; align-items: center; gap: 0.5rem;">
+            <a href="https://github.com/NovaProtocol" target="_blank" rel="noopener" class="ui-btn ui-btn--outline" style="display: inline-flex; align-items: center; gap: 0.5rem;">
                 <i class="fab fa-github"></i> GitHub
             </a>
-            <a href="https://www.linkedin.com/in/khyles-gibrian-ramos/" target="_blank" class="ui-btn ui-btn--outline" style="display: inline-flex; align-items: center; gap: 0.5rem;">
+            <a href="https://www.linkedin.com/in/khyles-gibrian-ramos/" target="_blank" rel="noopener" class="ui-btn ui-btn--outline" style="display: inline-flex; align-items: center; gap: 0.5rem;">
                 <i class="fab fa-linkedin-in"></i> LinkedIn
             </a>
         </div>
+        <!-- The address in text, with the same copy control the header panel uses:
+             a mailto needs a mail handler, and this is what works without one. -->
+        <p style="display: flex; justify-content: center; align-items: center; gap: 0.75rem; flex-wrap: wrap; margin-top: 1.5rem;">
+            <span style="font-family: var(--ui-font-mono); font-size: 0.85rem; color: var(--ui-on-surface-variant);">{{ contact_email }}</span>
+            <button type="button" class="ui-btn ui-btn--outline" data-contact-copy data-copy-value="{{ contact_email }}"
+                    title="Copy the address to the clipboard" aria-label="Copy the address to the clipboard">Copy address</button>
+            <span data-contact-status role="status" aria-live="polite" style="font-size: 0.75rem; color: var(--ui-primary);"></span>
+        </p>
     </div>
 </section>
 {% endblock %}

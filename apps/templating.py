@@ -6,6 +6,7 @@ from pathlib import Path
 from jinja2 import ChoiceLoader, FileSystemLoader
 from starlette.templating import Jinja2Templates
 
+from apps.config import get_config
 from apps.tags import tech_tag
 
 _PROJECT_ROOT = Path(__file__).resolve().parent.parent
@@ -47,3 +48,4 @@ templates.env.loader = ChoiceLoader([FileSystemLoader(d) for d in _TEMPLATES_DIR
 templates.env.globals["tech_tag"] = tech_tag
 templates.env.globals["url_for"] = _url_for
 templates.env.globals["now"] = _now
+templates.env.globals["contact_email"] = get_config().CONTACT_EMAIL
