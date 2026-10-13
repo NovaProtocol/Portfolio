@@ -62,10 +62,10 @@
     {% endfor %}
 </section>
 
-{% if resume.coursework %}
-<section class="section-coursework">
-    <h2>Relevant Coursework</h2>
-    <p style="margin-bottom:0;">{{ resume.coursework | join(' · ') }}</p>
+{% if resume.highlight_skills %}
+<section class="section-highlight-skills">
+    <h2>Highlight Skills</h2>
+    <p style="margin-bottom:0;">{{ resume.highlight_skills | join(' · ') }}</p>
 </section>
 {% endif %}
 

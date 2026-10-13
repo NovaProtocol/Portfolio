@@ -40,3 +40,20 @@
     <p class="skill-row"><span class="skill-cat">{{ skill.category }}:</span> {{ skill.value }}</p>
     {% endfor %}
 </section>
+
+{# The signing area, pinned to the foot of the last page: the certification
+   sentence full width, then the room to sign, a rule, and the printed name.
+   The image is optional, so the space is rendered whether or not one is set.
+   `margin-top: auto` on the section (with `.page` a flex column) is what holds
+   it at the bottom rather than letting it float under the skills. #}
+<section class="section-signature">
+    <p class="signature-certify">I hereby certify that the above information is true and correct to the best of my knowledge and belief.</p>
+    <div class="signature-block">
+        {% if resume.signature %}
+        <img class="signature-image" src="{{ url_for('static', filename=resume.signature) }}" alt="Signature">
+        {% else %}
+        <div class="signature-space"></div>
+        {% endif %}
+        <p class="signature-name">{{ resume.name }}</p>
+    </div>
+</section>

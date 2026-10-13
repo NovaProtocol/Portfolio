@@ -460,12 +460,14 @@ def test_a_skill_order_reorders_without_losing_a_category() -> None:
 
 
 def test_a_partial_skill_order_still_keeps_every_category() -> None:
-    """The case the software resume does not exercise, because it names all eight.
+    """A resume that names only the categories it cares about must still carry the
+    rest.
 
-    A resume that names only the categories it cares about must still carry the
-    rest. Without this, an order could stop selecting and start replacing and the
-    suite would not notice: every order in the data today happens to be
-    exhaustive.
+    Without this, an order could stop selecting and start replacing and the suite
+    would not notice. The software resume names all but one category, so it very
+    nearly exercises this; the synthetic case below pins the rule outright, and
+    also covers an order that names a category that is added to the default
+    later.
     """
     from apps.routes.resume import _order_skills
 

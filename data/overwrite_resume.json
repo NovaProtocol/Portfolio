@@ -29,13 +29,10 @@
       ],
       "skill_order": [
         "Programming Languages",
-        "Backend & APIs",
-        "Data & Infrastructure",
+        "Backend & Infrastructure",
         "Machine Learning",
-        "Embedded Systems",
-        "Mechanical Design",
-        "Manufacturing & Fabrication",
-        "Safety & Compliance"
+        "Embedded & Controls",
+        "Mechanical Design & Fabrication"
       ]
     },
     "label": "Software",

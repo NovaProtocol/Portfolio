@@ -96,6 +96,7 @@ and carries only what it changes:
   school entry that omits them looks exactly as it did before they existed:
   - `education[].status`, a short line under the degree (for example a graduation status).
   - `projects[].status_line`, a build-state line directly under the tech stack, above `highlights`, styled with `.demo-line`.
+  - `signature`, an image path rendered into the signing area at the foot of page 2. The area is rendered whether or not it is set, so there is always a defined place to sign; with it empty the space is blank.
 - Projects carry one shared `Live demos of selected projects are hosted on my portfolio. Source code for these projects is public on GitHub.` line.
 - A project with a live demo carries a `url`, rendering a `Live demo: <url>` line under its tech stack. Projects without one omit it via the `{% if proj.url %}` guard.
 - No DB and no migrations. Edit the JSON and restart.
@@ -171,6 +172,7 @@ The markup and the styles are **partials** rather than copies. They used to be t
 ## Static Assets
 
 - Portrait photo: `static/assets/images/resume_image.JPG`
+- Signing area image, only when `signature` is set: any path under `static/`, for example `static/assets/images/signature.png`. It is drawn at the same height as the blank signing space.
 - No additional JS for the resume. It is pure FastAPI + Jinja2 + CSS for reliable printing.
 
 ## Metric Note

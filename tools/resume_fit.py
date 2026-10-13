@@ -72,6 +72,12 @@ META_MB = 0.2 * REM                  # .tech-stack / .demo-line { margin-bottom 
 LI_H = 0.95 * FS * LH                # .entry ul li
 LI_MB = 0.15 * REM                   # .entry ul li { margin-bottom }
 SKILL_MB = 0.4 * REM                 # .skill-row { margin-bottom }
+SIG_CERT_H = 0.85 * FS * LH          # .signature-certify
+SIG_CERT_MB = 0.3 * REM              # .signature-certify { margin-bottom }
+SIG_MARK_H = 24                      # .signature-space / .signature-image height
+SIG_NAME_H = 0.9 * FS * LH           # .signature-name
+SIG_NAME_PAD = 0.12 * REM            # .signature-name { padding-top }
+SIG_BORDER = 1                       # the rule over the printed name
 UL_MT = 0.1 * REM                    # .entry ul { margin-top }
 AWARD_UL_MT = 0.2 * REM              # inline margin-top on the education awards list
 
@@ -147,8 +153,8 @@ def fold(text: str, chars: int = BODY_CHARS) -> int:
 # a small error: summing page 1's blocks into page 2 made both pages report the
 # same 168%, and "both pages are equally overflowing" is worse than no figure.
 PAGE_BLOCKS = {
-    1: ("header", "summary", "education", "coursework", "certifications", "experience"),
-    2: ("projects", "skills"),
+    1: ("header", "summary", "education", "highlight_skills", "certifications", "experience"),
+    2: ("projects", "skills", "signature"),
 }
 
 #: The one sentence `_page2_body.html` prints above the projects. It is the only
@@ -236,9 +242,9 @@ def _page1(resume: dict) -> dict:
     if edu:
         detail["education"] = _section(edu)
 
-    cw = resume.get("coursework") or []
-    if cw:
-        detail["coursework"] = H2_H + max(H2_MB, P_MB) + fold(" · ".join(cw)) * LINE
+    hs = resume.get("highlight_skills") or []
+    if hs:
+        detail["highlight_skills"] = H2_H + max(H2_MB, P_MB) + fold(" · ".join(hs)) * LINE
 
     certs = []
     for entry in resume.get("certifications", []):
@@ -280,6 +286,16 @@ def _page2(resume: dict) -> dict:
             H2_H + H2_MB + len(skills) * LINE + (len(skills) - 1) * SKILL_MB
         )
 
+    # The signing area is unconditional, so it always costs its block: the
+    # certification sentence, the room to sign, and the ruled name. It is pinned
+    # to the sheet rather than stacked, so the page really spends less than this;
+    # counting it stacked is the conservative reading, and the one that stays
+    # right when the block moves or an image takes the space.
+    detail["signature"] = (
+        SIG_CERT_H + SIG_CERT_MB + SIG_MARK_H
+        + SIG_NAME_H + SIG_NAME_PAD + SIG_BORDER
+    )
+
     return detail
 
 
@@ -299,14 +315,14 @@ def measure(page: int, resume: dict) -> dict:
         detail = _page1(resume)
         sections = [
             detail["summary"],
-            *[detail[k] for k in ("education", "coursework",
+            *[detail[k] for k in ("education", "highlight_skills",
                                   "certifications", "experience") if k in detail],
         ]
         px = (detail["header"] + HEADER_MB
               + sum(sections) + (len(sections) - 1) * SECTION_MB)
     elif page == 2:
         detail = _page2(resume)
-        sections = [detail[k] for k in ("projects", "skills") if k in detail]
+        sections = [detail[k] for k in ("projects", "skills", "signature") if k in detail]
         px = sum(sections) + max(0, len(sections) - 1) * SECTION_MB
     else:
         raise ValueError(f"no page {page}")

@@ -48,6 +48,12 @@ body {
     box-sizing: border-box;
     /* A sheet is a fixed-size preview, so it does not scroll internally. */
     overflow: hidden;
+    /* The signing area is positioned against the sheet so it can be held at the
+       foot of the last page. Deliberately NOT a flex container: margins do not
+       collapse between flex items, and both pages depend on that collapsing for
+       their spacing, so flexing the page moved page 1 by 15.6px. Positioning the
+       one block leaves the flow layout exactly as it was. */
+    position: relative;
 }
 .resume-header {
     display: flex;
@@ -129,3 +135,28 @@ section h2 {
    padding stops it there, so it was spending 6.4px of the page doing nothing. */
 .skill-row:last-child { margin-bottom: 0; }
 .skill-cat { font-weight: 700; }
+/* Signing area at the foot of the last page: the certification sentence, then
+   room to sign, a ruled line, and the printed name under it. The image is
+   optional, so the space is always rendered. It is taken out of the flow and
+   pinned to the sheet's bottom padding, which is what holds it at the foot of
+   the page instead of letting it sit directly under the skills; the inside of
+   the block is `margin-left: auto` right-aligned. `.signature-certify` and
+   `.signature-name` are bare `<p>`s and reset the user-agent margin, the same
+   reason `.skill-row` does. */
+.section-signature {
+    position: absolute;
+    left: 18mm;
+    right: 18mm;
+    bottom: 13mm;
+}
+.signature-certify { font-size: 0.85em; margin: 0 0 0.3rem; }
+.signature-block { width: 46%; margin-left: auto; text-align: center; }
+.signature-space { height: 24px; }
+.signature-image { display: block; height: 24px; margin: 0 auto; }
+.signature-name {
+    border-top: 1px solid var(--text-color);
+    margin: 0;
+    padding-top: 0.12rem;
+    font-weight: 700;
+    font-size: 0.9em;
+}

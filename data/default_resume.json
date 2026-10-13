@@ -2,6 +2,7 @@
   "name": "Khyles Gibrian Ramos",
   "headline": "Mechanical Engineering graduate | Embedded systems and software",
   "photo": "assets/images/resume_image.JPG",
+  "signature": "",
   "contact": {
     "address": "Brgy. Mateuna, Tayabas, Quezon",
     "phone": "(+63) 927 403 2529",
@@ -31,15 +32,12 @@
       ]
     }
   ],
-  "coursework": [
-    "Machine Design",
-    "Thermodynamics",
-    "Fluid Mechanics",
-    "Heat Transfer",
-    "Manufacturing Processes",
-    "Engineering Mechanics",
-    "Materials Engineering",
-    "Mechatronics"
+  "highlight_skills": [
+    "PLC & Industrial Controls",
+    "Embedded Systems",
+    "Software Development",
+    "Mechanical Design",
+    "Machine Learning"
   ],
   "certifications": [
     {
@@ -112,8 +110,7 @@
       "url": "https://melereview.projectnova.download/",
       "highlights": [
         "Built a unit-aware engineering equation solver for multi-step formulas across metric and English conventions",
-        "Developed a Mechanical Engineering Licensure Exam reviewer with a self-maintained question bank",
-        "Implemented answer feedback, flag-for-review, and progress tracking"
+        "Developed a Mechanical Engineering Licensure Exam reviewer with a self-maintained question bank"
       ]
     },
     {
@@ -148,36 +145,28 @@
   ],
   "skills": [
     {
-      "category": "Mechanical Design",
-      "value": "AutoCAD, Fusion 360, OnShape, Technical Drawing, Blueprint Reading"
+      "category": "Mechanical Design & Fabrication",
+      "value": "AutoCAD, Fusion 360, OnShape, SMAW, 3D Printing"
     },
     {
-      "category": "Manufacturing & Fabrication",
-      "value": "SMAW, 3D Printing, Prototyping, Materials Selection"
-    },
-    {
-      "category": "Safety & Compliance",
-      "value": "DOLE BOSH SO2, OSH Standards, Safety Inspection, Fire Safety Planning"
-    },
-    {
-      "category": "Embedded Systems",
-      "value": "Arduino, ESP32, Raspberry Pi, NFC, Sensor Interfaces, Hardware/Software Integration"
+      "category": "Embedded & Controls",
+      "value": "Arduino, ESP32, Raspberry Pi, NFC, PLC, Ladder Logic"
     },
     {
       "category": "Programming Languages",
       "value": "Python, C++, JavaScript, TypeScript, SQL"
     },
     {
-      "category": "Backend & APIs",
-      "value": "FastAPI, Flask, SQLAlchemy, REST APIs, Granian"
-    },
-    {
-      "category": "Data & Infrastructure",
-      "value": "MySQL, SQLite, Docker, Linux, Caddy, Cloudflare Tunnel, Gunicorn"
+      "category": "Backend & Infrastructure",
+      "value": "FastAPI, SQLAlchemy, MySQL, Docker, Linux, Caddy"
     },
     {
       "category": "Machine Learning",
-      "value": "PyTorch, ResNet-18, Triplet Loss, Image Preprocessing, Model Training & Validation, Inference Services"
+      "value": "PyTorch, ResNet-18, Triplet Loss"
+    },
+    {
+      "category": "Office & Productivity",
+      "value": "Microsoft Excel, Word, PowerPoint, Google Workspace, Technical Documentation"
     }
   ]
 }
