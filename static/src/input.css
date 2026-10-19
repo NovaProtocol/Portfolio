@@ -17,3 +17,10 @@
   --accent: var(--ui-primary);
   --accent-dim: rgba(100, 255, 218, 0.1);
 }
+
+/* Every page's content column. All templates wrap in `container mx-auto px-4`,
+   so the gutter lives here and cannot drift per page. Declared after the
+   utilities so it wins over the horizontal padding px-4 set. */
+.container {
+  padding-inline: clamp(1.25rem, 5vw, 4rem);
+}
