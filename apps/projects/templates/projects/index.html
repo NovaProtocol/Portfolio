@@ -2,19 +2,83 @@
 
 {% block title %}Projects | Nova{% endblock %}
 
+{% block head_assets %}
+{{ super() }}
+<style>
+    /* Filter chips. Plain CSS rather than Tailwind utilities: the compiled
+       Tailwind is a build artifact and a class that is not in it is a silent
+       no-op. */
+    .filter-bar { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 2rem; }
+    .filter-chip {
+        display: inline-flex; align-items: center; gap: 0.4rem;
+        padding: 0.35rem 0.85rem; border-radius: 999px;
+        border: 1px solid var(--border); background: var(--bg-card);
+        color: var(--text-secondary); font-size: 0.82rem; font-weight: 500;
+        cursor: pointer; user-select: none; transition: all 0.2s;
+    }
+    .filter-chip .filter-dot {
+        width: 8px; height: 8px; border-radius: 50%;
+        background: var(--text-secondary); opacity: 0.4; transition: all 0.2s;
+    }
+    .filter-chip.is-active { border-color: var(--accent); color: var(--accent); }
+    .filter-chip.is-active .filter-dot { background: var(--accent); opacity: 1; }
+    .filter-chip:hover { border-color: var(--accent); }
+    .grid-cols-projects { display: grid; grid-template-columns: 1fr; gap: 1.5rem; }
+    @media (min-width: 1024px) { .grid-cols-projects { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+</style>
+{% endblock %}
+
 {% block content %}
 <section style="padding: 4rem 0;">
-    <div class="container mx-auto px-4">
+    <div class="container mx-auto" style="padding-inline: clamp(1.25rem, 6vw, 5rem);">
         <h1 class="section-title">Projects</h1>
         <p class="section-subtitle">Things I have built</p>
 
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div class="filter-bar" role="group" aria-label="Filter projects by category">
+            <button type="button" class="filter-chip is-active" data-cat="mechanical-engineering" aria-pressed="true"><span class="filter-dot"></span>Mechanical Engineering</button>
+            <button type="button" class="filter-chip is-active" data-cat="software-engineering" aria-pressed="true"><span class="filter-dot"></span>Software Engineering</button>
+            <button type="button" class="filter-chip" data-cat="gaming" aria-pressed="false"><span class="filter-dot"></span>Gaming</button>
+        </div>
+
+        <div class="grid-cols-projects" id="projects-grid">
+            {% set default_cats = ['mechanical-engineering', 'software-engineering'] %}
             {% for slug, project in projects %}
-            <div class="min-w-0">
+            {% set is_hidden = (project.categories | reject('in', default_cats) | list | length) > 0 %}
+            <div class="min-w-0" data-categories="{{ project.categories | join(' ') }}" {% if is_hidden %}hidden{% endif %}>
                 {% include "projects/_card.html" %}
             </div>
             {% endfor %}
         </div>
     </div>
 </section>
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<script>
+(function() {
+    var chips = document.querySelectorAll('.filter-chip');
+    var cards = document.querySelectorAll('#projects-grid [data-categories]');
+
+    function apply() {
+        var active = new Set();
+        chips.forEach(function(chip) {
+            if (chip.classList.contains('is-active')) active.add(chip.dataset.cat);
+        });
+        cards.forEach(function(card) {
+            var cats = card.dataset.categories.split(' ');
+            var visible = cats.some(function(c) { return active.has(c); });
+            card.hidden = !visible;
+        });
+    }
+
+    chips.forEach(function(chip) {
+        chip.addEventListener('click', function() {
+            chip.classList.toggle('is-active');
+            chip.setAttribute('aria-pressed', chip.classList.contains('is-active') ? 'true' : 'false');
+            apply();
+        });
+    });
+})();
+</script>
 {% endblock %}

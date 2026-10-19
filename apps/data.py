@@ -1,8 +1,20 @@
 from __future__ import annotations
 
+# Filter groups shown on the projects page. Each project lists the groups it
+# belongs to; the page's chips toggle them and Gaming is off by default.
+PROJECT_CATEGORIES: dict[str, str] = {
+    "mechanical-engineering": "Mechanical Engineering",
+    "software-engineering": "Software Engineering",
+    "gaming": "Gaming",
+}
+
+# Categories selected when the page first loads (Gaming starts unchecked).
+DEFAULT_CATEGORIES: list[str] = ["mechanical-engineering", "software-engineering"]
+
 PROJECTS: dict[str, dict] = {
     "lawn-mower-control-panel": {
         "active": True,
+        "categories": ["mechanical-engineering"],
         "title": "Automated Lawn Mower",
         "subtitle": "Mission planning and telemetry for an autonomous mower",
         "description": [
@@ -61,6 +73,7 @@ PROJECTS: dict[str, dict] = {
     },
     "gatekeeper": {
         "active": True,
+        "categories": ["software-engineering"],
         "title": "GateKeeper",
         "subtitle": "Reverse-proxy gateway with per-path access rules",
         "description": [
@@ -100,6 +113,7 @@ PROJECTS: dict[str, dict] = {
     },
     "portfolio": {
         "active": True,
+        "categories": ["software-engineering"],
         "title": "Portfolio",
         "subtitle": "Personal portfolio site",
         "description": [
@@ -135,6 +149,7 @@ PROJECTS: dict[str, dict] = {
     },
     "water-billing-system": {
         "active": True,
+        "categories": ["software-engineering"],
         "title": "Water Billing System",
         "subtitle": "Utility billing for a water service provider",
         "description": [
@@ -218,6 +233,7 @@ PROJECTS: dict[str, dict] = {
     },
     "mle-review": {
         "active": True,
+        "categories": ["mechanical-engineering"],
         "title": "MELE Review",
         "subtitle": "Board exam reviewer for the Mechanical Engineering Licensure Exam",
         "description": [
@@ -266,6 +282,7 @@ PROJECTS: dict[str, dict] = {
     },
     "practiceforge": {
         "active": True,
+        "categories": ["software-engineering"],
         "title": "PracticeForge",
         "subtitle": "Self-hosted Python practice sandbox",
         "description": [
@@ -305,6 +322,7 @@ PROJECTS: dict[str, dict] = {
     # Intentionally public. SVG embeds carry no cookies because GitHub has no cookie jar and a gate would break them.
     "novaprotocol": {
         "active": True,
+        "categories": ["software-engineering"],
         "title": "NovaProtocol",
         "title_prefix": "https://github.com/",
         "subtitle": "Dynamic GitHub profile asset server",
@@ -346,6 +364,7 @@ PROJECTS: dict[str, dict] = {
     },
     "host-dashboard": {
         "active": True,
+        "categories": ["software-engineering"],
         # The key stays `host-dashboard` so the published URL keeps working; the
         # name the reader sees is Homelab, because what is worth showing off is
         # the machine, and the dashboard is how you look at it.
@@ -391,6 +410,7 @@ PROJECTS: dict[str, dict] = {
     },
     "cdnserver": {
         "active": True,
+        "categories": ["software-engineering"],
         "title": "CDNServer",
         "subtitle": "Shared design-language asset server",
         "description": [
@@ -415,6 +435,32 @@ PROJECTS: dict[str, dict] = {
         "links": [],
         "buttons": [],
     },
+    "factorio-server": {
+        "active": True,
+        "categories": ["gaming"],
+        "title": "Factorio Server",
+        "subtitle": "Self-hosted Factorio server with a browser dashboard",
+        "description": [
+            "A Factorio server with a web manager on top of it: saves, server settings, users, game settings and a console, all driven from the browser.",
+            "The manager also reads the game's own statistics and turns them into live dashboards — production per planet, power usage, research pace — so the base can be watched without ever opening the game.",
+            "I wrote a small companion mod to go with it, a Lua addition that gives the manager a safe line into the running game; it deliberately avoids anything that could break achievements, so it can stay on a normal save.",
+        ],
+        "tech": {
+            "web": ["Go", "React", "Docker"],
+            "lib": ["Lua", "Factorio Mod API"],
+        },
+        "status": "operational",
+        "github": "https://github.com/NovaProtocol/factorio-server-manager",
+        "image": "assets/images/factorio-server/dashboard-production.png",
+        "links": [
+            {
+                "name": "Companion Mod",
+                "url": "https://github.com/NovaProtocol/factorio-companion-mod",
+                "icon": "fas fa-puzzle-piece",
+            },
+        ],
+        "buttons": [],
+    },
 }
 
 # Invisible ordering weight for the projects page: higher = nearer the top.
@@ -425,6 +471,7 @@ PROJECT_PRIORITY: dict[str, int] = {
     "gatekeeper": 95,
     "host-dashboard": 90,
     "lawn-mower-control-panel": 85,
+    "factorio-server": 80,
     "mle-review": 70,
     "practiceforge": 60,
     "novaprotocol": 50,
