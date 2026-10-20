@@ -81,9 +81,8 @@
   "projects": [
     {
       "name": "Automated Lawn Mower",
-      "redact_name": true,
       "tech": "FastAPI, Granian, Docker, Caddy, Leaflet",
-      "url": "<redact>https://mower.projectnova.download/</redact>",
+      "url": "https://mower.<redact>projectnova.download</redact>/",
       "status_line": "Operational; for now the panel is the deliverable",
       "highlights": [
         "Built the mission-planning and telemetry software for the autonomous mower designed in my undergraduate thesis",
@@ -95,9 +94,8 @@
     },
     {
       "name": "Water Billing System",
-      "redact_name": true,
       "tech": "React Native, Expo, TypeScript, FastAPI, MySQL, Docker, NFC",
-      "url": "<redact>https://water-billing-system.projectnova.download/</redact>",
+      "url": "https://water-billing-system.<redact>projectnova.download</redact>/",
       "status_line": "Live demo, architecture and core modules complete",
       "highlights": [
         "Designed an end-to-end utility billing workflow that unifies meter reading, tariff computation, and bill distribution into a single process",
@@ -108,9 +106,8 @@
     },
     {
       "name": "MELE Review",
-      "redact_name": true,
       "tech": "Python, FastAPI, MySQL, Docker, MathQuill, math.js",
-      "url": "<redact>https://melereview.projectnova.download/</redact>",
+      "url": "https://melereview.<redact>projectnova.download</redact>/",
       "highlights": [
         "Built a unit-aware engineering equation solver for multi-step formulas across metric and English conventions",
         "Developed a Mechanical Engineering Licensure Exam reviewer with a self-maintained question bank"
@@ -118,9 +115,8 @@
     },
     {
       "name": "Homelab",
-      "redact_name": true,
       "tech": "Docker, Caddy, Cloudflare Tunnel, Linux, FastAPI, MySQL, Python",
-      "url": "<redact>https://homelab.projectnova.download/</redact>",
+      "url": "https://homelab.<redact>projectnova.download</redact>/",
       "status_line": "Self-hosted server running every project on this resume",
       "highlights": [
         "One machine serves every project here, each in its own Compose stack behind a single Cloudflare Tunnel with per-host routing and TLS",
@@ -130,7 +126,6 @@
     },
     {
       "name": "GateKeeper",
-      "redact_name": true,
       "tech": "Python, FastAPI, MySQL, Docker, Caddy, PyJWT",
       "highlights": [
         "Reverse-proxy gateway routing every service in the stack, with per-host and per-path rules that allow, refuse, or hold a request behind a shared access code",
@@ -139,9 +134,8 @@
     },
     {
       "name": "PracticeForge",
-      "redact_name": true,
       "tech": "Python, Flask, MySQL, Docker, Bubblewrap, Caddy",
-      "url": "<redact>https://practiceforge.projectnova.download/</redact>",
+      "url": "https://practiceforge.<redact>projectnova.download</redact>/",
       "highlights": [
         "Isolated execution sandbox for untrusted code with hard memory, CPU, and process limits, and no network access",
         "Process isolation with a read-only filesystem, 1 GB memory cap, 25s CPU limit, and 64-process ceiling via Bubblewrap",

@@ -236,8 +236,7 @@ def test_each_resume_renders_its_own_projects(client) -> None:
 
     for name in resume_names():
         body = client.get(f"/resume/view?page=2&resume={name}").text
-        cells = re.findall(r'<p class="title"[^>]*>(.*?)</p>', body, re.S)
-        rendered = [re.sub(r"<[^>]+>", "", cell) for cell in cells]
+        rendered = re.findall(r'<p class="title"[^>]*>([^<]+)</p>', body)
         expected = [p["name"] for p in served(name)["projects"]]
         assert rendered == expected, f"{name}: {rendered}"
 
@@ -761,35 +760,6 @@ def test_the_redaction_toggle_and_its_print_path_exist() -> None:
     assert "redact-on" in hub
     assert "'&redact=1'" in hub
     assert "__coverRedactions" in hub
-
-
-def test_project_names_and_links_are_redacted(client) -> None:
-    """The projects are the other searchable part of the record.
-
-    A project name and its subdomain lead straight back to the GitHub account, so
-    both are marked. The redacted document also drops the anchor: a covered link
-    whose href survives puts the URL in the PDF's link annotations, where the
-    visible bar cannot hide it.
-    """
-    plain = client.get("/resume/view?page=2").text
-    assert '<span class="redactable">Automated Lawn Mower</span>' in plain
-    assert 'href="https://mower.projectnova.download/"' in plain
-
-    redacted = client.get("/resume/view?page=2&redact=1").text
-    assert '<span class="redactable">Automated Lawn Mower</span>' in redacted
-    assert 'href="https://mower.projectnova.download/"' not in redacted
-    assert 'href="https://homelab.projectnova.download/"' not in redacted
-
-    redacted1 = client.get("/resume/view?page=1&redact=1").text
-    for url in (
-        "https://www.linkedin.com/in/khyles-gibrian-ramos/",
-        "https://github.com/NovaProtocol",
-        "https://portfolio.projectnova.download",
-    ):
-        assert f'href="{url}"' not in redacted1, url
-
-    plain1 = client.get("/resume/view?page=1").text
-    assert 'href="https://github.com/NovaProtocol"' in plain1
 
 
 def test_the_print_path_removes_the_text_instead_of_painting_over_it(client) -> None:

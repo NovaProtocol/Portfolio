@@ -126,14 +126,7 @@ part to cover in `<redact>...</redact>`:
 "contact": {
   "phone": "<redact>(+63) 927 403 2529</redact>"
 },
-"photo": "<redact>assets/images/resume_image.JPG</redact>",
-"projects": [
-  {
-    "name": "Automated Lawn Mower",
-    "redact_name": true,
-    "url": "<redact>https://mower.projectnova.download/</redact>"
-  }
-]
+"photo": "<redact>assets/images/resume_image.JPG</redact>"
 ```
 
 - The Jinja `redact` filter turns each tag into `<span class="redactable">`; the
@@ -145,14 +138,8 @@ part to cover in `<redact>...</redact>`:
   injection point.
 - Labels outside the tags stay readable. `Contact No:` is in the template, so only
   the number is marked; wrapping the whole paragraph would hide the label too.
-- URLs use `redact` for the visible text and `strip_redact` inside `href` in the
-  unredacted document, so the link works there. In the redacted document a marked
-  link is rendered as a plain span with no `href`: a covered link whose target
-  survives still puts the URL in the PDF's link annotations, where the bar cannot
-  hide it.
-- Project names carry `"redact_name": true` instead of tags in `name`. `name` is
-  also the key a named resume uses to select a project, so it stays the plain
-  identifier; the template wraps the displayed name in `.redactable`.
+- URLs use `redact` for the visible text and `strip_redact` inside `href`, so a
+  marked link remains clickable.
 - The photo follows the same marker. An image path cannot hold a span, so the
   `redact_marked` filter adds the class and `strip_redact` keeps the tags out of
   `src`; the portrait is covered while redaction is on. Remove the tags from
@@ -182,7 +169,6 @@ part to cover in `<redact>...</redact>`:
 | `resume/_page2_body.html` | included by page2 + view | Page 2 content, one copy |
 | `resume/_resume_css.html` | included by all three | Shared layout rules, one copy |
 | `resume/_theme.html` | included by all three | The one theme: colours, typography, print rules |
-| `resume/_redact_cover.html` | included by all three, active when `redact` is set | Measures each marked run and replaces it with a text-free block before printing |
 
 The print templates (`page1.html`, `page2.html`, `view.html`) are standalone documents. They do NOT extend `apps/templates/base.html` (only the `index.html` hub does).
 
