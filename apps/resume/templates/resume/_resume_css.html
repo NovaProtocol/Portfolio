@@ -184,6 +184,16 @@ section h2 {
 /* The anchor decoration is drawn by the `<a>`, not by the covered text, so it
    would still trace a line under the bar. */
 .redact-on .contact-line a { text-decoration: none; }
+/* The replacement the print path swaps in for a marked run. It is empty, so the
+   PDF carries a block and no characters to extract. */
+.redact-bar {
+    background: #111;
+    border-radius: 1px;
+    font-size: 0;
+    line-height: 0;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+}
 /* A face is the most identifying thing on the sheet. Covered in the same block
    colour as the text, but only when the photo path is marked in the data, so a
    resume can keep the portrait while hiding the details around it. */

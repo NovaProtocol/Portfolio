@@ -149,6 +149,13 @@ part to cover in `<redact>...</redact>`:
   the PDF's title and metadata drop the name too.
 - `print-color-adjust: exact` keeps the bars in the printed PDF; browsers drop
   backgrounds by default.
+- **The PDF does not contain the hidden text.** Covering it with a background is
+  only enough on screen; a PDF keeps the characters, so they could be selected,
+  copied, or extracted. The redacted document (`?redact=1`) therefore measures
+  each marked run and replaces it with an empty block of the same size before
+  printing (`_redact_cover.html`). The width keeps the line from re-wrapping and
+  the result carries no characters to extract. The hub's print frame calls the
+  same function again immediately before `print()`.
 
 ## Templates
 

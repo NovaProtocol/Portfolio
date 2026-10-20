@@ -164,6 +164,16 @@
             + '?resume=' + encodeURIComponent(currentResume)
             + (redactOn ? '&redact=1' : '');
         printFrame.onload = function() {
+            try {
+                /* The document does this for itself on load; calling it again is
+                   harmless and guarantees the text is gone before printing. */
+                if (redactOn && printFrame.contentWindow.__coverRedactions) {
+                    printFrame.contentWindow.__coverRedactions();
+                }
+            } catch (err) {
+                /* Same-origin, so this should not happen; if it does, the sheet
+                   still paints the bars, but the text would remain extractable. */
+            }
             printFrame.contentWindow.focus();
             printFrame.contentWindow.print();
         };

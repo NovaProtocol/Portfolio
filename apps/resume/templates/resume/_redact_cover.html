@@ -1,0 +1,44 @@
+{# Convert marked runs to real blocks before printing.
+
+   Painting a bar over live text is enough on screen, but not in a PDF: the
+   characters are still in the document, so they can be selected, copied, or
+   pulled out with a text extractor. The fix has to remove the characters, not
+   cover them.
+
+   Each run is measured first, then replaced with an empty block of the same
+   width and height. Width is what keeps the line from re-wrapping; the small
+   vertical adjustment puts the block back on the run's baseline, so nothing
+   around it moves. The result prints as a bar and leaves no text behind. #}
+{% if redact %}
+<script>
+    (function () {
+        function coverRedactions() {
+            document.querySelectorAll('.redactable').forEach(function (el) {
+                var rect = el.getBoundingClientRect();
+                var bar = document.createElement('span');
+                bar.className = 'redact-bar';
+                /* Sized with padding on an empty inline box: horizontal padding
+                   reproduces the run's width, and vertical padding paints the
+                   height without taking part in the line box. An inline-block
+                   would sit on the wrong edge and could shorten the line. */
+                bar.style.padding = (rect.height / 2) + 'px ' + (rect.width / 2) + 'px';
+                el.parentNode.replaceChild(bar, el);
+
+                var placed = bar.getBoundingClientRect();
+                bar.style.position = 'relative';
+                bar.style.top = (rect.top - placed.top) + 'px';
+                /* An empty inline box can lose the collapsed space before it,
+                   so put the bar back on the run's own left edge too. */
+                bar.style.left = (rect.left - placed.left) + 'px';
+            });
+        }
+
+        window.__coverRedactions = coverRedactions;
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', coverRedactions);
+        } else {
+            coverRedactions();
+        }
+    })();
+</script>
+{% endif %}

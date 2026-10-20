@@ -759,6 +759,26 @@ def test_the_redaction_toggle_and_its_print_path_exist() -> None:
     assert "fa-eye-slash" in hub
     assert "redact-on" in hub
     assert "'&redact=1'" in hub
+    assert "__coverRedactions" in hub
+
+
+def test_the_print_path_removes_the_text_instead_of_painting_over_it(client) -> None:
+    """A bar over live text is still text in the PDF.
+
+    The redacted document must replace each marked run with an empty, measured
+    block before printing, or the characters can be copied and extracted from the
+    PDF that gets distributed.
+    """
+    redacted = client.get("/resume/view?redact=1").text
+    assert "__coverRedactions" in redacted
+    assert "replaceChild" in redacted
+    assert ".redact-bar" in redacted
+
+    plain = client.get("/resume/view").text
+    assert "__coverRedactions" not in plain, (
+        "the unredacted sheet must keep its text; the cover script only belongs "
+        "on the redacted print document"
+    )
 
 
 def test_the_served_page_can_start_redacted(client) -> None:
