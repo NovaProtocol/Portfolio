@@ -683,3 +683,90 @@ def test_the_facilities_coordination_line_stays() -> None:
     assert plant, "the facilities entry is gone"
     joined = " ".join(plant["responsibilities"])
     assert "Coordinated documentation and communication across departments" in joined
+
+
+def test_redaction_marks_the_detail_and_not_its_label(client) -> None:
+    """`<redact>` in the data is a span, and the label beside it stays readable.
+
+    The markup hides nothing until the toggle is flipped. Wrapping the whole
+    contact line would have hidden "Contact No:" too, which is why the tags sit
+    on the value in the JSON rather than around the rendered paragraph.
+    """
+    body = client.get("/resume/view?page=1").text
+
+    assert '<span class="redactable">Khyles Gibrian Ramos</span>' in body
+    assert '<span class="redactable">(+63) 927 403 2529</span>' in body
+    assert "Contact No: <span" in body
+    assert "<redact>" not in body
+
+
+def test_redaction_keeps_the_specialisation_visible(client) -> None:
+    """The headline hides the role and leaves the differentiator on the sheet."""
+    body = client.get("/resume/view?page=1&resume=Mechanical%20Engineering").text
+    assert (
+        '<span class="redactable">Mechanical Engineer</span> | Embedded Systems &amp; Automation'
+        in body
+    )
+
+
+def test_redaction_urls_stay_clickable(client) -> None:
+    """The visible text carries the span; the href must not.
+
+    Checked from the rendered anchor rather than from fixed strings, because the
+    data can mark all of a URL or only the account part of it.
+    """
+    body = client.get("/resume/view?page=1").text
+    match = re.search(r'<a href="([^"]*)">GitHub: (.*?)</a>', body)
+
+    assert match, "the GitHub link disappeared"
+    assert "<redact>" not in match.group(1)
+    assert match.group(1).startswith("https://github.com/")
+    assert '<span class="redactable">' in match.group(2)
+
+
+def test_redaction_filter_escapes_content_inside_the_tags() -> None:
+    """The marker is data, so it must not become an injection point."""
+    from apps.templating import _redact_markup
+
+    rendered = str(_redact_markup("<redact><script>alert(1)</script></redact>"))
+    assert "<script>" not in rendered
+    assert "&lt;script&gt;" in rendered
+
+
+def test_the_photo_is_redacted_only_when_its_path_is_marked(client) -> None:
+    """The portrait follows the same marker as the text.
+
+    An image cannot carry a span, so the marker becomes a class and the path is
+    stripped for `src`. Removing the tags keeps the photo while the rest of the
+    header stays covered.
+    """
+    from apps.templating import _redact_marked, _strip_redact
+
+    body = client.get("/resume/view?page=1").text
+    assert 'class="resume-photo redact-photo"' in body
+    assert 'src="/static/assets/images/resume_image.JPG"' in body
+    assert "<redact>" not in body
+
+    assert _redact_marked("<redact>assets/images/resume_image.JPG</redact>")
+    assert not _redact_marked("assets/images/resume_image.JPG")
+    assert _strip_redact("<redact>a.png</redact>") == "a.png"
+
+
+def test_the_redaction_toggle_and_its_print_path_exist() -> None:
+    """The eye button on the hub, and the print frame asking for the same state."""
+    hub = (TEMPLATES / "index.html").read_text()
+    assert 'id="redact-toggle"' in hub
+    assert "fa-eye-slash" in hub
+    assert "redact-on" in hub
+    assert "'&redact=1'" in hub
+
+
+def test_the_served_page_can_start_redacted(client) -> None:
+    """A direct link, and the print frame, both get a covered sheet."""
+    for page in (1, 2):
+        body = client.get(f"/resume/view?page={page}&redact=1").text
+        assert 'class="redact-on"' in body
+
+    body = client.get("/resume/view?redact=1").text
+    assert 'class="redact-on"' in body
+    assert "<title>Resume</title>" in body

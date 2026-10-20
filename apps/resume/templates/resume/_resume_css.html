@@ -160,3 +160,31 @@ section h2 {
     font-weight: 700;
     font-size: 0.9em;
 }
+
+/* Redaction. A field marks the text that may be hidden with redact tags; the
+   filter turns those into `.redactable`, and the toggle puts `redact-on` on the
+   root. The text is hidden rather than removed, so the line keeps its exact
+   width and the resume does not reflow when the switch is flipped. The bar is
+   the inline box itself, which is the rendered width of the text, not a run of
+   block characters sized to the character count.
+
+   `print-color-adjust` is required: browsers drop backgrounds when printing by
+   default, and the PDF is the copy that gets sent. */
+.redact-on .redactable {
+    background: #111;
+    color: transparent;
+    border-radius: 1px;
+    box-shadow: 0 0 0 1px #111;
+    -webkit-box-decoration-break: clone;
+    box-decoration-break: clone;
+    user-select: none;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+}
+/* The anchor decoration is drawn by the `<a>`, not by the covered text, so it
+   would still trace a line under the bar. */
+.redact-on .contact-line a { text-decoration: none; }
+/* A face is the most identifying thing on the sheet. Covered in the same block
+   colour as the text, but only when the photo path is marked in the data, so a
+   resume can keep the portrait while hiding the details around it. */
+.redact-on .resume-photo.redact-photo { filter: brightness(0); }

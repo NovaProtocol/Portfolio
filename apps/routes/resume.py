@@ -193,17 +193,19 @@ def load_resume(name: str | None = None) -> dict:
     return _LOADED.get(name or DEFAULT_RESUME) or _LOADED.get(DEFAULT_RESUME) or {}
 
 
-def _resume_context(name: str = DEFAULT_RESUME) -> dict:
+def _resume_context(name: str = DEFAULT_RESUME, redact: bool = False) -> dict:
     """Context for the resume templates.
 
-    The template receives one resolved resume, its name, and the list to build a
-    selector from. No template needs to know how an override is merged.
+    The template receives one resolved resume, its name, the list to build a
+    selector from, and whether the page opens with redaction on. No template
+    needs to know how an override is merged.
     """
     resume = _LOADED.get(name) or _LOADED.get(DEFAULT_RESUME) or {}
     return {
         "resume": resume,
         "resume_name": name,
         "resumes": _RESUME_LIST,
+        "redact": redact,
     }
 
 
@@ -225,13 +227,19 @@ async def index(request: Request, resume: str = DEFAULT_RESUME):
 
 
 @router.get("/view", response_class=HTMLResponse)
-async def view(request: Request, page: int | None = None, resume: str = DEFAULT_RESUME):
+async def view(
+    request: Request,
+    page: int | None = None,
+    resume: str = DEFAULT_RESUME,
+    redact: bool = False,
+):
     """One sheet, or both in one document, for one resume.
 
-    `?variant=` is the old name for this parameter and is ignored rather than
-    rejected, so a link made before the resumes were named still renders.
-    `?theme=` is from a time when the resume had three visual themes; it is
-    ignored too, for the same reason.
+    `redact=1` opens the page with personal details covered, which is what the
+    hub's eye button and its print frame request. `?variant=` is the old name for
+    this parameter and is ignored rather than rejected, so a link made before the
+    resumes were named still renders. `?theme=` is from a time when the resume
+    had three visual themes; it is ignored too, for the same reason.
     """
     resolved = _normalise_resume(resume)
     if page is not None:
@@ -240,8 +248,8 @@ async def view(request: Request, page: int | None = None, resume: str = DEFAULT_
         if not template:
             raise HTTPException(status_code=404, detail="Not found")
         return templates.TemplateResponse(
-            request, template, _resume_context(resolved)
+            request, template, _resume_context(resolved, redact)
         )
     return templates.TemplateResponse(
-        request, "resume/view.html", _resume_context(resolved)
+        request, "resume/view.html", _resume_context(resolved, redact)
     )

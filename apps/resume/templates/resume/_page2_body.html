@@ -12,19 +12,19 @@
         <div class="resume-projects-list">
             {% for proj in resume.projects %}
             <div class="entry">
-                <p class="title" style="margin-bottom:0.15rem;">{{ proj.name }}</p>
+                <p class="title" style="margin-bottom:0.15rem;">{{ proj.name | redact }}</p>
                 {% if proj.tech %}
-                <p class="tech-stack">Tech Stack: {{ proj.tech }}</p>
+                <p class="tech-stack">Tech Stack: {{ proj.tech | redact }}</p>
                 {% endif %}
                 {% if proj.status_line %}
-                <p class="demo-line">{{ proj.status_line }}</p>
+                <p class="demo-line">{{ proj.status_line | redact }}</p>
                 {% endif %}
                 {% if proj.url %}
-                <p class="demo-line"><strong>Live demo:</strong> <a href="{{ proj.url }}">{{ proj.url }}</a></p>
+                <p class="demo-line"><strong>Live demo:</strong> <a href="{{ proj.url | strip_redact }}">{{ proj.url | redact }}</a></p>
                 {% endif %}
                 <ul>
                     {% for item in proj.highlights %}
-                    <li>{{ item }}</li>
+                    <li>{{ item | redact }}</li>
                     {% endfor %}
                 </ul>
             </div>
@@ -37,7 +37,7 @@
 <section class="section-skills">
     <h2>Technical Skills</h2>
     {% for skill in resume.skills %}
-    <p class="skill-row"><span class="skill-cat">{{ skill.category }}:</span> {{ skill.value }}</p>
+    <p class="skill-row"><span class="skill-cat">{{ skill.category | redact }}:</span> {{ skill.value | redact }}</p>
     {% endfor %}
 </section>
 
@@ -54,6 +54,6 @@
         {% else %}
         <div class="signature-space"></div>
         {% endif %}
-        <p class="signature-name">{{ resume.name }}</p>
+        <p class="signature-name">{{ resume.name | redact }}</p>
     </div>
 </section>

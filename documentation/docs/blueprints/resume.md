@@ -14,7 +14,7 @@ holds the named resumes, each carrying only the parts it changes.
 | Route | Handler | Query params | Description |
 |-------|---------|--------------|-------------|
 | `GET /resume/` | `apps.routes.resume.index` | `resume=<name>` (default `Generic`) | Resume hub rendering `resume/index.html`, with the resume selector |
-| `GET /resume/view` | `apps.routes.resume.view` | `resume=<name>`, `page=1,2` (optional) | Single or combined page using `resume/view.html` (both pages) or `resume/page1.html` / `page2.html` for print |
+| `GET /resume/view` | `apps.routes.resume.view` | `resume=<name>`, `page=1,2` (optional), `redact=1` (optional) | Single or combined page using `resume/view.html` (both pages) or `resume/page1.html` / `page2.html` for print |
 
 `?variant=` and `?theme=` were both real parameters once. They are accepted and
 ignored rather than rejected, so a link made before either rename still renders.
@@ -111,6 +111,45 @@ code change. `tools/resume_fit.py --resume all` measures every one.
 
 Router is `APIRouter(prefix="/resume")` and aggregated in `apps/routes/__init__.py`.
 
+## Redaction
+
+The hub has an eye button beside Print. It covers the personal details on both
+sheets without changing the layout, and Save-as-PDF / Print print the redacted
+version while it is on.
+
+What is hidden is **data, not template logic**. Any string field can wrap the
+part to cover in `<redact>...</redact>`:
+
+```json
+"name": "<redact>Khyles Gibrian Ramos</redact>",
+"headline": "<redact>Mechanical Engineer</redact> | Embedded Systems & Automation",
+"contact": {
+  "phone": "<redact>(+63) 927 403 2529</redact>"
+},
+"photo": "<redact>assets/images/resume_image.JPG</redact>"
+```
+
+- The Jinja `redact` filter turns each tag into `<span class="redactable">`; the
+  text stays in place and `.redact-on .redactable` paints a solid bar over it with
+  transparent text. The bar is the inline box, so its width is the rendered width
+  of the marked text, not its character count: the line does not reflow and
+  nothing beside it moves.
+- The filter escapes the marked content piece by piece, so the tags are not an
+  injection point.
+- Labels outside the tags stay readable. `Contact No:` is in the template, so only
+  the number is marked; wrapping the whole paragraph would hide the label too.
+- URLs use `redact` for the visible text and `strip_redact` inside `href`, so a
+  marked link remains clickable.
+- The photo follows the same marker. An image path cannot hold a span, so the
+  `redact_marked` filter adds the class and `strip_redact` keeps the tags out of
+  `src`; the portrait is covered while redaction is on. Remove the tags from
+  `photo` to keep the face visible with everything else hidden.
+- The toggle puts `redact-on` on each iframe's root. The print frame asks the
+  server for `?redact=1`, which sets the class in the document before printing, so
+  the PDF's title and metadata drop the name too.
+- `print-color-adjust: exact` keeps the bars in the printed PDF; browsers drop
+  backgrounds by default.
+
 ## Templates
 
 | Template | Used when | Purpose |
@@ -164,6 +203,8 @@ The markup and the styles are **partials** rather than copies. They used to be t
 /resume/view?resume=Mechanical%20Engineering → combined, mechanical
 /resume/view?page=1                         → page 1 only
 /resume/view?page=2&resume=Mechanical%20Engineering → page 2 only
+/resume/view?redact=1                       → combined, personal details covered
+/resume/view?page=1&redact=1                → page 1, redacted (print frame)
 /resume/view?page=3                         → 404 (only 1 and 2 exist)
 /resume/view?variant=mechanical             → ignored, serves Generic
 /resume/view?theme=2                        → ignored, renders the one theme

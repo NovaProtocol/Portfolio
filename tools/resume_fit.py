@@ -124,7 +124,12 @@ def make_env() -> Environment:
     template's `{{ url_for('static', ...) }}` calls behave as they do in
     production instead of being papered over.
     """
-    from apps.templating import _url_for
+    from apps.templating import (
+        _redact_markup,
+        _redact_marked,
+        _strip_redact,
+        _url_for,
+    )
 
     env = Environment(
         loader=FileSystemLoader([
@@ -136,6 +141,9 @@ def make_env() -> Environment:
         autoescape=select_autoescape(["html"]),
     )
     env.globals["url_for"] = _url_for
+    env.filters["redact"] = _redact_markup
+    env.filters["strip_redact"] = _strip_redact
+    env.filters["redact_marked"] = _redact_marked
     return env
 
 
@@ -145,7 +153,11 @@ def fold(text: str, chars: int = BODY_CHARS) -> int:
 
     if not text:
         return 0
-    return len(textwrap.wrap(text, chars)) or 1
+    # `<redact>` tags are markup, not characters on the page, so they must not
+    # count towards the wrap.
+    from apps.templating import _strip_redact
+
+    return len(textwrap.wrap(_strip_redact(text), chars)) or 1
 
 
 # Which blocks each page template renders, so a page is measured against its own

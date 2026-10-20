@@ -2,7 +2,7 @@
   {
     "resume_name": "Mechanical Engineering",
     "overwrites": {
-      "headline": "Mechanical Engineer | Embedded Systems & Automation",
+      "headline": "<redact>Mechanical Engineer</redact> | Embedded Systems & Automation",
       "summary": "Mechanical Engineering graduate with hands-on experience in AutoCAD facility design, safety inspection, and technical documentation. Differentiated by hands-on embedded systems experience: integrating microcontrollers, sensors, and NFC into working hardware and software systems. Also builds backend services and applied machine learning independently. Seeking a mechanical design, facilities, safety, or automation-adjacent engineering role.",
       "projects": [
         "Automated Lawn Mower",
@@ -18,7 +18,7 @@
   {
     "resume_name": "Software",
     "overwrites": {
-      "headline": "Software developer | Backend services, infrastructure, and embedded systems",
+      "headline": "<redact>Software developer</redact> | Backend services, infrastructure, and embedded systems",
       "summary": "Self-taught developer with a Mechanical Engineering degree and five applications built, deployed, and running on a self-hosted server. Writes Python and TypeScript, designs MySQL schemas, and owns each project end to end: architecture, implementation, tests, and the deployment it runs on. Comfortable with Linux, Docker, and the parts of a system that are not the interesting feature. Looking for a software or systems development role, and willing to learn whatever the codebase is written in.",
       "projects": [
         "Water Billing System",

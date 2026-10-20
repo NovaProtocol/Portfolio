@@ -1,15 +1,15 @@
 {
-  "name": "Khyles Gibrian Ramos",
-  "headline": "Mechanical Engineering graduate | Embedded systems and software",
-  "photo": "assets/images/resume_image.JPG",
+  "name": "<redact>Khyles Gibrian Ramos</redact>",
+  "headline": "<redact>Mechanical Engineering graduate</redact> | Embedded systems and software",
+  "photo": "<redact>assets/images/resume_image.JPG</redact>",
   "signature": "",
   "contact": {
-    "address": "Brgy. Mateuna, Tayabas, Quezon",
-    "phone": "(+63) 927 403 2529",
-    "email": "khyles.gibrian.ramos19@gmail.com",
-    "linkedin": "https://www.linkedin.com/in/khyles-gibrian-ramos/",
-    "github": "https://github.com/NovaProtocol",
-    "portfolio": "https://portfolio.projectnova.download"
+    "address": "Brgy. <redact>Mateuna</redact>, <redact>Tayabas</redact>, Quezon",
+    "phone": "<redact>(+63) 927 403 2529</redact>",
+    "email": "<redact>khyles.gibrian.ramos19@gmail.com</redact>",
+    "linkedin": "https://www.linkedin.com/in/<redact>khyles-gibrian-ramos</redact>/",
+    "github": "https://github.com/<redact>NovaProtocol</redact>",
+    "portfolio": "https://portfolio.<redact>projectnova.download</redact>"
   },
   "resumes": [
     {
@@ -22,7 +22,7 @@
   "education": [
     {
       "level": "Tertiary",
-      "school": "Southern Luzon State University",
+      "school": "<redact>Southern Luzon</redact> State University",
       "degree": "Bachelor of Science in Mechanical Engineering",
       "years": "2021 - 2026",
       "status": "Graduated June 2026",
@@ -55,7 +55,7 @@
   ],
   "experience": [
     {
-      "role": "ResNet-18 Signature Verification (undergraduate thesis support)",
+      "role": "Freelance Machine Learning Developer",
       "organization": "Independent technical contributor",
       "period": "Aug 2025 - Nov 2025",
       "responsibilities": [
@@ -67,8 +67,8 @@
       ]
     },
     {
-      "role": "Physical Plant Facilities Department - PTP Program",
-      "organization": "Southern Luzon State University",
+      "role": "<redact>Physical Plant Facilities Department - PTP Program</redact>",
+      "organization": "<redact>Southern Luzon State University</redact>",
       "period": "Mar 2024 - Apr 2024",
       "responsibilities": [
         "Drafted facility layouts and emergency fire exit plans in AutoCAD to code-compliant egress and fire safety standards",
@@ -82,7 +82,7 @@
     {
       "name": "Automated Lawn Mower",
       "tech": "FastAPI, Granian, Docker, Caddy, Leaflet",
-      "url": "https://mower.projectnova.download/",
+      "url": "https://mower.<redact>projectnova.download</redact>/",
       "status_line": "Operational; for now the panel is the deliverable",
       "highlights": [
         "Built the mission-planning and telemetry software for the autonomous mower designed in my undergraduate thesis",
@@ -95,7 +95,7 @@
     {
       "name": "Water Billing System",
       "tech": "React Native, Expo, TypeScript, FastAPI, MySQL, Docker, NFC",
-      "url": "https://water-billing-system.projectnova.download/",
+      "url": "https://water-billing-system.<redact>projectnova.download</redact>/",
       "status_line": "Live demo, architecture and core modules complete",
       "highlights": [
         "Designed an end-to-end utility billing workflow that unifies meter reading, tariff computation, and bill distribution into a single process",
@@ -107,7 +107,7 @@
     {
       "name": "MELE Review",
       "tech": "Python, FastAPI, MySQL, Docker, MathQuill, math.js",
-      "url": "https://melereview.projectnova.download/",
+      "url": "https://melereview.<redact>projectnova.download</redact>/",
       "highlights": [
         "Built a unit-aware engineering equation solver for multi-step formulas across metric and English conventions",
         "Developed a Mechanical Engineering Licensure Exam reviewer with a self-maintained question bank"
@@ -116,7 +116,7 @@
     {
       "name": "Homelab",
       "tech": "Docker, Caddy, Cloudflare Tunnel, Linux, FastAPI, MySQL, Python",
-      "url": "https://homelab.projectnova.download/",
+      "url": "https://homelab.<redact>projectnova.download</redact>/",
       "status_line": "Self-hosted server running every project on this resume",
       "highlights": [
         "One machine serves every project here, each in its own Compose stack behind a single Cloudflare Tunnel with per-host routing and TLS",
@@ -135,7 +135,7 @@
     {
       "name": "PracticeForge",
       "tech": "Python, Flask, MySQL, Docker, Bubblewrap, Caddy",
-      "url": "https://practiceforge.projectnova.download/",
+      "url": "https://practiceforge.<redact>projectnova.download</redact>/",
       "highlights": [
         "Isolated execution sandbox for untrusted code with hard memory, CPU, and process limits, and no network access",
         "Process isolation with a read-only filesystem, 1 GB memory cap, 25s CPU limit, and 64-process ceiling via Bubblewrap",

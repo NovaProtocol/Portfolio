@@ -35,7 +35,8 @@
         transition: background var(--ui-duration) var(--ui-ease), color var(--ui-duration) var(--ui-ease),
             border-color var(--ui-duration) var(--ui-ease);
     }
-    .resume-toolbar button:hover {
+    .resume-toolbar button:hover,
+    .resume-toolbar button.active {
         background: var(--ui-primary);
         color: var(--ui-on-primary);
         border-color: var(--ui-primary);
@@ -111,6 +112,10 @@
                 <button type="button" title="Print" onclick="printResume()">
                     <i class="fas fa-print"></i>
                 </button>
+                <button type="button" id="redact-toggle" aria-pressed="false"
+                        title="Redact personal details">
+                    <i class="fas fa-eye"></i>
+                </button>
             </div>
 
             <div class="resume-sheet">
@@ -127,14 +132,37 @@
 
 <script>
     let currentResume = {{ resume_name | tojson }};
+    let redactOn = false;
 
     function iframeUrl(page) {
-        return "{{ url_for('resume_blueprint.view') }}" + '?page=' + page + '&resume=' + encodeURIComponent(currentResume);
+        return "{{ url_for('resume_blueprint.view') }}"
+            + '?page=' + page + '&resume=' + encodeURIComponent(currentResume)
+            + (redactOn ? '&redact=1' : '');
+    }
+
+    /* Flip the class on each sheet's root. They are same-origin, so the hub can
+       do this without reloading the frames and losing the reader's position. */
+    function applyRedact() {
+        document.querySelectorAll('.resume-sheet iframe').forEach(function(frame) {
+            try {
+                frame.contentDocument.documentElement.classList.toggle('redact-on', redactOn);
+            } catch (err) {
+                /* If a frame is not reachable, the print path still asks the
+                   server for a redacted document. */
+            }
+        });
+        const btn = document.getElementById('redact-toggle');
+        btn.classList.toggle('active', redactOn);
+        btn.setAttribute('aria-pressed', redactOn ? 'true' : 'false');
+        btn.title = redactOn ? 'Show personal details' : 'Redact personal details';
+        btn.querySelector('i').className = redactOn ? 'fas fa-eye-slash' : 'fas fa-eye';
     }
 
     function printResume() {
         const printFrame = document.getElementById('print-frame');
-        printFrame.src = "{{ url_for('resume_blueprint.view') }}" + '?resume=' + encodeURIComponent(currentResume);
+        printFrame.src = "{{ url_for('resume_blueprint.view') }}"
+            + '?resume=' + encodeURIComponent(currentResume)
+            + (redactOn ? '&redact=1' : '');
         printFrame.onload = function() {
             printFrame.contentWindow.focus();
             printFrame.contentWindow.print();
@@ -154,6 +182,17 @@
         btn.addEventListener('click', function() {
             setResume(btn.dataset.resume);
         });
+    });
+
+    document.getElementById('redact-toggle').addEventListener('click', function() {
+        redactOn = !redactOn;
+        applyRedact();
+    });
+
+    /* A resume swap reloads both frames, which drops the class the toggle had
+       put on the old documents. Reapply it as each new one lands. */
+    document.querySelectorAll('.resume-sheet iframe').forEach(function(frame) {
+        frame.addEventListener('load', applyRedact);
     });
 </script>
 {% endblock %}

@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en"{% if redact %} class="redact-on"{% endif %}>
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Resume - Khyles Gibrian Ramos</title>
+    <title>{% if redact %}Resume{% else %}Resume - {{ resume.name | strip_redact }}{% endif %}</title>
     {% include "resume/_theme.html" %}
     <style>
         {# The shared rules first, then the rules this file adds. Order matters:
