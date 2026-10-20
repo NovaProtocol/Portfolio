@@ -20,13 +20,13 @@
         <p class="contact-line">Contact No: {{ resume.contact.phone | redact }}</p>
         <p class="contact-line">E-mail: {{ resume.contact.email | redact }}</p>
         {% if resume.contact.linkedin %}
-        <p class="contact-line"><a href="{{ resume.contact.linkedin | strip_redact }}">LinkedIn: {{ resume.contact.linkedin | redact }}</a></p>
+        <p class="contact-line">{% if redact and (resume.contact.linkedin | redact_marked) %}<span>LinkedIn: {{ resume.contact.linkedin | redact }}</span>{% else %}<a href="{{ resume.contact.linkedin | strip_redact }}">LinkedIn: {{ resume.contact.linkedin | redact }}</a>{% endif %}</p>
         {% endif %}
         {% if resume.contact.github %}
-        <p class="contact-line"><a href="{{ resume.contact.github | strip_redact }}">GitHub: {{ resume.contact.github | redact }}</a></p>
+        <p class="contact-line">{% if redact and (resume.contact.github | redact_marked) %}<span>GitHub: {{ resume.contact.github | redact }}</span>{% else %}<a href="{{ resume.contact.github | strip_redact }}">GitHub: {{ resume.contact.github | redact }}</a>{% endif %}</p>
         {% endif %}
         {% if resume.contact.portfolio %}
-        <p class="contact-line"><a href="{{ resume.contact.portfolio | strip_redact }}">Portfolio: {{ resume.contact.portfolio | redact }}</a></p>
+        <p class="contact-line">{% if redact and (resume.contact.portfolio | redact_marked) %}<span>Portfolio: {{ resume.contact.portfolio | redact }}</span>{% else %}<a href="{{ resume.contact.portfolio | strip_redact }}">Portfolio: {{ resume.contact.portfolio | redact }}</a>{% endif %}</p>
         {% endif %}
     </div>
     {% if resume.photo %}

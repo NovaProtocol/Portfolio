@@ -184,6 +184,9 @@ section h2 {
 /* The anchor decoration is drawn by the `<a>`, not by the covered text, so it
    would still trace a line under the bar. */
 .redact-on .contact-line a { text-decoration: none; }
+/* A covered project URL must not be clickable on screen either; the print
+   document drops the anchor entirely, so the PDF carries no link target. */
+.redact-on .demo-line a { pointer-events: none; }
 /* The replacement the print path swaps in for a marked run. It is empty, so the
    PDF carries a block and no characters to extract. */
 .redact-bar {

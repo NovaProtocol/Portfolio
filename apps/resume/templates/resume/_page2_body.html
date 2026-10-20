@@ -12,7 +12,7 @@
         <div class="resume-projects-list">
             {% for proj in resume.projects %}
             <div class="entry">
-                <p class="title" style="margin-bottom:0.15rem;">{{ proj.name | redact }}</p>
+                <p class="title" style="margin-bottom:0.15rem;">{% if proj.redact_name %}<span class="redactable">{{ proj.name }}</span>{% else %}{{ proj.name | redact }}{% endif %}</p>
                 {% if proj.tech %}
                 <p class="tech-stack">Tech Stack: {{ proj.tech | redact }}</p>
                 {% endif %}
@@ -20,7 +20,7 @@
                 <p class="demo-line">{{ proj.status_line | redact }}</p>
                 {% endif %}
                 {% if proj.url %}
-                <p class="demo-line"><strong>Live demo:</strong> <a href="{{ proj.url | strip_redact }}">{{ proj.url | redact }}</a></p>
+                <p class="demo-line"><strong>Live demo:</strong> {% if redact and (proj.url | redact_marked) %}{{ proj.url | redact }}{% else %}<a href="{{ proj.url | strip_redact }}">{{ proj.url | redact }}</a>{% endif %}</p>
                 {% endif %}
                 <ul>
                     {% for item in proj.highlights %}
