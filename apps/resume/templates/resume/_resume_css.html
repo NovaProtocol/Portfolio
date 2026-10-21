@@ -194,6 +194,14 @@ section h2 {
     -webkit-print-color-adjust: exact;
     print-color-adjust: exact;
 }
+/* A fallback label for a covered value. Hidden while the real text is showing;
+   shown in grey when the bar takes its place, so the entry still reads. */
+.redact-only {
+    display: none;
+    color: #777;
+    font-weight: 400;
+}
+.redact-on .redact-only { display: inline; }
 /* A face is the most identifying thing on the sheet. Covered in the same block
    colour as the text, but only when the photo path is marked in the data, so a
    resume can keep the portrait while hiding the details around it. */

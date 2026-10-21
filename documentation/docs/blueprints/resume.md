@@ -126,18 +126,38 @@ part to cover in `<redact>...</redact>`:
 "contact": {
   "phone": "<redact>(+63) 927 403 2529</redact>"
 },
-"photo": "<redact>assets/images/resume_image.JPG</redact>"
+"photo": "<redact>assets/images/resume_image.JPG</redact>",
+"projects": [
+  {
+    "name": "<redact>Homelab</redact><redact-only> - Home Server Setup</redact-only>",
+    "url": "https://<redact>homelab</redact>.<redact>projectnova.download</redact>/"
+  }
+]
 ```
 
-- The Jinja `redact` filter turns each tag into `<span class="redactable">`; the
-  text stays in place and `.redact-on .redactable` paints a solid bar over it with
-  transparent text. The bar is the inline box, so its width is the rendered width
-  of the marked text, not its character count: the line does not reflow and
-  nothing beside it moves.
+- The Jinja `redact` filter turns each tag into `<span class="redactable">` or
+  `<span class="redact-only">`; the text stays in place and `.redact-on
+  .redactable` paints a solid bar over it with transparent text. The bar is the
+  inline box, so its width is the rendered width of the marked text, not its
+  character count: the line does not reflow and nothing beside it moves.
+- `<redact-only>...</redact-only>` is the opposite side of the switch: a fallback
+  label (for example ` - Home Server Setup`) that is hidden while the real text is
+  visible and shown, in grey at normal weight, when the bar takes its place. It is
+  rendered in the document either way, so the plain and redacted sheets switch
+  without a reload.
+- `_strip_redact` returns the real text only: `<redact>` content unwrapped and
+  `<redact-only>` content dropped. It is used for `href` values and for the
+  project name a named resume selects on, so the fallback label never becomes an
+  identifier.
 - The filter escapes the marked content piece by piece, so the tags are not an
   injection point.
 - Labels outside the tags stay readable. `Contact No:` is in the template, so only
   the number is marked; wrapping the whole paragraph would hide the label too.
+- A project's plain `name` is still the key a named resume selects on:
+  `_expand_projects` strips the markup and drops the `<redact-only>` label before
+  matching, so `"projects": ["Homelab"]` keeps working even when the default calls
+  it
+  `"<redact>Homelab</redact><redact-only> - Home Server Setup</redact-only>"`.
 - URLs use `redact` for the visible text and `strip_redact` inside `href`, so a
   marked link remains clickable.
 - The photo follows the same marker. An image path cannot hold a span, so the

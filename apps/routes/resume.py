@@ -9,7 +9,7 @@ from typing import Any
 from fastapi import APIRouter, HTTPException, Request
 from fastapi.responses import HTMLResponse
 
-from apps.templating import templates
+from apps.templating import _strip_redact, templates
 
 router = APIRouter(prefix="/resume")
 
@@ -73,7 +73,9 @@ def _expand_projects(resume: dict) -> dict:
         return resume
 
     pool = resume.get("project_pool") or []
-    by_name = {p.get("name"): p for p in pool}
+    # A project's `name` may carry redaction markup and a fallback label. Named
+    # resumes still select it by its plain name, so the key is the stripped text.
+    by_name = {_strip_redact(p.get("name")): p for p in pool}
     chosen = []
     for name in projects:
         if name in by_name:

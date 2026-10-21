@@ -44,41 +44,66 @@ def _now():
     return datetime.datetime.now(datetime.timezone.utc)
 
 
-# A field can mark the parts that may be hidden with `<redact>...</redact>`.
-# The tags do not hide anything themselves: they only wrap the text in a span
-# that the redaction toggle covers on screen and in print. Marking is data, so a
-# resume can change what it hides without a template edit.
+# A field can mark the parts that may be hidden with `<redact>...</redact>`, and
+# add a fallback label with `<redact-only>...</redact-only>`. The tags do not hide
+# anything themselves: they only wrap the text in spans that the redaction toggle
+# switches between. Marking is data, so a resume can change what it hides without
+# a template edit.
 _REDACT_RE = re.compile(r"<redact>(.*?)</redact>", re.DOTALL | re.IGNORECASE)
+_REDACT_ONLY_RE = re.compile(
+    r"<redact-only>(.*?)</redact-only>", re.DOTALL | re.IGNORECASE
+)
+_REDACT_TAG_RE = re.compile(
+    r"<redact>(?P<real>.*?)</redact>"
+    r"|<redact-only>(?P<alias>.*?)</redact-only>",
+    re.DOTALL | re.IGNORECASE,
+)
 
 
 def _redact_markup(value) -> Markup:
-    """Render a field's `<redact>` tags as spans, escaping everything else.
+    """Render a field's redaction tags as spans, escaping everything else.
 
-    Escaped piece by piece rather than with Jinja's autoescape, because the tag
-    has to survive as markup. Only the span emitted here is trusted; the content
-    inside it is escaped the same way as the text around it.
+    Escaped piece by piece rather than with Jinja's autoescape, because the tags
+    have to survive as markup. Only the spans emitted here are trusted; their
+    contents are escaped the same way as the text around them.
     """
     text = "" if value is None else str(value)
     parts: list[str] = []
     last = 0
-    for match in _REDACT_RE.finditer(text):
+    for match in _REDACT_TAG_RE.finditer(text):
         parts.append(str(escape(text[last:match.start()])))
-        parts.append(f'<span class="redactable">{escape(match.group(1))}</span>')
+        if match.group("real") is not None:
+            parts.append(
+                f'<span class="redactable">{escape(match.group("real"))}</span>'
+            )
+        else:
+            parts.append(
+                f'<span class="redact-only">{escape(match.group("alias"))}</span>'
+            )
         last = match.end()
     parts.append(str(escape(text[last:])))
     return Markup("".join(parts))
 
 
 def _strip_redact(value) -> str:
-    """A field's plain text, for places that cannot carry markup, such as href."""
-    return _REDACT_RE.sub(r"\1", "" if value is None else str(value))
+    """A field's real text, without the markup or the redacted-only fallback.
+
+    Used for places that cannot carry markup (`href`) and for the project name
+    that named resumes use as a key, so the fallback label must not become part
+    of the identifier.
+    """
+    text = "" if value is None else str(value)
+    text = _REDACT_ONLY_RE.sub("", text)
+    return _REDACT_RE.sub(r"\1", text)
 
 
 def _redact_marked(value) -> bool:
     """Whether a field carries a redaction marker.
 
     For values that cannot hold a span, such as an image path: the path is
-    stripped for the attribute and the marker becomes a class instead.
+    stripped for the attribute and the marker becomes a class instead. The
+    fallback-only tag does not count, because it does not mark anything for
+    covering.
     """
     return bool(value) and bool(_REDACT_RE.search(str(value)))
 

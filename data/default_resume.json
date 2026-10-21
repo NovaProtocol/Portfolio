@@ -80,7 +80,7 @@
   ],
   "projects": [
     {
-      "name": "Automated Lawn Mower",
+      "name": "<redact>Automated Lawn Mower</redact><redact-only> - Autonomous Mower Platform</redact-only>",
       "tech": "FastAPI, Granian, Docker, Caddy, Leaflet",
       "url": "https://<redact>mower</redact>.<redact>projectnova.download</redact>/",
       "status_line": "Operational; for now the panel is the deliverable",
@@ -93,7 +93,7 @@
       ]
     },
     {
-      "name": "Water Billing System",
+      "name": "<redact>Water Billing System</redact><redact-only> - Utility Billing Platform</redact-only>",
       "tech": "React Native, Expo, TypeScript, FastAPI, MySQL, Docker, NFC",
       "url": "https://<redact>water-billing-system</redact>.<redact>projectnova.download</redact>/",
       "status_line": "Live demo, architecture and core modules complete",
@@ -105,7 +105,7 @@
       ]
     },
     {
-      "name": "MELE Review",
+      "name": "<redact>MELE Review</redact><redact-only> - Engineering Exam Reviewer</redact-only>",
       "tech": "Python, FastAPI, MySQL, Docker, MathQuill, math.js",
       "url": "https://<redact>melereview</redact>.<redact>projectnova.download</redact>/",
       "highlights": [
@@ -114,7 +114,7 @@
       ]
     },
     {
-      "name": "Homelab",
+      "name": "<redact>Homelab</redact><redact-only> - Home Server Setup</redact-only>",
       "tech": "Docker, Caddy, Cloudflare Tunnel, Linux, FastAPI, MySQL, Python",
       "url": "https://<redact>homelab</redact>.<redact>projectnova.download</redact>/",
       "status_line": "Self-hosted server running every project on this resume",
@@ -125,7 +125,7 @@
       ]
     },
     {
-      "name": "GateKeeper",
+      "name": "<redact>GateKeeper</redact><redact-only> - Access Gateway</redact-only>",
       "tech": "Python, FastAPI, MySQL, Docker, Caddy, PyJWT",
       "highlights": [
         "Reverse-proxy gateway routing every service in the stack, with per-host and per-path rules that allow, refuse, or hold a request behind a shared access code",
@@ -133,7 +133,7 @@
       ]
     },
     {
-      "name": "PracticeForge",
+      "name": "<redact>PracticeForge</redact><redact-only> - Code Practice Sandbox</redact-only>",
       "tech": "Python, Flask, MySQL, Docker, Bubblewrap, Caddy",
       "url": "https://<redact>practiceforge</redact>.<redact>projectnova.download</redact>/",
       "highlights": [

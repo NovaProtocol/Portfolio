@@ -50,6 +50,13 @@ def resume_data() -> dict:
     return served()
 
 
+def project_name(project: dict) -> str:
+    """A project's real name, without redaction markup or the fallback label."""
+    from apps.templating import _strip_redact
+
+    return _strip_redact(project.get("name", ""))
+
+
 @pytest.fixture()
 def client():
     from fastapi.testclient import TestClient
@@ -139,7 +146,7 @@ def test_the_homelab_is_a_project_and_not_a_section_of_its_own() -> None:
 
     assert "homelab" not in resume, "the dedicated homelab section is back"
 
-    names = [p.get("name") for p in resume["projects"]]
+    names = [project_name(p) for p in resume["projects"]]
     assert names.count("Homelab") == 1, f"Homelab appears {names.count('Homelab')} times"
 
     # And no template renders one either, however the data is shaped.
@@ -196,8 +203,8 @@ def test_the_mechanical_resume_drops_only_practiceforge() -> None:
     PracticeForge is a Python practice sandbox, recorded elsewhere as halted for
     lack of productive use, so it has nothing to say to that reader.
     """
-    base = [p["name"] for p in default_resume()["projects"]]
-    mech = [p["name"] for p in served("Mechanical Engineering")["projects"]]
+    base = [project_name(p) for p in default_resume()["projects"]]
+    mech = [project_name(p) for p in served("Mechanical Engineering")["projects"]]
 
     assert set(mech) == set(base) - {"PracticeForge"}
     assert base[0] == "Automated Lawn Mower", (
@@ -222,7 +229,7 @@ def test_a_named_resume_repeats_no_project_text() -> None:
 
 def test_a_named_resume_only_names_projects_that_exist() -> None:
     """A rename in the default would otherwise silently empty a resume."""
-    pool = {p["name"] for p in default_resume()["projects"]}
+    pool = {project_name(p) for p in default_resume()["projects"]}
     for entry in overrides():
         projects = (entry.get("overwrites") or {}).get("projects") or []
         unknown = [p for p in projects if p not in pool]
@@ -236,8 +243,14 @@ def test_each_resume_renders_its_own_projects(client) -> None:
 
     for name in resume_names():
         body = client.get(f"/resume/view?page=2&resume={name}").text
-        rendered = re.findall(r'<p class="title"[^>]*>([^<]+)</p>', body)
-        expected = [p["name"] for p in served(name)["projects"]]
+        cells = re.findall(r'<p class="title"[^>]*>(.*?)</p>', body, re.S)
+        rendered = []
+        for cell in cells:
+            cell = re.sub(
+                r'<span class="redact-only">.*?</span>', "", cell, flags=re.S
+            )
+            rendered.append(re.sub(r"<[^>]+>", "", cell))
+        expected = [project_name(p) for p in served(name)["projects"]]
         assert rendered == expected, f"{name}: {rendered}"
 
 
@@ -257,15 +270,15 @@ def test_the_software_resume_reads_for_software() -> None:
 
     # And it leads with the largest software build, not the mechanical-subject
     # project.
-    assert [p["name"] for p in soft["projects"]][0] == "Water Billing System"
-    assert [p["name"] for p in soft["projects"]][-1] == "MELE Review"
+    assert project_name(soft["projects"][0]) == "Water Billing System"
+    assert project_name(soft["projects"][-1]) == "MELE Review"
 
     # It drops the thesis build, the way the mechanical resume drops PracticeForge,
     # and keeps every other project. Pinned as an exclusion rather than a count, so
     # a project added to the default has to be placed here deliberately instead of
     # appearing by arithmetic.
-    pool = {p["name"] for p in default_resume()["projects"]}
-    assert {p["name"] for p in soft["projects"]} == pool - {
+    pool = {project_name(p) for p in default_resume()["projects"]}
+    assert {project_name(p) for p in soft["projects"]} == pool - {
         "Automated Lawn Mower"
     }
 
@@ -506,8 +519,8 @@ def test_the_mechanical_resume_excludes_practiceforge_on_purpose() -> None:
     future edit has to argue with a test rather than quietly re-add it or drop
     something else.
     """
-    pool = {p["name"] for p in default_resume()["projects"]}
-    mech = {p["name"] for p in served("Mechanical Engineering")["projects"]}
+    pool = {project_name(p) for p in default_resume()["projects"]}
+    mech = {project_name(p) for p in served("Mechanical Engineering")["projects"]}
 
     assert "PracticeForge" not in mech
     assert mech == pool - {"PracticeForge"}
@@ -530,7 +543,7 @@ def test_the_mechanical_resume_leads_with_the_hardware_project() -> None:
     argument is about subject matter, and the page is making a claim about
     hardware.
     """
-    mech = [p["name"] for p in served("Mechanical Engineering")["projects"]]
+    mech = [project_name(p) for p in served("Mechanical Engineering")["projects"]]
 
     assert mech[0] == "Automated Lawn Mower", (
         f"the mechanical resume leads with {mech[0]!r}, which does not evidence the "
@@ -554,7 +567,7 @@ def test_the_headline_claim_is_what_the_page_leads_with() -> None:
             f"{name}: the headline no longer claims {headline_word!r}, so this "
             f"expectation is stale"
         )
-        assert resume["projects"][0]["name"] == first, (
+        assert project_name(resume["projects"][0]) == first, (
             f"{name}: leads with {resume['projects'][0]['name']!r}, not {first!r}"
         )
 
@@ -731,6 +744,33 @@ def test_redaction_filter_escapes_content_inside_the_tags() -> None:
     rendered = str(_redact_markup("<redact><script>alert(1)</script></redact>"))
     assert "<script>" not in rendered
     assert "&lt;script&gt;" in rendered
+
+
+def test_redact_only_alias_is_hidden_until_redaction(client) -> None:
+    """The fallback label is sent but only shown in redacted mode.
+
+    It replaces the covered name with something readable, so the entry still
+    makes sense in a PDF where the bar has removed the real title.
+    """
+    from apps.templating import _redact_markup, _strip_redact
+
+    plain = client.get("/resume/view?page=2").text
+    redacted = client.get("/resume/view?page=2&redact=1").text
+    alias = '<span class="redact-only"> - Home Server Setup</span>'
+
+    assert alias in plain
+    assert alias in redacted
+    assert '<span class="redactable">Homelab</span>' in redacted
+    assert ".redact-only" in redacted
+
+    markup = (
+        "<redact>Homelab</redact>"
+        "<redact-only> - Home Server Setup</redact-only>"
+    )
+    rendered = str(_redact_markup(markup))
+    assert '<span class="redactable">Homelab</span>' in rendered
+    assert alias in rendered
+    assert _strip_redact(markup) == "Homelab"
 
 
 def test_the_photo_is_redacted_only_when_its_path_is_marked(client) -> None:
