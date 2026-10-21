@@ -1,5 +1,5 @@
 {
-  "name": "<redact>Khyles Gibrian Ramos</redact>",
+  "name": "<redact>Khyles Gibrian Ramos</redact><redact-only> - Name</redact-only>",
   "headline": "<redact>Mechanical Engineering graduate</redact> | Embedded systems and software",
   "photo": "<redact>assets/images/resume_image.JPG</redact>",
   "signature": "",
@@ -67,8 +67,8 @@
       ]
     },
     {
-      "role": "<redact>Physical Plant Facilities Department - PTP Program</redact>",
-      "organization": "<redact>Southern Luzon State University</redact>",
+      "role": "<redact>Physical Plant Facilities Department - PTP Program</redact><redact-only> - Role</redact-only>",
+      "organization": "<redact>Southern Luzon State University</redact><redact-only> - Organization</redact-only>",
       "period": "Mar 2024 - Apr 2024",
       "responsibilities": [
         "Drafted facility layouts and emergency fire exit plans in AutoCAD to code-compliant egress and fire safety standards",

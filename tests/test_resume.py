@@ -773,6 +773,24 @@ def test_redact_only_alias_is_hidden_until_redaction(client) -> None:
     assert _strip_redact(markup) == "Homelab"
 
 
+def test_unclear_entries_say_what_they_were(client) -> None:
+    """A standalone bar gets a grey label, so a reader knows what was covered."""
+    redacted = client.get("/resume/view?page=1&redact=1").text
+    plain = client.get("/resume/view?page=1").text
+
+    for real, label in (
+        ("Khyles Gibrian Ramos", " - Name"),
+        ("Southern Luzon State University", " - Organization"),
+        ("Physical Plant Facilities Department - PTP Program", " - Role"),
+    ):
+        markup = (
+            f'<span class="redactable">{real}</span>'
+            f'<span class="redact-only">{label}</span>'
+        )
+        assert markup in redacted, real
+        assert f'<span class="redact-only">{label}</span>' in plain, label
+
+
 def test_the_photo_is_redacted_only_when_its_path_is_marked(client) -> None:
     """The portrait follows the same marker as the text.
 
