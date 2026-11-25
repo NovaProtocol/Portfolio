@@ -85,8 +85,8 @@
       "url": "https://<redact>mower</redact>.<redact>projectnova.download</redact>/",
       "status_line": "Operational; for now the panel is the deliverable",
       "highlights": [
-        "Built the mission-planning and telemetry software for the autonomous mower designed in my undergraduate thesis",
-        "Implemented five coverage strategies (linear sweep, contour spiral, inverse spiral, triangulation fill and strip partition) planned from a field boundary and a cutting width",
+        "Undergraduate thesis: designed an autonomous robotic mower with solar docking, and built its mission-planning and telemetry software",
+        "Five coverage path planning strategies (linear sweep, contour spiral, inverse spiral, triangulation fill, strip partition)",
         "Measured coverage by sweeping the cut corridor against the field: covered, missed, excess and overlap, with distance, rotation and mission time",
         "Kept routes on the field: every transition is checked and re-routed along the boundary if it would cross ground that is not being cut",
         "Modelled the machine's energy with two LiFePO4 packs and a 400 W array, drawing load from the motors actually commanded on"
@@ -98,7 +98,7 @@
       "url": "https://<redact>water-billing-system</redact>.<redact>projectnova.download</redact>/",
       "status_line": "Live demo, architecture and core modules complete",
       "highlights": [
-        "Designed an end-to-end utility billing workflow that unifies meter reading, tariff computation, and bill distribution into a single process",
+        "Full-stack utility billing platform: meter reading, tariff computation, payments, and bill distribution in one workflow",
         "Offline-first NFC meter reading with on-device key derivation so meter data never crosses the network",
         "Automated five-tier tariff billing with late penalties and waterfall payment application",
         "Customer and payment data isolated in internal networks with role-scoped access"
@@ -109,8 +109,8 @@
       "tech": "Python, FastAPI, MySQL, Docker, MathQuill, math.js",
       "url": "https://<redact>melereview</redact>.<redact>projectnova.download</redact>/",
       "highlights": [
-        "Built a unit-aware engineering equation solver for multi-step formulas across metric and English conventions",
-        "Developed a Mechanical Engineering Licensure Exam reviewer with a self-maintained question bank"
+        "Mechanical Engineering Licensure Exam reviewer with a self-maintained question bank built from uploaded board-exam PDFs",
+        "Unit-aware engineering equation solver: evaluates multi-step formulas across metric and English conventions, with binary-search solving for single variables"
       ]
     },
     {
@@ -120,7 +120,7 @@
       "status_line": "Self-hosted server running every project on this resume",
       "highlights": [
         "One machine serves every project here, each in its own Compose stack behind a single Cloudflare Tunnel with per-host routing and TLS",
-        "The dashboard that does it reads /proc and /sys directly, with no agent, no exported metrics, and no credentials to manage",
+        "Self-hosted monitoring dashboard that reads /proc and /sys directly, with no agent, no exported metrics, and no credentials to manage",
         "Per-core CPU, memory, disk, network, GPU, and thermals recorded on four cadences with a rolling 24-hour window, plus container health"
       ]
     },
@@ -129,7 +129,7 @@
       "tech": "Python, FastAPI, MySQL, Docker, Caddy, PyJWT",
       "highlights": [
         "Reverse-proxy gateway routing every service in the stack, with per-host and per-path rules that allow, refuse, or hold a request behind a shared access code",
-        "Signed tamper-evident sessions, an admin panel for editing routes and rule groups while the gateway runs, and an audit log of every request with address, path, status, and latency"
+        "Audit log of every request with address, path, status and latency, plus tamper-evident signed sessions and a live admin panel for routes and rule groups"
       ]
     },
     {
@@ -139,7 +139,7 @@
       "highlights": [
         "Isolated execution sandbox for untrusted code with hard memory, CPU, and process limits, and no network access",
         "Process isolation with a read-only filesystem, 1 GB memory cap, 25s CPU limit, and 64-process ceiling via Bubblewrap",
-        "Built a background execution queue with signal-based timeout handling and lenient test-case matching"
+        "Background execution queue with signal-based timeout handling and lenient test-case matching"
       ]
     }
   ],
@@ -148,12 +148,12 @@
       "name": "<redact>AI Snake</redact><redact-only> - Reinforcement Learning Sandbox</redact-only>",
       "tech": "Python, FastAPI, PyTorch, jax-js, React, TypeScript, MySQL, Docker",
       "url": "https://<redact>snake</redact>.<redact>projectnova.download</redact>/",
-      "status_line": "Live; training runs in the browser, the server only compiles and scores",
+      "status_line": "Live; reinforcement learning trains in the browser, the server only compiles and scores",
       "highlights": [
-        "Built an arena where the network and its reward function are both authored on a canvas, then trained by REINFORCE in the browser",
-        "Typed reward-program graph whose ports reject mismatched wiring, so a position cannot be read as a multiplier",
-        "Training spread across a worker per CPU core, with every lane watchable on one board and any finished episode replayed tick by tick",
-        "Browser and server match engines pinned against shared golden vectors, so the two cannot disagree on a result"
+        "Beginner-friendly introduction to machine learning: build a neural network, train it to play Snake, and watch it learn in the browser",
+        "Visual graph editor for the network: wire layers, convolutions and activations on a canvas, so designing an architecture needs no code",
+        "Graph editor for the reward function too: drag typed blocks to define what the snake is rewarded for, making reward shaping hands-on",
+        "Trains in the browser with REINFORCE and jax-js, one worker per CPU core, so the server never runs the optimization loop"
       ]
     }
   ],
