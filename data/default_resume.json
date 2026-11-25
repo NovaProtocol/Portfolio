@@ -176,7 +176,7 @@
     },
     {
       "category": "Machine Learning",
-      "value": "PyTorch, ResNet-18, Triplet Loss"
+      "value": "PyTorch, ONNX Runtime, jax-js, ResNet-18, Triplet Loss, REINFORCE, reward shaping"
     },
     {
       "category": "Office & Productivity",

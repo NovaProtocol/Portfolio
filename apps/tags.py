@@ -47,6 +47,12 @@ TAG_LINKS: dict[str, str] = {
     "OnShape": "https://www.onshape.com/",
     "Fusion 360": "https://www.autodesk.com/products/fusion-360",
     "UltiMaker Cura": "https://ultimaker.com/software/ultimaker-cura",
+    "PyTorch": "https://pytorch.org/",
+    "ONNX Runtime": "https://onnxruntime.ai/",
+    "jax-js": "https://github.com/ekzhang/jax-js",
+    "ResNet-18": "https://pytorch.org/vision/main/models/generated/torchvision.models.resnet18.html",
+    "Triplet Loss": "https://pytorch.org/docs/stable/generated/torch.nn.TripletMarginLoss.html",
+    "REINFORCE": "https://link.springer.com/article/10.1007/BF00992696",
 }
 
 
