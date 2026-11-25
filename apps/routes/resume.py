@@ -134,7 +134,13 @@ def _load_resumes() -> tuple[dict[str, dict], list[dict]]:
     # The pool is the default's own project content. A named resume names projects
     # from it rather than repeating their text, so a project is written once no
     # matter how many resumes show it.
-    pool = default.get("projects") or []
+    #
+    # `reserve_projects` extends the pool without extending Generic. Generic lists
+    # six entries and its page has no room for a seventh, but a named resume has a
+    # different set of slots and should be able to draw on a project the generic
+    # one does not show. They are written here, beside the others, so the project
+    # text still lives in one file.
+    pool = (default.get("projects") or []) + (default.get("reserve_projects") or [])
     described = {
         d.get("name"): d for d in (default.get("resumes") or []) if isinstance(d, dict)
     }
@@ -142,8 +148,11 @@ def _load_resumes() -> tuple[dict[str, dict], list[dict]]:
     resumes: dict[str, dict] = {}
     listing: list[dict] = []
 
+    # Generic keeps its own entries: they are content, not names, so giving it the
+    # full pool would change nothing, but being explicit is what stops a reserve
+    # project from leaking onto it by arithmetic.
     resumes[DEFAULT_RESUME] = _order_skills(
-        _expand_projects({**default, "project_pool": pool})
+        _expand_projects({**default, "project_pool": default.get("projects") or []})
     )
     generic = described.get(DEFAULT_RESUME) or {}
     listing.append({

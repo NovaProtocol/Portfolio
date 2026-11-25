@@ -143,6 +143,20 @@
       ]
     }
   ],
+  "reserve_projects": [
+    {
+      "name": "<redact>AI Snake</redact><redact-only> - Reinforcement Learning Sandbox</redact-only>",
+      "tech": "Python, FastAPI, PyTorch, jax-js, React, TypeScript, MySQL, Docker",
+      "url": "https://<redact>snake</redact>.<redact>projectnova.download</redact>/",
+      "status_line": "Live; training runs in the browser, the server only compiles and scores",
+      "highlights": [
+        "Built an arena where the network and its reward function are both authored on a canvas, then trained by REINFORCE in the browser",
+        "Typed reward-program graph whose ports reject mismatched wiring, so a position cannot be read as a multiplier",
+        "Training spread across a worker per CPU core, with every lane watchable on one board and any finished episode replayed tick by tick",
+        "Browser and server match engines pinned against shared golden vectors, so the two cannot disagree on a result"
+      ]
+    }
+  ],
   "skills": [
     {
       "category": "Mechanical Design & Fabrication",

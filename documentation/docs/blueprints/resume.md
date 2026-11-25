@@ -45,6 +45,11 @@ def _expand_projects(resume: dict) -> dict:
     by_name = {p.get("name"): p for p in resume.get("project_pool") or []}
     return {**resume, "projects": [by_name[n] for n in projects if n in by_name]}
 
+# The pool named resumes select from: the default's own entries plus the reserve.
+pool = (default.get("projects") or []) + (default.get("reserve_projects") or [])
+# Generic keeps its own list, so a reserve project cannot reach it by arithmetic.
+resumes[DEFAULT_RESUME] = _expand_projects({**default, "project_pool": default.get("projects") or []})
+
 @router.get("/view", response_class=HTMLResponse)
 async def view(request: Request, page: int | None = None, resume: str = DEFAULT_RESUME):
     resolved = _normalise_resume(resume)
@@ -84,6 +89,11 @@ and carries only what it changes:
 - `projects` in an override names projects rather than restating them. The
   content of every project lives in the default, once, so the two files cannot
   drift and a project is edited in one place no matter how many resumes show it.
+- `reserve_projects` is a second list in the default holding projects that no
+  default resume displays. It joins the pool a named resume selects from, but
+  Generic keeps its own `projects` and does not gain them: Generic already fills
+  its page, and a seventh entry would be clipped by `overflow: hidden` rather than
+  flowing to a third sheet. Snake lives here.
 - The served list is **Generic plus every override**, in file order. An unknown
   or missing name falls back to Generic rather than erroring, so a stale bookmark
   still renders a resume.
@@ -199,18 +209,32 @@ The markup and the styles are **partials** rather than copies. They used to be t
 | Resume | Headline leads with | Projects |
 |---|---|---|
 | Generic (default) | the degree, then what the software work is | all six, thesis build first |
-| Mechanical Engineering | the degree and the mechanical work | all but PracticeForge, thesis build first |
+| Mechanical Engineering | the degree and the mechanical work | four of the default's six, plus AI Snake, thesis build first |
 | Software | the software work, degree mentioned second | all but the mower, largest software build first |
 
 - A named resume is a **projection** of the default, never a second data file.
-- The mechanical resume drops PracticeForge. Every other entry is engineering
-  work a mechanical reader can follow; PracticeForge is a Python practice sandbox
-  with neither an engineering subject nor a product purpose.
+- The mechanical resume drops PracticeForge and GateKeeper. PracticeForge is a
+  Python practice sandbox with neither an engineering subject nor a product
+  purpose. GateKeeper is a reverse proxy: real infrastructure work, but the page
+  already evidences infrastructure through Homelab, and two entries making the
+  same point on a five-slot page is one too many.
+- **The mechanical resume's AI Snake slot is a deliberate exception to the
+  subject-and-purpose rule.** Snake is a game, so it has no product purpose for a
+  mechanical reader, and by that rule alone it would not qualify. It earns the slot
+  on a different ground: the mechanical summary claims applied machine learning,
+  and without it page 2 shows backend services three times and machine learning
+  zero times. It is the one entry that makes good on a claim the page already
+  makes. If that summary line is ever cut, cut Snake with it.
 - The software resume drops the mower, the way the mechanical resume drops
   PracticeForge, and keeps every other entry. The solver and the reviewer stay,
   because they are still things this person built and shipped. Both exclusions are
   asserted as set differences against the default, so a project added later has to
   be placed on each resume deliberately rather than appearing by arithmetic.
+- **`reserve_projects` holds projects no default resume shows.** Generic carries
+  six entries on a page with 4px of slack, so a seventh would be clipped mid-entry
+  rather than spilled. A reserve project is named and rendered exactly like any
+  other, its text still lives in `default_resume.json` once, and Generic is pinned
+  against the reserve list by test so nothing reaches it by arithmetic.
 - The mower leads Generic and Mechanical. It is the undergraduate thesis and the
   only entry that is a machine rather than a service: two LiFePO4 packs, a 400 W
   array, and a panel that commands the drives.

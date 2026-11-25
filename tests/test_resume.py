@@ -196,20 +196,45 @@ def test_the_merge_is_deep() -> None:
     assert base == {"a": {"keep": 1, "change": 2}, "b": 3}, "the base was mutated"
 
 
-def test_the_mechanical_resume_drops_only_practiceforge() -> None:
-    """One project is left out, and it is the one with no subject to place.
+def test_reserve_projects_extend_the_pool_but_not_generic() -> None:
+    """A project can be available to a named resume without being on Generic.
+
+    Generic lists six entries on a page that has 4px of slack, so a seventh would
+    be clipped mid-entry rather than spilling. The mechanical resume has 112px, and
+    a project worth showing there is not automatically worth showing to a job fair.
+    The reserve list is written in `default_resume.json` beside the others, so the
+    project's text still lives in one file, and Generic is pinned against it so a
+    reserve entry cannot appear there by arithmetic.
+    """
+    base = default_resume()
+    reserve = {project_name(p) for p in base.get("reserve_projects") or []}
+    generic = {project_name(p) for p in served()["projects"]}
+
+    assert reserve, "the reserve list is empty; drop the key rather than keep it"
+    assert not (reserve & generic), f"reserve projects leaked onto Generic: {reserve & generic}"
+
+
+def test_the_mechanical_resume_drops_only_practiceforge_and_gatekeeper() -> None:
+    """Two projects are left out, and each for its own stated reason.
 
     Every other entry is engineering work a mechanical reader can follow.
     PracticeForge is a Python practice sandbox, recorded elsewhere as halted for
-    lack of productive use, so it has nothing to say to that reader.
+    lack of productive use, so it has nothing to say to that reader. GateKeeper is
+    the second: it is infrastructure the page already evidences through Homelab,
+    and its slot goes to AI Snake, which is the only project that backs the
+    summary's claim to applied machine learning. Stated as an exact set so a future
+    edit has to argue with a test rather than quietly re-add one or drop another.
     """
-    base = [project_name(p) for p in default_resume()["projects"]]
-    mech = [project_name(p) for p in served("Mechanical Engineering")["projects"]]
+    pool = {project_name(p) for p in default_resume()["projects"]}
+    reserve = {project_name(p) for p in default_resume().get("reserve_projects") or []}
+    mech = {project_name(p) for p in served("Mechanical Engineering")["projects"]}
 
-    assert set(mech) == set(base) - {"PracticeForge"}
-    assert base[0] == "Automated Lawn Mower", (
-        "the generic resume leads with the undergraduate thesis build"
-    )
+    assert set(mech) == (pool | reserve) - {"PracticeForge", "GateKeeper"}
+    assert "AI Snake" in mech, "the machine learning project was dropped"
+    assert "GateKeeper" not in mech, "the infrastructure duplicate came back"
+    assert [project_name(p) for p in default_resume()["projects"]][0] == (
+        "Automated Lawn Mower"
+    ), "the generic resume leads with the undergraduate thesis build"
 
 
 def test_a_named_resume_repeats_no_project_text() -> None:
@@ -228,8 +253,13 @@ def test_a_named_resume_repeats_no_project_text() -> None:
 
 
 def test_a_named_resume_only_names_projects_that_exist() -> None:
-    """A rename in the default would otherwise silently empty a resume."""
-    pool = {project_name(p) for p in default_resume()["projects"]}
+    """A rename in the default would otherwise silently empty a resume.
+
+    Reserve projects are named from too, so they are checked against the same pool.
+    """
+    base = default_resume()
+    pool = {project_name(p) for p in base["projects"]}
+    pool |= {project_name(p) for p in base.get("reserve_projects") or []}
     for entry in overrides():
         projects = (entry.get("overwrites") or {}).get("projects") or []
         unknown = [p for p in projects if p not in pool]
@@ -508,22 +538,6 @@ def test_every_named_skill_category_exists() -> None:
         unknown = [c for c in order if c not in pool]
         assert not unknown, f"{entry['resume_name']} names unknown skill categories: {unknown}"
         assert len(set(order)) == len(order), f"{entry['resume_name']} repeats a category"
-
-
-def test_the_mechanical_resume_excludes_practiceforge_on_purpose() -> None:
-    """The exclusion is deliberate, not a dropped row.
-
-    Every other project is engineering work a mechanical reader can follow.
-    PracticeForge is a Python practice sandbox, recorded elsewhere as halted for
-    lack of productive use, so it has nothing to say to that reader. Pinned so a
-    future edit has to argue with a test rather than quietly re-add it or drop
-    something else.
-    """
-    pool = {project_name(p) for p in default_resume()["projects"]}
-    mech = {project_name(p) for p in served("Mechanical Engineering")["projects"]}
-
-    assert "PracticeForge" not in mech
-    assert mech == pool - {"PracticeForge"}
 
 
 def test_the_mechanical_resume_leads_with_the_hardware_project() -> None:
