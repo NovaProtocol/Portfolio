@@ -461,6 +461,67 @@ PROJECTS: dict[str, dict] = {
         ],
         "buttons": [],
     },
+    "snake": {
+        "active": True,
+        "categories": ["software-engineering", "gaming"],
+        "title": "AI Snake",
+        "subtitle": "Reinforcement learning you can watch, in a browser tab",
+        "description": [
+            "A snake game whose player is a neural network you build yourself. You wire the "
+            "layers on a canvas, write what the snake should be rewarded for, and it learns "
+            "by playing in your browser. Nothing is trained on the server.",
+            "The point is the reward program. Eating, dying, open space and distance to the "
+            "food are blocks you drag in and connect, and the snake learns whatever you "
+            "describe, including the wrong thing. Getting a reward function right is the "
+            "part of reinforcement learning that is hard to teach and easy to feel when the "
+            "snake does something stupid because of a term you wrote.",
+            "Models are scored on ticks spent per block of length gained, on a fixed seed, "
+            "so a faster learner ranks above one that only survives. The front page plays "
+            "the current best model.",
+        ],
+        "tech": {
+            "web": [
+                "React",
+                "TypeScript",
+                "FastAPI",
+                "Granian",
+                "SQLAlchemy",
+                "MySQL 8.4",
+                "Docker",
+                "Caddy",
+                "Cloudflare Tunnel",
+            ],
+            "domain": [
+                "jax-js",
+                "Reinforcement learning",
+                "REINFORCE with Adam",
+                "Web Workers",
+                "ONNX Runtime",
+            ],
+        },
+        "features": [
+            "Build the network as a graph: convolution, pooling, dense and activation blocks, connected on a canvas",
+            "Write the loss as a reward program: typed blocks for eating, dying, open space and distance, with a live value range",
+            "Training runs in your browser on jax-js, spread across a pool of workers, one lane per CPU core",
+            "Watch every lane at once on one board, each in its own colour, or step back through a finished episode tick by tick",
+            "Scored on a fixed board by ticks per block gained, so models are ranked on how fast they learn rather than how lucky they got",
+        ],
+        "status": "operational",
+        "note": "Training runs in the browser. The server only compiles and scores.",
+        "reason": (
+            "Reinforcement learning is usually taught with a fixed environment and a hidden "
+            "loss function. Exposing the loss as blocks makes the failure modes visible: a "
+            "snake that circles forever because you never charged it for time, or one that "
+            "dies immediately because dying was cheaper than living. Running the training "
+            "in the browser keeps it free to host and makes the loop fast enough to iterate "
+            "on a reward function in minutes."
+        ),
+        "url": "https://snake.projectnova.download/",
+        "github": "https://github.com/NovaProtocol/snake",
+        "image": "",
+        "links": [],
+        "buttons": [],
+    },
 }
 
 # Invisible ordering weight for the projects page: higher = nearer the top.
@@ -472,6 +533,7 @@ PROJECT_PRIORITY: dict[str, int] = {
     "host-dashboard": 90,
     "lawn-mower-control-panel": 85,
     "factorio-server": 80,
+    "snake": 75,
     "mle-review": 70,
     "practiceforge": 60,
     "novaprotocol": 50,
